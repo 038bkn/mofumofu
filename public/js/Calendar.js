@@ -1,25 +1,31 @@
-let currentDate = new Date(2026, 3, 1);
+let currentDate = new Date();
 const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
 
+// ────────────────────────────────────────────────
+// カレンダー描画
+// ────────────────────────────────────────────────
 function renderCalendar() {
-    const year = currentDate.getFullYear();
+    const year  = currentDate.getFullYear();
     const month = currentDate.getMonth();
 
     document.getElementById('monthDisplay').textContent = monthNames[month];
-    document.getElementById('yearDisplay').textContent = year;
+    document.getElementById('yearDisplay').textContent  = year;
 
-    const firstDay = new Date(year, month, 1).getDay();
-    const lastDate = new Date(year, month + 1, 0).getDate();
+    const firstDay  = new Date(year, month, 1).getDay();
+    const lastDate  = new Date(year, month + 1, 0).getDate();
     const calendarGrid = document.getElementById('calendarGrid');
-    const dayElements = Array.from(calendarGrid.children).slice(7);
-    dayElements.forEach(el => el.remove());
 
+    // ヘッダー行（曜日）以外を削除
+    Array.from(calendarGrid.children).slice(7).forEach(el => el.remove());
+
+    // 月初前の空白
     for (let i = 0; i < firstDay; i++) {
         const span = document.createElement('span');
         span.className = 'text-sm text-slate-400 py-2';
         calendarGrid.appendChild(span);
     }
 
+    // 日付セル
     for (let day = 1; day <= lastDate; day++) {
         const span = document.createElement('span');
         span.className = 'text-sm text-slate-900 py-2 cursor-pointer hover:bg-slate-100 rounded';
@@ -31,6 +37,7 @@ function renderCalendar() {
         calendarGrid.appendChild(span);
     }
 
+    // 末尾の空白（6行揃え）
     const totalCells = (firstDay + lastDate) % 7;
     if (totalCells !== 0) {
         for (let i = 0; i < 7 - totalCells; i++) {
@@ -39,8 +46,146 @@ function renderCalendar() {
             calendarGrid.appendChild(span);
         }
     }
+
+    // タスク一覧を更新
+    loadMonthTasks(year, month);
 }
 
+// ────────────────────────────────────────────────
+// その月のタスクを取得してToDo欄・完了欄に表示
+// ────────────────────────────────────────────────
+async function loadMonthTasks(year, month) {
+    const monthStr = `${year}-${String(month + 1).padStart(2, '0')}`;
+
+    let tasks = [];
+    try {
+        const res  = await fetch(`/api/tasks?month=${monthStr}`, {
+            headers: { 'Accept': 'application/json' }
+        });
+        const data = await res.json();
+        tasks = data.tasks || [];
+    } catch (e) {
+        // 通信エラー時は空のまま表示
+    }
+
+    const now = new Date();
+
+    // 完了済み判定：
+    //   ① completed フラグが true、または
+    //   ② 終了日時（due_date + end_time）が現在時刻より過去
+    const todoList      = [];
+    const completedList = [];
+
+    tasks.forEach(task => {
+        const endDatetime = getEndDatetime(task);
+        const isPast = endDatetime && endDatetime < now;
+
+        if (task.completed || isPast) {
+            completedList.push(task);
+        } else {
+            todoList.push(task);
+        }
+    });
+
+    // 日付順にソート
+    todoList.sort((a, b) => sortKey(a).localeCompare(sortKey(b)));
+    completedList.sort((a, b) => sortKey(a).localeCompare(sortKey(b)));
+
+    renderTodoList(todoList);
+    renderCompletedList(completedList);
+}
+
+// due_date + end_time から Date オブジェクトを生成
+function getEndDatetime(task) {
+    if (!task.due_date || !task.end_time) return null;
+    return new Date(`${task.due_date}T${task.end_time}`);
+}
+
+// ソートキー：due_date + start_time
+function sortKey(task) {
+    return `${task.due_date || ''}T${task.start_time || '00:00'}`;
+}
+
+// ────────────────────────────────────────────────
+// ToDo リスト描画
+// ────────────────────────────────────────────────
+function renderTodoList(tasks) {
+    const container = document.getElementById('todoList');
+    container.innerHTML = '';
+
+    if (tasks.length === 0) {
+        container.innerHTML = `
+            <div class="rounded-2xl bg-slate-50 border border-slate-200 p-3 text-slate-400">
+                予定がありません
+            </div>`;
+        return;
+    }
+
+    tasks.forEach(task => {
+        const item = document.createElement('div');
+        item.className = 'rounded-2xl bg-slate-50 border border-slate-200 p-3 flex items-center justify-between cursor-pointer hover:bg-slate-100 transition';
+        item.innerHTML = `
+            <div class="flex items-center gap-2 min-w-0">
+                <span class="text-slate-400 flex-shrink-0">○</span>
+                <span class="text-sm font-medium text-slate-800 truncate">${escHtml(task.title)}</span>
+            </div>
+            <span class="text-xs text-slate-400 flex-shrink-0 ml-2">${formatDate(task.due_date)}</span>
+        `;
+        item.addEventListener('click', () => {
+            window.location.href = `/task/detail?id=${task.id}&date=${task.due_date}`;
+        });
+        container.appendChild(item);
+    });
+}
+
+// ────────────────────────────────────────────────
+// 完了リスト描画
+// ────────────────────────────────────────────────
+function renderCompletedList(tasks) {
+    const container = document.getElementById('completedList');
+    container.innerHTML = '';
+
+    if (tasks.length === 0) {
+        container.innerHTML = `
+            <p class="text-sm text-slate-400">完了した予定はここに表示されます。</p>`;
+        return;
+    }
+
+    tasks.forEach(task => {
+        const item = document.createElement('div');
+        item.className = 'rounded-2xl bg-white border border-slate-200 p-3 flex items-center justify-between';
+        item.innerHTML = `
+            <div class="flex items-center gap-2 min-w-0">
+                <span class="text-emerald-400 flex-shrink-0">✓</span>
+                <span class="text-sm text-slate-400 line-through truncate">${escHtml(task.title)}</span>
+            </div>
+            <span class="text-xs text-slate-400 flex-shrink-0 ml-2">${formatDate(task.due_date)}</span>
+        `;
+        container.appendChild(item);
+    });
+}
+
+// ────────────────────────────────────────────────
+// ユーティリティ
+// ────────────────────────────────────────────────
+function escHtml(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+// "2026-04-15" → "4/15"
+function formatDate(dateStr) {
+    if (!dateStr) return '';
+    const [, m, d] = dateStr.split('-');
+    return `${parseInt(m)}/${parseInt(d)}`;
+}
+
+// ────────────────────────────────────────────────
+// ナビボタン
+// ────────────────────────────────────────────────
 document.getElementById('prevBtn').addEventListener('click', () => {
     const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
     if (newDate.getFullYear() >= 2000) {
