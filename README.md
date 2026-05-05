@@ -1,62 +1,59 @@
-// サーバー起動
-php artisan serve
+### サーバー起動コマンド
+`php artisan serve`
 
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## 開発ルール
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+### 1. 担当ディレクトリを守る
+自分が担当するファイル以外は、むやみに変更・追加しないでください。
 
-## About Laravel
+- 触ってよい場所
+  - `resources/views/` （HTML/Bladeファイル）
+  - `public/css/` （スタイルシート）
+  - `public/js/` （JavaScriptファイル）
+  - `public/images/` （画像ファイル）
+  - `routes/` （URLの設定）
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### 2. ファイル名の命名規則
+新しく画面（Bladeファイル）を作るときは、ファイル名を必ずすべて小文字にしてください。単語を繋ぐときはアンダースコア `_` またはハイフン `-` を使います。
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- 良い例: `login.blade.php`
+- 悪い例: `Login.blade.php`
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 3. CSS / JavaScript の書き方
+CSSやJSファイルは直接 `public/` フォルダの中に作成し、Bladeファイルから以下のように読み込んでください。
 
-## Learning Laravel
+```html
+<!-- CSSの読み込み -->
+<link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+<!-- JSの読み込み -->
+<script src="{{ asset('js/main.js') }}"></script>
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 4. 新しい画面のURLを追加したい場合
+`routes/web.php` に追記しますが、今は画面を表示するだけのシンプルな書き方にしてください。
+DBの代わりとしてSessionを使った保存処理や、コントローラーを作成することは禁止です。
 
-## Laravel Sponsors
+```php
+// routes/web.php の記述例
+Route::get('/calendar', function () {
+    return view('calendar_screen');
+});
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## レビューとマージ（合流）の流れ
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+このリポジトリの `main` ブランチには直接コードをPushできません。必ず以下の手順を踏んでください。
 
-## Contributing
+1. 自分のブランチで作業する
+   作業前に必ず今いるブランチ（例: `feature/〇〇(名前)`）を確認してください。
+2. Pull Requestを作成する
+   作業が終わったら GitHub 上で `main` ブランチに向けて PR を作成します。
+3. AIレビュワー（CodeRabbit）のチェックを受ける
+   PRを出すと、数分以内に AI（CodeRabbit）が自動でコードをレビューしてコメントをくれます。
+   - 指摘された箇所があれば修正してください。
+   - 指摘の意味がわからない場合は、コメント欄で `@coderabbitai なぜこう直すの？` と返信すると AI が解説してくれます。
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
