@@ -7,7 +7,11 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Create authentication-related tables and extend the users table.
+     *
+     * Creates `users`, `password_reset_tokens`, and `sessions` tables, then
+     * alters the `users` table to add `points` (integer, default 0), `mode` (tiny integer, default 0),
+     * and `icon_path` (nullable string).
      */
     public function up(): void
     {

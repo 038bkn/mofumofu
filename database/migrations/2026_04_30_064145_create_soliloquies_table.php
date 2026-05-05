@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Create the `soliloquies` table with its schema.
+     *
+     * The table includes an auto-incrementing `id`, a `user_id` foreign key that references the related users table and cascades on delete, a `content` TEXT column (comment: "つぶやき内容"), a `type` TINYINT column defaulting to 0 with values `0:通常`, `1:ほめて`, `2:なぐさめて`, and Laravel-managed `created_at` / `updated_at` timestamps.
      */
     public function up(): void
     {
@@ -21,7 +23,7 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Drop the `soliloquies` table if it exists.
      */
     public function down(): void
     {

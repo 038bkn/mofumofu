@@ -7,7 +7,10 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Create the `owned_items` table with id, owner/item foreign keys, an equipped flag, and timestamps.
+     *
+     * The `user_id` and `item_id` columns are constrained as foreign keys and cascade on delete.
+     * The `is_equipped` column is a boolean that defaults to `false` and includes the comment '装備中フラグ'.
      */
     public function up(): void
     {
@@ -21,7 +24,7 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Drop the `owned_items` table if it exists.
      */
     public function down(): void
     {

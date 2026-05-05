@@ -7,7 +7,17 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Create the `tasks` database table used to store user tasks and their metadata.
+     *
+     * The table includes:
+     * - `id`: auto-incrementing primary key.
+     * - `user_id`: foreign key to `users`, cascades on delete.
+     * - `title`: task title (comment: タスク内容).
+     * - `difficulty`: difficulty level 1–5 (tiny integer, comment: 難易度1〜5).
+     * - `status`: tiny integer with default `0` (0:未完了, 1:完了).
+     * - `due_date`: nullable date for the task deadline (comment: 期限日).
+     * - `completed_at`: nullable timestamp for completion time (comment: 完了日時).
+     * - `created_at` and `updated_at` timestamps.
      */
     public function up(): void
     {
@@ -24,7 +34,7 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Drop the `tasks` table if it exists.
      */
     public function down(): void
     {

@@ -7,7 +7,15 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Create the `items` database table.
+     *
+     * The table will include the following columns:
+     * - `id`: auto-incrementing primary key.
+     * - `name`: item name (comment: `アイテム名`).
+     * - `category`: category string (max 50 characters, e.g., `character`, `clothing`).
+     * - `price`: required points (comment: `必要ポイント`).
+     * - `image_path`: path to the item's image (comment: `画像パス`).
+     * - `created_at` and `updated_at` timestamps.
      */
     public function up(): void
     {
@@ -22,7 +30,7 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Reverts the migration by dropping the `items` table if it exists.
      */
     public function down(): void
     {
