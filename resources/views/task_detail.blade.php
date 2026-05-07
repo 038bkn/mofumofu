@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>タスク詳細</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
         body { font-family: 'Hiragino Sans', 'Hiragino Kino Gothic ProN', 'Noto Sans JP', sans-serif; }
     </style>
@@ -14,7 +13,6 @@
     @php
         use Carbon\Carbon;
         $dateObject = Carbon::parse($date);
-        $weekDays = ['日', '月', '火', '水', '木', '金', '土'];
     @endphp
 
     <div class="min-h-screen flex flex-col items-center p-4 gap-4">
@@ -26,9 +24,8 @@
                    class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-slate-100 transition text-slate-600 text-lg">
                     ←
                 </a>
-                <button id="editBtn" class="text-sm font-semibold text-slate-700 hover:text-slate-900 transition">
-                    編集
-                </button>
+                <span class="text-base font-semibold text-slate-800">詳細</span>
+                <div class="w-9"></div>
             </div>
 
             {{-- タスク詳細カード --}}
@@ -71,57 +68,40 @@
         const params       = new URLSearchParams(location.search);
         const taskId       = params.get('id');
         const scheduleDate = "{{ $dateObject->format('Y-m-d') }}";
-        const csrfToken    = document.querySelector('meta[name="csrf-token"]').content;
         const weekDays     = ['日', '月', '火', '水', '木', '金', '土'];
 
-        // 編集ボタン
-        document.getElementById('editBtn').addEventListener('click', () => {
-            if (taskId) {
-                window.location.href = `/task/edit?id=${taskId}&date=${scheduleDate}`;
-            }
-        });
+        function escHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
 
-        // タスク取得: GET /api/tasks?date= で一覧取得してIDで絞り込む
-        async function loadTask() {
+        // localStorageからタスクを読み込んで表示
+        function loadTask() {
             if (!taskId) {
                 showError('タスクIDが指定されていません。');
                 return;
             }
-            try {
-                const res  = await fetch(`/api/tasks?date=${scheduleDate}`, {
-                    headers: { 'Accept': 'application/json' }
-                });
-                const data = await res.json();
 
-                if (data.status !== 'success') {
-                    showError(data.message || '取得に失敗しました。');
-                    return;
-                }
+            const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+            const task  = tasks.find(t => String(t.id) === String(taskId));
 
-                const task = (data.tasks || []).find(t => String(t.id) === String(taskId));
-                if (!task) {
-                    document.getElementById('taskContent').innerHTML =
-                        '<p class="text-sm text-slate-400 text-center py-4">タスクが見つかりません。</p>';
-                    return;
-                }
-
-                renderTask(task);
-            } catch (e) {
-                showError('読み込みに失敗しました。');
+            if (!task) {
+                showError('タスクが見つかりません。');
+                return;
             }
+
+            renderTask(task);
         }
 
         function renderTask(task) {
-            // 日付フォーマット: 2026/04/01 水曜日
-            const d       = new Date(task.due_date);
+            const d       = new Date(task.due_date + 'T00:00:00');
             const dow     = weekDays[d.getDay()];
             const dateStr = `${task.due_date.replace(/-/g, '/')} ${dow}曜日`;
 
-            // 難易度★
-            const filled = task.difficulty || 0;
-            const stars  = '★'.repeat(filled) + '☆'.repeat(5 - filled);
+            const filled  = task.difficulty || 0;
+            const stars   = '★'.repeat(filled) + '☆'.repeat(5 - filled);
 
-            // 時間
             const startStr = (task.start_time || '').slice(0, 5);
             const endStr   = (task.end_time   || '').slice(0, 5);
             const timeStr  = startStr && endStr ? `${startStr} － ${endStr}` : startStr;
@@ -135,17 +115,8 @@
                 </div>
                 ${task.note
                     ? `<p class="text-sm text-slate-600 mt-2 whitespace-pre-wrap">${escHtml(task.note)}</p>`
-                    : '<p class="text-sm text-slate-300 mt-2">メモ</p>'}
+                    : '<p class="text-sm text-slate-300 mt-2">メモなし</p>'}
             `;
-
-            // 削除ボタンにIDをセット
-            document.getElementById('deleteBtn').dataset.taskId = task.id;
-        }
-
-        function escHtml(str) {
-            return String(str)
-                .replace(/&/g, '&amp;').replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
 
         function showError(msg) {
@@ -153,38 +124,16 @@
                 `<p class="text-sm text-red-400 text-center py-4">${escHtml(msg)}</p>`;
         }
 
-        // 削除: DELETE /api/tasks/{id}
-        document.getElementById('deleteBtn').addEventListener('click', async () => {
-            const id = document.getElementById('deleteBtn').dataset.taskId || taskId;
-            if (!id) { alert('タスクIDが取得できませんでした。'); return; }
+        // 削除処理
+        document.getElementById('deleteBtn').addEventListener('click', () => {
+            if (!taskId) { alert('タスクIDが取得できませんでした。'); return; }
             if (!confirm('この予定を削除しますか？')) return;
 
-            const btn = document.getElementById('deleteBtn');
-            btn.textContent = '削除中…';
-            btn.disabled = true;
+            const tasks   = JSON.parse(localStorage.getItem('tasks') || '[]');
+            const updated = tasks.filter(t => String(t.id) !== String(taskId));
+            localStorage.setItem('tasks', JSON.stringify(updated));
 
-            try {
-                const res = await fetch(`/api/tasks/${id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken,
-                        'Accept': 'application/json',
-                    },
-                });
-                const data = await res.json();
-
-                if (res.ok && data.status === 'success') {
-                    window.location.href = `/day-schedule?date=${scheduleDate}`;
-                } else {
-                    alert(data.message || '削除に失敗しました。');
-                    btn.textContent = '予定を削除';
-                    btn.disabled = false;
-                }
-            } catch (e) {
-                alert('通信エラーが発生しました。');
-                btn.textContent = '予定を削除';
-                btn.disabled = false;
-            }
+            window.location.href = `/day-schedule?date=${scheduleDate}`;
         });
 
         loadTask();
