@@ -44,9 +44,6 @@
 <body class="bg-[#fde8e8] min-h-screen flex justify-center items-start">
     <div class="w-full max-w-[390px] min-h-screen bg-[#fde8e8] flex flex-col px-8">
 
-        <!-- 画面ラベル -->
-        <p class="text-[11px] text-gray-400 pt-3">ログイン画面</p>
-
         <!-- タイトル -->
         <div class="mt-[72px] mb-[52px] text-center fade-in-1">
             <h1 class="text-[42px] font-normal text-[#3a3a3a] tracking-wide">もふすけ</h1>
