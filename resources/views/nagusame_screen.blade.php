@@ -103,6 +103,9 @@
             outline: none;
             font-size: 16px;
         }
+        .text-input:focus {
+            box-shadow: 0 0 0 3px rgba(90, 74, 74, 0.4);
+}
         .send-btn {
             background: white;
             border: none;
@@ -119,13 +122,13 @@
 <body>
 <div class="phone-frame">
     <div class="back-nav">
-        <a href="/chat" class="back-link">ひとりごとに戻る</a>
+        <a href="{{ route('chat') }}" class="back-link">ひとりごとに戻る</a>
     </div>
 
     <div class="chat-area" id="chatArea"></div>
 
     <div class="mascot-container">
-        <svg class="mascot-img" viewBox="0 0 100 100">
+        <svg class="mascot-img" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
             <ellipse cx="50" cy="62" rx="28" ry="22" fill="white"/>
             <ellipse cx="50" cy="52" rx="15" ry="13" fill="#fce8e6"/>
             <circle cx="45" cy="50" r="2" fill="#c8a0a0"/>

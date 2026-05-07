@@ -51,9 +51,10 @@ Route::get('/task/detail', function (Request $request) {
     $date = $request->query('date', date('Y-m-d'));
     return view('task_detail', compact('date'));
 });
+
 Route::get('/chat', function () {
-    return view('chatscreen');
-});
+    })->name('chat');
+
 Route::get('/homete', function () {
     return view('homete_screen');
 });
