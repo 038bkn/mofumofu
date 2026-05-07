@@ -4,19 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>もふすけ - ログイン</title>
+    <title>もふすけ - パスワード再設定</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        mofupink: '#fde8e8',
-                    }
-                }
-            }
-        }
-    </script>
     <style>
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(12px); }
@@ -24,7 +13,13 @@
         }
         .fade-in-1 { animation: fadeIn 0.5s ease 0.1s forwards; opacity: 0; }
         .fade-in-2 { animation: fadeIn 0.5s ease 0.2s forwards; opacity: 0; }
-        .fade-in-3 { animation: fadeIn 0.5s ease 0.3s forwards; opacity: 0; }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+        .pop-in { animation: popIn 0.2s ease forwards; }
+
         @keyframes spin {
             to { transform: translateY(-50%) rotate(360deg); }
         }
@@ -44,54 +39,63 @@
 <body class="bg-[#fde8e8] min-h-screen flex justify-center items-start">
     <div class="w-full max-w-[390px] min-h-screen bg-[#fde8e8] flex flex-col px-8">
 
-        <!-- タイトル -->
-        <div class="mt-[72px] mb-[52px] text-center fade-in-1">
-            <h1 class="text-[42px] font-normal text-[#3a3a3a] tracking-wide">もふすけ</h1>
+        <!-- タイトルバッジ -->
+        <div class="mt-[52px] mb-10 text-center fade-in-1">
+            <span class="inline-block bg-white rounded-full px-10 py-2.5 text-[18px] text-[#3a3a3a] shadow-md">
+                再設定
+            </span>
         </div>
 
         <!-- フォーム -->
         <div class="flex flex-col fade-in-2">
-            <label class="text-[13px] text-[#555]">メールアドレス・ユーザー名</label>
+            <label class="text-[13px] text-[#555]">メールアドレス</label>
             <input
-                type="text"
+                type="email"
                 id="email"
                 autocomplete="email"
                 inputmode="email"
                 class="mt-1.5 w-full h-11 bg-white border-none rounded-lg px-3.5 text-[15px] text-[#333] outline-none shadow-sm focus:ring-2 focus:ring-[#f4a0a0]"
             >
 
-            <label class="text-[13px] text-[#555] mt-5">パスワード</label>
-            <input
-                type="password"
-                id="password"
-                autocomplete="current-password"
-                class="mt-1.5 w-full h-11 bg-white border-none rounded-lg px-3.5 text-[15px] text-[#333] outline-none shadow-sm focus:ring-2 focus:ring-[#f4a0a0]"
-            >
-
-            <div class="text-right mt-2.5">
-                <a href="/forgot-password" class="text-[12px] text-[#6a9fd8] no-underline">パスワードを忘れたはこちらから</a>
-            </div>
-
             <!-- エラーメッセージ -->
             <div id="errorMsg" class="hidden mt-4 bg-[#fff0f0] border border-[#f4a0a0] rounded-lg px-3.5 py-2.5 text-[13px] text-[#c0392b] leading-relaxed"></div>
 
-            <!-- ログインボタン -->
+            <!-- 送信ボタン -->
             <button
-                id="loginBtn"
+                id="submitBtn"
                 class="relative mt-9 w-full h-12 bg-white border-none rounded-full text-[16px] text-[#3a3a3a] cursor-pointer shadow-md active:scale-95 transition-transform disabled:opacity-60"
             >
-                ログイン
+                送信
                 <div class="spinner"></div>
             </button>
         </div>
 
-        <!-- 新規登録リンク -->
-        <div class="text-center mt-8 fade-in-3">
-            <a href="/register" class="text-[13px] text-[#6a9fd8] no-underline">新規登録はこちらから</a>
-        </div>
-
     </div>
 
-    <script src="{{ asset('js/login.js') }}"></script>
+    <!-- ポップアップ -->
+    <div id="popup" class="hidden fixed inset-0 flex items-center justify-center px-8 z-50">
+        <!-- 背景オーバーレイ -->
+        <div class="absolute inset-0 bg-black/20" id="popupOverlay"></div>
+
+        <!-- ポップアップ本体 -->
+        <div class="relative bg-white rounded-2xl shadow-lg p-6 w-full max-w-[320px] pop-in">
+            <!-- バツ印（右上） -->
+            <button
+                id="popupClose"
+                class="absolute top-3 right-3 w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                    <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
+                </svg>
+            </button>
+
+            <!-- メッセージ -->
+            <p class="text-[14px] text-[#3a3a3a] leading-relaxed mt-2">
+                メールボックスに送信しました<br>確認お願いします
+            </p>
+        </div>
+    </div>
+
+    <script src="{{ asset('js/forgot_password.js') }}"></script>
 </body>
 </html>
