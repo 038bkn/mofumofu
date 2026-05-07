@@ -79,6 +79,6 @@
         </nav>
     </div>
 
-    <script src="{{ asset('js/Calendar.js') }}"></script>
+    <script src="{{ asset('js/calendar.js') }}"></script>
 </body>
 </html>

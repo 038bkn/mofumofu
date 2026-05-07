@@ -1,19 +1,6 @@
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
     const scheduleContainer = document.getElementById('scheduleContainer');
-    const scheduleDate = window.scheduleDate || document.body.dataset.scheduleDate;
-
-    // API からタスク取得
-    async function fetchTasks() {
-        try {
-            const res = await fetch(`/api/tasks?date=${scheduleDate}`, {
-                headers: { 'Accept': 'application/json' }
-            });
-            const data = await res.json();
-            return data.tasks || [];
-        } catch (e) {
-            return [];
-        }
-    }
+    const scheduleDate = window.scheduleDate;
 
     function escHtml(str) {
         return String(str)
@@ -21,6 +8,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;');
+    }
+
+    // localStorageから該当日のタスクを取得
+    function fetchTasks() {
+        const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+        return tasks.filter(t => t.due_date === scheduleDate);
     }
 
     function renderTasks(tasks) {
@@ -74,6 +67,5 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    const tasks = await fetchTasks();
-    renderTasks(tasks);
+    renderTasks(fetchTasks());
 });

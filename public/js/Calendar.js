@@ -11,8 +11,8 @@ function renderCalendar() {
     document.getElementById('monthDisplay').textContent = monthNames[month];
     document.getElementById('yearDisplay').textContent  = year;
 
-    const firstDay  = new Date(year, month, 1).getDay();
-    const lastDate  = new Date(year, month + 1, 0).getDate();
+    const firstDay     = new Date(year, month, 1).getDay();
+    const lastDate     = new Date(year, month + 1, 0).getDate();
     const calendarGrid = document.getElementById('calendarGrid');
 
     // ヘッダー行（曜日）以外を削除
@@ -47,37 +47,25 @@ function renderCalendar() {
         }
     }
 
-    // タスク一覧を更新
     loadMonthTasks(year, month);
 }
 
 // ────────────────────────────────────────────────
-// その月のタスクを取得してToDo欄・完了欄に表示
+// localStorageから該当月のタスクを取得して表示
 // ────────────────────────────────────────────────
-async function loadMonthTasks(year, month) {
+function loadMonthTasks(year, month) {
     const monthStr = `${year}-${String(month + 1).padStart(2, '0')}`;
-
-    let tasks = [];
-    try {
-        const res  = await fetch(`/api/tasks?month=${monthStr}`, {
-            headers: { 'Accept': 'application/json' }
-        });
-        const data = await res.json();
-        tasks = data.tasks || [];
-    } catch (e) {
-        // 通信エラー時は空のまま表示
-    }
+    const allTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+    const tasks    = allTasks.filter(t => (t.due_date || '').startsWith(monthStr));
 
     const now = new Date();
-
-    // 完了済み判定：
-    //   ① completed フラグが true、または
-    //   ② 終了日時（due_date + end_time）が現在時刻より過去
     const todoList      = [];
     const completedList = [];
 
     tasks.forEach(task => {
-        const endDatetime = getEndDatetime(task);
+        const endDatetime = task.due_date && task.end_time
+            ? new Date(`${task.due_date}T${task.end_time}`)
+            : null;
         const isPast = endDatetime && endDatetime < now;
 
         if (task.completed || isPast) {
@@ -87,21 +75,13 @@ async function loadMonthTasks(year, month) {
         }
     });
 
-    // 日付順にソート
-    todoList.sort((a, b) => sortKey(a).localeCompare(sortKey(b)));
+    todoList.sort((a, b)      => sortKey(a).localeCompare(sortKey(b)));
     completedList.sort((a, b) => sortKey(a).localeCompare(sortKey(b)));
 
     renderTodoList(todoList);
     renderCompletedList(completedList);
 }
 
-// due_date + end_time から Date オブジェクトを生成
-function getEndDatetime(task) {
-    if (!task.due_date || !task.end_time) return null;
-    return new Date(`${task.due_date}T${task.end_time}`);
-}
-
-// ソートキー：due_date + start_time
 function sortKey(task) {
     return `${task.due_date || ''}T${task.start_time || '00:00'}`;
 }
@@ -146,8 +126,7 @@ function renderCompletedList(tasks) {
     container.innerHTML = '';
 
     if (tasks.length === 0) {
-        container.innerHTML = `
-            <p class="text-sm text-slate-400">完了した予定はここに表示されます。</p>`;
+        container.innerHTML = `<p class="text-sm text-slate-400">完了した予定はここに表示されます。</p>`;
         return;
     }
 
@@ -176,7 +155,6 @@ function escHtml(str) {
         .replace(/"/g, '&quot;');
 }
 
-// "2026-04-15" → "4/15"
 function formatDate(dateStr) {
     if (!dateStr) return '';
     const [, m, d] = dateStr.split('-');
