@@ -9,3 +9,6 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
 })->name('password.request');
+Route::get('/setting', function () {
+    return view('setting');
+});
