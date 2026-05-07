@@ -32,7 +32,7 @@ Route::get('/setting', function () {
 // メイン機能画面
 // ==========================================
 Route::get('/calendar', function () {
-    return view('Calendar_screen');
+    return view('calendar_screen');
 });
 
 // ※ダミーデータとして日付（date）を受け取る処理
@@ -50,4 +50,14 @@ Route::get('/task/create', function (Request $request) {
 Route::get('/task/detail', function (Request $request) {
     $date = $request->query('date', date('Y-m-d'));
     return view('task_detail', compact('date'));
+});
+Route::get('/chat', function () {
+    return view('chatscreen');
+});
+Route::get('/homete', function () {
+    return view('homete_screen');
+});
+// routes/web.php に追記
+Route::get('/nagusame', function () {
+    return view('nagusame_screen');
 });
