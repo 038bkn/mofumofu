@@ -19,7 +19,7 @@ Route::get('/register', function () {
 })->name('register');
 
 Route::get('/forgot-password', function () {
-    return view('auth.forgot-password');
+    return view('auth.forgot_password');
 })->name('password.request');
 
 
