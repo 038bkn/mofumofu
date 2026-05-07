@@ -50,5 +50,8 @@ function addMessage(text, sender) {
 
 // Enterキー対応
 messageInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') sendMessage();
+   if (e.isComposing || e.keyCode === 229) return; if (e.key === 'Enter') {
+    e.preventDefault();
+    sendMessage();
+   }
 });

@@ -28,7 +28,7 @@
                     ←
                 </a>
                 <span class="text-base font-semibold text-slate-800">新規</span>
-                <button type="submit" form="taskForm" id="saveBtn"
+                 <button type="submit" form="taskForm" id="saveBtn" aria-label="保存"
                         class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-slate-100 transition text-slate-600 text-lg">
                     ✓
                 </button>

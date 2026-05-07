@@ -45,5 +45,8 @@ function addMessage(text, sender) {
 }
 
 messageInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') sendMessage();
+     if (e.key === 'Enter' && !e.isComposing) {
+        e.preventDefault();
+        sendMessage();
+     }
 });

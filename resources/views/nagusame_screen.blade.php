@@ -2,8 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>なぐさめて画面</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500&display=swap');
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -23,7 +22,8 @@
         .phone-frame {
             width: 100%;
             max-width: 450px; /* PCで見た時の最大幅 */
-            height: 100vh;    /* 画面いっぱいの高さ */
+            height: 100vh;
+            height: 100dvh;    /* 画面いっぱいの高さ */
             background: var(--nagusame-bg);
             display: flex;
             flex-direction: column;
@@ -137,7 +137,7 @@
 
     <div class="input-area">
         <input type="text" id="messageInput" class="text-input" placeholder="テキスト入力">
-        <button class="send-btn" id="sendBtn">
+        <button class="send-btn" type="button" aria-label="メッセージを送信" onclick="sendMessage()">
             <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#5a4a4a" stroke-width="2">
                 <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
             </svg>

@@ -12,10 +12,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // localStorageから該当日のタスクを取得
     function fetchTasks() {
-        const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-        return tasks.filter(t => t.due_date === scheduleDate);
+       let tasks = [];
+       try {
+        const raw = localStorage.getItem('tasks');
+        tasks = raw ? JSON.parse(raw) : [];
+        if (!Array.isArray(tasks)) tasks = [];
+         } catch {
+             tasks = [];
     }
-
+ return tasks.filter(t => t.due_date === scheduleDate);
+}
     function renderTasks(tasks) {
         scheduleContainer.innerHTML = '';
 

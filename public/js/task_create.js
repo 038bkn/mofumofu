@@ -50,7 +50,14 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         // localStorageのタスク配列に追加して保存
-        const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+       let tasks = [];
+       try {
+        const raw = localStorage.getItem('tasks');
+        tasks = raw ? JSON.parse(raw) : [];
+        if (!Array.isArray(tasks)) tasks = [];
+        } catch {
+            tasks = [];
+        }
         tasks.push(task);
         localStorage.setItem('tasks', JSON.stringify(tasks));
 
