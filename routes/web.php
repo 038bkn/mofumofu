@@ -25,7 +25,7 @@ Route::get('/forgot-password', function () {
 Route::get('/setting', function () {
     return view('setting');
 });
-=======
+
 
 
 // ==========================================
