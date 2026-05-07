@@ -16,9 +16,9 @@
             <p class="text-slate-600 leading-relaxed mb-6">
                 Laravel + Vanilla JS + Tailwind CSS の環境構築テスト用
             </p>
-            <button class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-3 px-6 rounded-lg transition duration-200">
-                スタートガイドを見る
-            </button>
+            <a href="/calendar" class="w-full inline-flex justify-center bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-3 px-6 rounded-lg transition duration-200">
+                カレンダーを見る
+            </a>
         </div>
     </div>
 

@@ -36,15 +36,22 @@
                 </div>
 
                 <div class="mt-6 grid gap-4">
+                    {{-- ToDo欄 --}}
                     <div class="rounded-3xl border border-slate-200 p-4">
                         <h2 class="text-lg font-semibold text-slate-900 mb-3">ToDo</h2>
-                        <div class="space-y-3 text-sm text-slate-700" id="todoList">
-                            <div class="rounded-2xl bg-slate-50 border border-slate-200 p-3">予定がありません</div>
+                        <div class="space-y-2 text-sm text-slate-700" id="todoList">
+                            <div class="rounded-2xl bg-slate-50 border border-slate-200 p-3 text-slate-400">
+                                読み込み中…
+                            </div>
                         </div>
                     </div>
+
+                    {{-- 完了欄 --}}
                     <div class="rounded-3xl border border-slate-200 p-4 bg-slate-50">
                         <h2 class="text-lg font-semibold text-slate-900 mb-3">完了</h2>
-                        <p class="text-sm text-slate-500">完了した予定はここに表示されます。</p>
+                        <div class="space-y-2 text-sm" id="completedList">
+                            <p class="text-sm text-slate-400">読み込み中…</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -73,7 +80,5 @@
     </div>
 
     <script src="{{ asset('js/Calendar.js') }}"></script>
- 
 </body>
-
 </html>

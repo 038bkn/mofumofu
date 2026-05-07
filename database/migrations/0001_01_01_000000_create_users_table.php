@@ -35,6 +35,12 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+
+        Schema::table('users', function (Blueprint $table) {
+            $table->integer('points')->default(0)->after('password')->comment('保有ポイント');
+            $table->tinyInteger('mode')->default(0)->after('points')->comment('0:あまあま, 1:飴と鞭');
+            $table->string('icon_path')->nullable()->after('mode')->comment('アイコン画像パス');
+        });
     }
 
     /**
