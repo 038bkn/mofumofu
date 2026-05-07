@@ -53,7 +53,7 @@
         <div class="flex flex-col fade-in-2">
             <label class="text-[13px] text-[#555]">メールアドレス・ユーザー名</label>
             <input
-                type="email"
+                type="text"
                 id="email"
                 autocomplete="email"
                 inputmode="email"
