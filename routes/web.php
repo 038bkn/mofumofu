@@ -22,6 +22,11 @@ Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
 })->name('password.request');
 
+Route::get('/setting', function () {
+    return view('setting');
+});
+=======
+
 
 // ==========================================
 // メイン機能画面
