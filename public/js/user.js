@@ -8,14 +8,12 @@ function handleIconUpload(event) {
     reader.onload = function (e) {
         const dataUrl = e.target.result;
 
-        // 画像を表示
         const img = document.getElementById("iconImage");
         const placeholder = document.getElementById("iconPlaceholder");
         img.src = dataUrl;
         img.style.display = "block";
         placeholder.style.display = "none";
 
-        // localStorageに保存
         localStorage.setItem("userIcon", dataUrl);
     };
     reader.readAsDataURL(file);
@@ -28,11 +26,12 @@ function toggleNameEdit() {
     const input = document.getElementById("nameInput");
     const current = document.getElementById("usernameDisplay").textContent;
 
-    if (area.classList.contains("visible")) {
-        area.classList.remove("visible");
+    // ②styleで表示/非表示を切り替え（Tailwindのhidden問題を回避）
+    if (area.style.display === "flex") {
+        area.style.display = "none";
     } else {
-        input.value = current !== "読み込み中…" ? current : "";
-        area.classList.add("visible");
+        input.value = (current !== "読み込み中…" && current !== "未設定") ? current : "";
+        area.style.display = "flex";
         input.focus();
     }
 }
@@ -48,21 +47,21 @@ function saveName() {
 
     localStorage.setItem("username", name);
     document.getElementById("usernameDisplay").textContent = name;
-    document.getElementById("nameEditArea").classList.remove("visible");
+    document.getElementById("nameEditArea").style.display = "none";
 }
 
 // ===== ログアウトモーダル =====
 
 function showLogoutModal() {
-    document.getElementById("logoutModal").classList.add("visible");
+    // ③styleで表示（Tailwindのhidden問題を回避）
+    document.getElementById("logoutModal").style.display = "flex";
 }
 
 function hideLogoutModal() {
-    document.getElementById("logoutModal").classList.remove("visible");
+    document.getElementById("logoutModal").style.display = "none";
 }
 
 function executeLogout() {
-    // Laravelのログアウト処理
     const form = document.createElement("form");
     form.method = "POST";
     form.action = "/logout";
@@ -70,9 +69,7 @@ function executeLogout() {
     const token = document.createElement("input");
     token.type = "hidden";
     token.name = "_token";
-    token.value = document.querySelector('meta[name="csrf-token"]')
-        ? document.querySelector('meta[name="csrf-token"]').content
-        : "";
+    token.value = document.querySelector('meta[name="csrf-token"]').content;
 
     form.appendChild(token);
     document.body.appendChild(form);
@@ -95,19 +92,11 @@ window.addEventListener("DOMContentLoaded", function () {
 
     // ユーザー名復元
     const savedName = localStorage.getItem("username");
-    if (savedName) {
-        document.getElementById("usernameDisplay").textContent = savedName;
-    } else {
-        document.getElementById("usernameDisplay").textContent = "未設定";
-    }
+    document.getElementById("usernameDisplay").textContent = savedName || "未設定";
 
-    // メールアドレス復元（表示のみ）
+    // メールアドレス復元
     const savedEmail = localStorage.getItem("email");
-    if (savedEmail) {
-        document.getElementById("emailDisplay").textContent = savedEmail;
-    } else {
-        document.getElementById("emailDisplay").textContent = "未設定";
-    }
+    document.getElementById("emailDisplay").textContent = savedEmail || "未設定";
 
     // フォントサイズ復元
     const savedFont = localStorage.getItem("fontSize");

@@ -40,6 +40,11 @@ Route::get('/user', function () {
     return view('user');
 });
 
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/login');
+})->name('logout');
+
 // ==========================================
 // メイン機能画面
 // ==========================================

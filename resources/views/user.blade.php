@@ -3,20 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mofumofu Project</title>
+    <title>もふすけ - ユーザー画面</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root { --font-size-base: 16px; }
         body { font-size: var(--font-size-base); }
+
+        .screen-label {
+            font-size: 11px;
+            color: #fde8e8;
+            padding: 12px 0 0;
+        }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-900 font-sans">
-
+<body class="bg-rose-50 text-slate-900 font-sans">
+    <div class="screen-label">設定</div>
     <div class="min-h-screen flex flex-col items-center p-4">
-
         <div class="w-full max-w-sm">
-
             <!-- 戻る -->
             <div class="mt-5">
                 <button
@@ -62,8 +66,8 @@
                         変更
                     </button>
                 </div>
-                <!-- 編集エリア -->
-                <div class="hidden mt-3 flex gap-2" id="nameEditArea">
+                {{-- ②styleで制御することでTailwindのhidden問題を回避 --}}
+                <div style="display:none;" class="mt-3 flex gap-2" id="nameEditArea">
                     <input
                         type="text"
                         id="nameInput"
@@ -109,9 +113,9 @@
 
     </div>
 
-    <!-- ログアウト確認モーダル -->
     <div
-        class="hidden fixed inset-0 bg-black bg-opacity-40 z-50 flex justify-center items-center"
+        style="display:none;"
+        class="fixed inset-0 bg-black bg-opacity-40 z-50 flex justify-center items-center"
         id="logoutModal"
         role="dialog"
         aria-modal="true"
