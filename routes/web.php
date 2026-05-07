@@ -36,6 +36,10 @@ Route::get('/home', function () {
     return view('home');
 })->name('home');
 
+Route::get('/user', function () {
+    return view('user');
+});
+
 // ==========================================
 // メイン機能画面
 // ==========================================
