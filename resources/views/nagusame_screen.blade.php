@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>なぐさめて画面</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500&display=swap');
@@ -16,16 +16,31 @@
             font-family: 'Noto Sans JP', sans-serif;
             background: #f0f0f0;
             display: flex; justify-content: center; align-items: center; min-height: 100vh;
+            overflow: hidden; /* 画面全体のスクロールを防ぐ */
         }
+
+        /* --- レスポンシブ対応の枠 --- */
         .phone-frame {
-            width: 360px; height: 700px;
+            width: 100%;
+            max-width: 450px; /* PCで見た時の最大幅 */
+            height: 100vh;    /* 画面いっぱいの高さ */
             background: var(--nagusame-bg);
-            border-radius: 24px; overflow: hidden;
-            display: flex; flex-direction: column;
+            display: flex;
+            flex-direction: column;
             position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
+
+        /* スマホ実機用の設定（横幅が狭い時） */
+        @media (max-width: 480px) {
+            .phone-frame {
+                max-width: 100%;
+                box-shadow: none;
+            }
+        }
+
         /* 戻るボタン */
-        .back-nav { padding: 20px; }
+        .back-nav { padding: 15px; z-index: 10; }
         .back-link {
             display: inline-block;
             background: var(--bubble-cream);
@@ -36,51 +51,68 @@
             font-size: 14px;
             font-weight: 500;
         }
+
         /* チャットエリア */
         .chat-area {
-            flex: 1; overflow-y: auto;
+            flex: 1;
+            overflow-y: auto;
             padding: 12px 16px;
-            display: flex; flex-direction: column; gap: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
         }
-        .message-row { display: flex; align-items: flex-end; gap: 8px; margin-bottom: 10px; }
+        .message-row { display: flex; align-items: flex-end; gap: 8px; margin-bottom: 5px; }
         .message-row.user { flex-direction: row-reverse; }
+        
         .bubble {
-            max-width: 70%; padding: 12px 16px;
-            border-radius: 25px; font-size: 13px;
+            max-width: 75%;
+            padding: 12px 16px;
+            border-radius: 20px;
+            font-size: 14px;
             background: var(--bubble-cream);
             color: var(--text-dark);
             position: relative;
+            word-wrap: break-word;
         }
-        /* 吹き出しのしっぽ */
-        .message-row.user .bubble::after {
-            content: ""; position: absolute; right: -8px; bottom: 10px;
-            border-left: 12px solid var(--bubble-cream);
-            border-top: 8px solid transparent; border-bottom: 8px solid transparent;
+        
+        .avatar {
+            width: 40px; height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px; flex-shrink: 0;
         }
-        .message-row.bot .bubble::after {
-            content: ""; position: absolute; left: -8px; bottom: 10px;
-            border-right: 12px solid var(--bubble-cream);
-            border-top: 8px solid transparent; border-bottom: 8px solid transparent;
-        }
-        .avatar { width: 40px; height: 40px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; text-align: center; }
 
         /* キャラクター固定エリア */
-        .mascot-container { text-align: center; padding-bottom: 20px; }
-        .mascot-img { width: 120px; }
+        .mascot-container { text-align: center; padding: 10px 0; }
+        .mascot-img { width: 100px; }
 
         /* 入力エリア */
         .input-area {
-            background: #b0e0e6; padding: 15px;
-            display: flex; align-items: center; gap: 10px;
+            background: #b0e0e6;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .text-input {
-            flex: 1; padding: 10px 15px;
-            border-radius: 20px; border: none; outline: none;
+            flex: 1;
+            padding: 12px 15px;
+            border-radius: 25px;
+            border: none;
+            outline: none;
+            font-size: 16px;
         }
         .send-btn {
-            background: white; border: none; width: 40px; height: 40px;
-            border-radius: 50%; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
+            background: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
@@ -105,8 +137,10 @@
 
     <div class="input-area">
         <input type="text" id="messageInput" class="text-input" placeholder="テキスト入力">
-        <button class="send-btn" onclick="sendMessage()">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        <button class="send-btn" id="sendBtn">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#5a4a4a" stroke-width="2">
+                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+            </svg>
         </button>
     </div>
 </div>

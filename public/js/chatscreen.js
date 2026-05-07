@@ -1,22 +1,13 @@
 const chatArea = document.getElementById('chatArea');
 const messageInput = document.getElementById('messageInput');
 const sendBtn = document.getElementById('sendBtn');
-const STORAGE_KEY = 'chat_history';
 
-// 1. ページ読み込み時に履歴を表示
-window.addEventListener('DOMContentLoaded', () => {
-    const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-    savedData.forEach(msg => {
-        addMessageToUI(msg.text);
-    });
-});
-
-// 2. 送信ボタンクリック
+// 送信ボタンクリック時のイベント
 sendBtn.addEventListener('click', () => {
     handleSend();
 });
 
-// 3. Enterキーでの送信
+// Enterキーでの送信
 messageInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
@@ -28,11 +19,8 @@ function handleSend() {
     const text = messageInput.value.trim();
     if (!text) return;
 
-    // UIに表示
+    // UIに表示するだけの処理
     addMessageToUI(text);
-    
-    // 保存
-    saveMessage(text);
 
     // 入力欄をクリア
     messageInput.value = '';
@@ -56,10 +44,4 @@ function addMessageToUI(text) {
 
     // 自動スクロール
     chatArea.scrollTop = chatArea.scrollHeight;
-}
-
-function saveMessage(text) {
-    const history = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-    history.push({ text: text });
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
 }
