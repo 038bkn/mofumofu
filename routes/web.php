@@ -78,3 +78,7 @@ Route::get('/nagusame', function () {
 Route::get('/collection', function () {
     return view('collection');
 });
+
+Route::get('/shop', function () {
+    return view('shop');
+});

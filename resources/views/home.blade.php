@@ -55,7 +55,7 @@
         コレクション画面
       </a>
 
-      <a href="/collection"
+      <a href="/shop"
         class="text-center bg-[#fff9e6] hover:bg-[#efe8cf] active:scale-95 transition-all rounded-full py-3 px-8 text-[#4a3f3f] font-bold shadow-sm border border-[#e8dfc5] no-underline"
       >
         ショップ画面
