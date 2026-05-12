@@ -53,7 +53,8 @@ Route::get('/task/detail', function (Request $request) {
 });
 
 Route::get('/chat', function () {
-    })->name('chat');
+    return view('chatscreen');
+})->name('chat');
 
 Route::get('/homete', function () {
     return view('homete_screen');
