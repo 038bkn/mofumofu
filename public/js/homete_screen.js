@@ -34,13 +34,6 @@ function addMessage(text, sender) {
     bubble.className = 'bubble';
     bubble.textContent = text;
 
-    if (sender === 'user') {
-        const avatar = document.createElement('div');
-        avatar.className = 'avatar';
-        avatar.innerHTML = 'ユーザー<br>アイコン';
-        row.appendChild(avatar);
-    }
-
     row.appendChild(bubble);
     chatArea.appendChild(row);
 

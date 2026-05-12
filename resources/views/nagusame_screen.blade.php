@@ -141,7 +141,7 @@
     <div class="input-area">
         <input type="text" id="messageInput" class="text-input" placeholder="テキスト入力">
         <button class="send-btn" type="button" aria-label="メッセージを送信" onclick="sendMessage()">
-            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#5a4a4a" stroke-width="2">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#87cefa" stroke-width="2">
                 <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
             </svg>
         </button>
