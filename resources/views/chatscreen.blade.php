@@ -86,11 +86,7 @@
 
     <!-- ホームへ戻るボタン -->
     <div class="top-nav">
-<<<<<<< HEAD
-        <button class="home-btn" onclick="location.href='/home'">
-=======
         <button class="home-btn" onclick=location.href='/home'>
->>>>>>> 43c5473 (fix:レイアウト修正　各画面に飛ぶように修正)
              🏠
         </button>
     </div>
