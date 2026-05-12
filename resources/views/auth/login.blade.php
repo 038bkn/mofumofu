@@ -78,6 +78,7 @@
             <!-- ログインボタン -->
             <button
                 id="loginBtn"
+                onClick="handleLogin()"
                 class="relative mt-9 w-full h-12 bg-white border-none rounded-full text-[16px] text-[#3a3a3a] cursor-pointer shadow-md active:scale-95 transition-transform disabled:opacity-60"
             >
                 ログイン
