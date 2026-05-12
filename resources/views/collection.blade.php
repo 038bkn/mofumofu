@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="base-url" content="{{ asset('') }}">
     <title>もふすけ - コレクション</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -11,15 +12,15 @@
     <div class="w-full max-w-[390px] min-h-screen bg-[#fde8e8] flex flex-col">
 
         <!-- ヘッダー -->
-        <div class="flex items-center justify-between px-4 pt-4 pb-2">
+        <div class="flex items-center justify-between px-8 pt-8 pb-2">
             <!-- 戻るボタン -->
-            <button onclick="window.history.back()" class="w-8 h-8 flex items-center justify-center text-[#3a3a3a]">
+            <button onclick="window.history.back()" aria-label="戻る" class="w-8 h-8 flex items-center justify-center text-[#3a3a3a]">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
                 </svg>
             </button>
             <!-- 保存ボタン -->
-            <button id="saveBtn" onclick="saveEquip()" class="w-8 h-8 flex items-center justify-center text-[#3a3a3a]">
+            <button id="saveBtn" onclick="saveEquip()" aria-label="保存" class="w-8 h-8 flex items-center justify-center text-[#3a3a3a]">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                 </svg>
@@ -27,12 +28,12 @@
         </div>
 
         <!-- キャラクター表示エリア -->
-        <div class="flex justify-center items-center py-4">
+        <div class="flex justify-center items-center py-10">
             <img
                 id="characterImg"
                 src="{{ asset('images/sheep.png') }}"
                 alt="キャラクター"
-                class="w-36 h-36 object-contain"
+                class="w-56 h-56 object-contain"
             >
         </div>
 
