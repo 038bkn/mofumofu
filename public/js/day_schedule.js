@@ -10,18 +10,32 @@ document.addEventListener('DOMContentLoaded', () => {
             .replace(/"/g, '&quot;');
     }
 
-    // localStorageから該当日のタスクを取得
-    function fetchTasks() {
-       let tasks = [];
-       try {
-        const raw = localStorage.getItem('tasks');
-        tasks = raw ? JSON.parse(raw) : [];
-        if (!Array.isArray(tasks)) tasks = [];
-         } catch {
-             tasks = [];
+    // API から該当日のタスクを取得
+    async function fetchTasks() {
+        try {
+            const response = await fetch(`/api/tasks?date=${scheduleDate}`, {
+                headers: { 'Accept': 'application/json' },
+            });
+            const json = await response.json();
+
+            if (!response.ok || json.status !== 'success') {
+                renderError(json.message || 'タスクの取得に失敗しました。');
+                return [];
+            }
+            return Array.isArray(json.data) ? json.data : [];
+        } catch (e) {
+            renderError('通信エラーが発生しました。');
+            return [];
+        }
     }
- return tasks.filter(t => t.due_date === scheduleDate);
-}
+
+    function renderError(message) {
+        scheduleContainer.innerHTML = `
+            <div style="text-align:center; padding:16px; font-size:13px; color:#dc2626;">
+                ${escHtml(message)}
+            </div>`;
+    }
+
     function renderTasks(tasks) {
         scheduleContainer.innerHTML = '';
 
@@ -46,11 +60,12 @@ document.addEventListener('DOMContentLoaded', () => {
             events.forEach(task => {
                 const startStr = (task.start_time || '').slice(0, 5);
                 const endStr   = (task.end_time   || '').slice(0, 5);
+                const isDone   = Number(task.status) === 1;
 
                 const eventBox = document.createElement('div');
-                eventBox.style.cssText = 'background:#1e293b; border-radius:10px; padding:8px 12px; color:white; margin-bottom:4px; cursor:pointer;';
+                eventBox.style.cssText = `background:${isDone ? '#94a3b8' : '#1e293b'}; border-radius:10px; padding:8px 12px; color:white; margin-bottom:4px; cursor:pointer;${isDone ? ' opacity:0.7;' : ''}`;
                 eventBox.innerHTML = `
-                    <div style="font-size:13px; font-weight:600;">${escHtml(task.title)}</div>
+                    <div style="font-size:13px; font-weight:600;${isDone ? ' text-decoration:line-through;' : ''}">${escHtml(task.title)}</div>
                     ${startStr ? `<div style="font-size:11px; color:#cbd5e1; margin-top:2px;">${startStr}${endStr ? ' - ' + endStr : ''}</div>` : ''}
                     ${task.note ? `<div style="font-size:11px; color:#cbd5e1; margin-top:4px;">${escHtml(task.note)}</div>` : ''}
                 `;
@@ -73,5 +88,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    renderTasks(fetchTasks());
+    fetchTasks().then(renderTasks);
 });
