@@ -40,7 +40,7 @@ Route::get('/home', function () {
 // メイン機能画面
 // ==========================================
 Route::get('/calendar', function () {
-    return view('calendar_screen');
+    return view('calender_screen');
 });
 
 // ※ダミーデータとして日付（date）を受け取る処理
