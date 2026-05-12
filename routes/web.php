@@ -28,6 +28,10 @@ Route::get('/setting', function () {
 
 
 
+Route::get('/home', function () {
+    return view('home');
+})->name('home');
+
 // ==========================================
 // メイン機能画面
 // ==========================================
