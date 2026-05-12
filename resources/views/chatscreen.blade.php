@@ -47,7 +47,7 @@
             padding: 10px 0 5px;
         }
         .mascot-area img {
-            width: 160px;
+            width: 200px;
             opacity: 0.9;
         }
 
