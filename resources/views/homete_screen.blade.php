@@ -60,12 +60,11 @@
          .mascot-label {
            margin-top: -30px; /* ここを大きくマイナスにする */
            font-size: 20px;
-           color: `#5a4a4a`;
+           color: #ffffff;
            position: relative;
            z-index: 5;
            font-weight: bold; /* 文字を見やすく */
-           text-shadow: 0 1px 2px rgba(255,255,255,0.45);
-}
+        }
 
         .input-area {
             background: #fce8e6; padding: 15px;
