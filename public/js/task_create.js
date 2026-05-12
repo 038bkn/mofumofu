@@ -19,49 +19,71 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('mouseout',  () => updateStars(difficulty));
     });
 
-    // フォーム送信
-    document.getElementById('taskForm').addEventListener('submit', (event) => {
+    function getCsrfToken() {
+        const meta = document.querySelector('meta[name="csrf-token"]');
+        return meta ? meta.content : '';
+    }
+
+    // フォーム送信 → API POST
+    document.getElementById('taskForm').addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        const title = document.getElementById('taskTitle').value.trim();
-        const start = document.getElementById('taskStart').value;
-        const end   = document.getElementById('taskEnd').value;
-        const note  = document.getElementById('taskNote').value.trim();
+        const title    = document.getElementById('taskTitle').value.trim();
+        const location = document.getElementById('taskLocation').value.trim();
+        const start    = document.getElementById('taskStart').value;
+        const end      = document.getElementById('taskEnd').value;
+        const note     = document.getElementById('taskNote').value.trim();
 
-        if (!title || !start || !end) {
-            alert('タイトルと開始・終了時刻を入力してください。');
+        // フロント側バリデーション
+        if (!title) {
+            alert('タイトルを入力してください。');
             return;
         }
-        if (start >= end) {
+        if (!difficulty) {
+            alert('難易度を選択してください。');
+            return;
+        }
+        if (start && end && start >= end) {
             alert('終了時刻は開始時刻より後にしてください。');
             return;
         }
 
-        // タスクオブジェクトを作成
-        const task = {
-            id:         Date.now(),
+        const payload = {
             title:      title,
-            start_time: start,
-            end_time:   end,
-            note:       note,
             difficulty: difficulty,
             due_date:   taskDate,
-            completed:  false,
+            start_time: start || null,
+            end_time:   end   || null,
+            note:       note  || null,
+            location:   location || null,
         };
 
-        // localStorageのタスク配列に追加して保存
-       let tasks = [];
-       try {
-        const raw = localStorage.getItem('tasks');
-        tasks = raw ? JSON.parse(raw) : [];
-        if (!Array.isArray(tasks)) tasks = [];
-        } catch {
-            tasks = [];
-        }
-        tasks.push(task);
-        localStorage.setItem('tasks', JSON.stringify(tasks));
+        const saveBtn = document.getElementById('saveBtn');
+        if (saveBtn) saveBtn.disabled = true;
 
-        // スケジュール画面へ遷移
-        window.location.href = `/day-schedule?date=${taskDate}`;
+        try {
+            const response = await fetch('/api/tasks', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': getCsrfToken(),
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+            const json = await response.json();
+
+            if (response.ok && json.status === 'success') {
+                // 作成成功 → 日次スケジュールへ
+                window.location.href = `/day-schedule?date=${taskDate}`;
+                return;
+            }
+
+            alert(json.message || 'タスクの登録に失敗しました。');
+        } catch (e) {
+            alert('通信エラーが発生しました。もう一度お試しください。');
+        } finally {
+            if (saveBtn) saveBtn.disabled = false;
+        }
     });
 });
