@@ -25,7 +25,7 @@ Route::get('/forgot-password', function () {
 Route::get('/setting', function () {
     return view('setting');
 });
-=======
+
 
 
 Route::get('/home', function () {
@@ -55,9 +55,11 @@ Route::get('/task/detail', function (Request $request) {
     $date = $request->query('date', date('Y-m-d'));
     return view('task_detail', compact('date'));
 });
+
 Route::get('/chat', function () {
     return view('chatscreen');
-});
+})->name('chat');
+
 Route::get('/homete', function () {
     return view('homete_screen');
 });

@@ -20,29 +20,19 @@ function handleSend() {
     const text = messageInput.value.trim();
     if (!text) return;
 
-    // UIに表示するだけの処理
-    addMessageToUI(text);
-
-    // 入力欄をクリア
+    addMessage(text, 'user');
     messageInput.value = '';
 }
 
-function addMessageToUI(text) {
+function addMessage(text, sender) {
     const row = document.createElement('div');
-    row.className = 'message-row user';
-
-    const avatar = document.createElement('div');
-    avatar.className = 'avatar';
-    avatar.textContent = '私';
+    row.className = `message-row ${sender}`;
 
     const bubble = document.createElement('div');
     bubble.className = 'bubble';
     bubble.textContent = text;
 
-    row.appendChild(avatar);
     row.appendChild(bubble);
     chatArea.appendChild(row);
-
-    // 自動スクロール
     chatArea.scrollTop = chatArea.scrollHeight;
 }

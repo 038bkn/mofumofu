@@ -13,51 +13,93 @@
             --bubble-cream: #fef9e7;
             --text-dark: #5a4a4a;
         }
-        body { font-family: 'Noto Sans JP', sans-serif; background: #f0f0f0; display: flex; justify-content: center; height: 100vh; overflow: hidden; }
-        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: #f0f0f0;
+            display: flex; justify-content: center;
+            height: 100vh; overflow: hidden;
+        }
+
         .phone-frame {
             width: 100%; max-width: 450px; height: 100%;
             background: var(--pink-bg); display: flex; flex-direction: column;
         }
 
-        .chat-area { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        
+        /* ホームボタンエリア */
+        .top-nav { padding: 12px 15px; }
+        .home-btn {
+            width: 48px; height: 48px; border-radius: 50%;
+            background: white; border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .home-btn img { width: 26px; height: 26px; }
+
+        /* チャットエリア（吹き出しが上に積まれる） */
+        .chat-area {
+            flex: 1; overflow-y: auto;
+            padding: 10px 20px; display: flex; flex-direction: column; gap: 15px;
+        }
+
+        /* 羊のエリア（画面中央に固定表示） */
+        .mascot-area {
+            display: flex; justify-content: center; align-items: center;
+            padding: 10px 0 5px;
+        }
+        .mascot-area img {
+            width: 200px;
+            opacity: 0.9;
+        }
+
         /* メッセージのスタイル */
         .message-row { display: flex; align-items: flex-end; gap: 8px; margin-bottom: 5px; }
         .message-row.user { flex-direction: row-reverse; }
-        .bubble { 
-            max-width: 75%; padding: 12px 16px; border-radius: 20px; 
+        .bubble {
+            max-width: 75%; padding: 12px 16px; border-radius: 20px;
             font-size: 14px; background: var(--bubble-cream); color: var(--text-dark);
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             word-wrap: break-word;
         }
-        .avatar { width: 36px; height: 36px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; }
 
+        /* 入力エリア */
         .input-area { background: var(--blue-bar); padding: 15px; }
         .tag-row { display: flex; gap: 10px; margin-bottom: 10px; }
-        .tag-btn { 
-            border: none; width: 40px; height: 40px; border-radius: 50%; 
+        .tag-btn {
+            border: none; width: 40px; height: 40px; border-radius: 50%;
             cursor: pointer; font-size: 18px; background: white;
             display: flex; align-items: center; justify-content: center;
         }
-
         .input-row { display: flex; gap: 10px; align-items: center; }
-        .text-input { 
-            flex: 1; padding: 12px 20px; border-radius: 25px; 
+        .text-input {
+            flex: 1; padding: 12px 20px; border-radius: 25px;
             border: none; outline: none; font-size: 16px;
         }
-        .send-btn { 
-            background: #e8e8e8; border: none; width: 45px; height: 45px; 
-            border-radius: 50%; cursor: pointer; display: flex; 
+        .send-btn {
+            background: #e8e8e8; border: none; width: 45px; height: 45px;
+            border-radius: 50%; cursor: pointer; display: flex;
             align-items: center; justify-content: center;
         }
     </style>
 </head>
 <body>
 <div class="phone-frame">
-    <div class="chat-area" id="chatArea">
-        </div>
 
+    <!-- ホームへ戻るボタン（仮） -->
+    <div class="top-nav">
+        <button class="home-btn" onclick="alert('ホーム画面は未実装です')">
+             🏠
+        </button>
+    </div>
+
+    <!-- チャット吹き出しエリア -->
+    <div class="chat-area" id="chatArea"></div>
+
+    <!-- 羊のキャラクター -->
+    <div class="mascot-area">
+        <img src="{{ asset('images/sleep_white.png') }}" alt="羊">
+    </div>
+
+    <!-- 入力エリア -->
     <div class="input-area">
         <div class="tag-row">
             <button class="tag-btn" onclick="location.href='/homete'">🌸</button>
@@ -72,6 +114,7 @@
             </button>
         </div>
     </div>
+
 </div>
 <script src="{{ asset('js/chatscreen.js') }}"></script>
 </body>
