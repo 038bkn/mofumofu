@@ -55,12 +55,15 @@
             padding: 8px 0 4px;
         }
         .mascot-container img {
-            width: 200px;
+            width: 300px;
         }
         .mascot-label {
-            font-size: 11px;
-            color: rgba(90, 74, 74, 0.6);
-            margin-top: 2px;
+         margin-top: -30px; /* ここを大きくマイナスにする */
+         font-size: 20px;
+         color: #ffffff;
+         position: relative;
+         z-index: 5;
+         font-weight: bold; /* 文字を見やすく */
         }
 
         .input-area {
@@ -83,9 +86,9 @@
     <div class="chat-area" id="chatArea"></div>
 
     <div class="mascot-container">
-        <img src="{{ asset('images/sleep_white.png') }}" alt="羊">
-        <div class="mascot-label" style="color:#ffff;">homete!</div>
-    </div>
+    <img src="{{ asset('images/sheep.png') }}" alt="羊">
+    <div class="mascot-label">homete!</div>
+</div>
 
     <div class="input-area">
         <input type="text" id="messageInput" class="text-input" placeholder="テキスト入力">

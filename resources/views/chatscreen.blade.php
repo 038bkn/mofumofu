@@ -47,7 +47,7 @@
             padding: 10px 0 5px;
         }
         .mascot-area img {
-            width: 200px;
+            width: 300px;
             opacity: 0.9;
         }
 
@@ -96,7 +96,7 @@
 
     <!-- 羊のキャラクター -->
     <div class="mascot-area">
-        <img src="{{ asset('images/sleep_white.png') }}" alt="羊">
+        <img src="{{ asset('images/sheep.png') }}" alt="羊">
     </div>
 
     <!-- 入力エリア -->
