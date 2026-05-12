@@ -58,4 +58,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(Task::class);
     }
+
+    /**
+     * このユーザーのつぶやき（ひとりごと）
+     */
+    public function soliloquies(): HasMany
+    {
+        return $this->hasMany(Soliloquy::class);
+    }
+
+    /**
+     * このユーザーが所持しているアイテム
+     */
+    public function ownedItems(): HasMany
+    {
+        return $this->hasMany(OwnedItem::class);
+    }
 }

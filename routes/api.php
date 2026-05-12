@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\SoliloquyController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\UserItemController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,4 +25,15 @@ Route::middleware('web')->group(function () {
 // 認証必須（ログインユーザー自身のタスクのみ操作可能）
 Route::middleware(['web', 'auth'])->group(function () {
     Route::apiResource('tasks', TaskController::class);
+
+    // ひとりごと（つぶやき）投稿
+    Route::post('soliloquies', [SoliloquyController::class, 'store']);
+
+    // ショップ：アイテム一覧 / 購入
+    Route::get('items',              [ItemController::class, 'index']);
+    Route::post('items/{item}/buy',  [ItemController::class, 'buy']);
+
+    // 着せ替え：所持アイテム一覧 / 装備切替
+    Route::get('user/items',                       [UserItemController::class, 'index']);
+    Route::put('user/items/{ownedItem}/equip',     [UserItemController::class, 'equip']);
 });
