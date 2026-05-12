@@ -69,18 +69,18 @@
         {{-- ボトムナビ --}}
         <nav class="w-full max-w-xl bg-white rounded-3xl shadow border border-slate-200 px-6 py-3">
             <div class="flex justify-between items-center">
-                <button class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 transition">
+                <a href="/chat" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 transition no-underline">
                     <span class="text-2xl">💬</span><span class="text-xs">ひとりごと</span>
-                </button>
-                <button class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 transition">
+                </a>
+                <a href="/home" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 transition no-underline">
                     <span class="text-2xl">🏠</span><span class="text-xs">ホーム</span>
-                </button>
-                <button class="flex flex-col items-center gap-1 text-slate-900">
+                </a>
+                <a href="/calendar" class="flex flex-col items-center gap-1 text-slate-900 no-underline">
                     <span class="text-2xl">📅</span><span class="text-xs font-semibold">ToDo</span>
-                </button>
-                <button class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 transition">
+                </a>
+                <a href="/setting" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 transition no-underline">
                     <span class="text-2xl">⚙️</span><span class="text-xs">設定</span>
-                </button>
+                </a>
             </div>
         </nav>
     </div>

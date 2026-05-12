@@ -84,9 +84,9 @@
 <body>
 <div class="phone-frame">
 
-    <!-- ホームへ戻るボタン（仮） -->
+    <!-- ホームへ戻るボタン -->
     <div class="top-nav">
-        <button class="home-btn" onclick="alert('ホーム画面は未実装です')">
+        <button class="home-btn" onclick="location.href='/home'">
              🏠
         </button>
     </div>
