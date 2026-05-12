@@ -145,7 +145,7 @@
                 <button
                     type="button"
                     class="change-btn"
-                    onclick="location.href='/profile'">
+                    onclick="location.href='/user'">
                     変更
                 </button>
             </div>

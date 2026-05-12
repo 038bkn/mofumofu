@@ -35,8 +35,8 @@ async function handleLogin() {
         const data = await response.json();
 
         if (response.ok && data.status === 'success') {
-            // ログイン成功 → カレンダー画面へ
-            window.location.href = '/calendar';
+            // ログイン成功 → ホーム画面へ
+            window.location.href = '/home';
         } else {
             const msg = data.message || 'メールアドレスまたはパスワードが正しくありません。';
             showError(msg);

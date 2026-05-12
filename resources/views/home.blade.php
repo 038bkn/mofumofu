@@ -48,18 +48,18 @@
       style="background-image: url('/images/cloud.png');"
       onclick="event.stopPropagation()"
     >
-    <div class="flex flex-col gap-3 mt-[-20px]"> 
-      <button
-        class="bg-[#fff9e6] hover:bg-[#efe8cf] active:scale-95 transition-all rounded-full py-3 px-8 text-[#4a3f3f] font-bold shadow-sm border border-[#e8dfc5]"
+    <div class="flex flex-col gap-3 mt-[-20px]">
+      <a href="/collection"
+        class="text-center bg-[#fff9e6] hover:bg-[#efe8cf] active:scale-95 transition-all rounded-full py-3 px-8 text-[#4a3f3f] font-bold shadow-sm border border-[#e8dfc5] no-underline"
       >
         コレクション画面
-      </button>
+      </a>
 
-      <button
-        class="bg-[#fff9e6] hover:bg-[#efe8cf] active:scale-95 transition-all rounded-full py-3 px-8 text-[#4a3f3f] font-bold shadow-sm border border-[#e8dfc5]"
+      <a href="/collection"
+        class="text-center bg-[#fff9e6] hover:bg-[#efe8cf] active:scale-95 transition-all rounded-full py-3 px-8 text-[#4a3f3f] font-bold shadow-sm border border-[#e8dfc5] no-underline"
       >
         ショップ画面
-      </button>
+      </a>
     </div>
   </div>
 
@@ -75,25 +75,25 @@
     <!-- 下ナビ -->
     <nav class="absolute bottom-0 left-0 w-full h-[90px] bg-[#cdeef9] flex justify-around items-center border-t border-[#b5d9e4] z-20">
 
-      <button class="flex flex-col items-center text-[#5b5b5b]">
+      <a href="/chat" class="flex flex-col items-center text-[#5b5b5b] no-underline">
         <span class="text-3xl">💬</span>
         <span class="text-xs mt-1">ひとりごと</span>
-      </button>
+      </a>
 
-      <button class="flex flex-col items-center text-[#5b5b5b]">
+      <a href="/home" class="flex flex-col items-center text-[#5b5b5b] font-bold no-underline">
         <span class="text-3xl">🏠</span>
         <span class="text-xs mt-1">ホーム</span>
-      </button>
+      </a>
 
-      <button class="flex flex-col items-center text-[#5b5b5b]">
+      <a href="/calendar" class="flex flex-col items-center text-[#5b5b5b] no-underline">
         <span class="text-3xl">📅</span>
         <span class="text-xs mt-1">ToDo</span>
-      </button>
+      </a>
 
-      <button class="flex flex-col items-center text-[#5b5b5b]">
+      <a href="/setting" class="flex flex-col items-center text-[#5b5b5b] no-underline">
         <span class="text-3xl">⚙️</span>
         <span class="text-xs mt-1">設定</span>
-      </button>
+      </a>
 
     </nav>
 

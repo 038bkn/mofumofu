@@ -24,7 +24,11 @@ Route::get('/forgot-password', function () {
 
 Route::get('/setting', function () {
     return view('setting');
-});
+})->name('setting');
+
+Route::get('/user', function () {
+    return view('user');
+})->name('user');
 
 
 

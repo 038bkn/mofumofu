@@ -59,22 +59,22 @@
 
         <nav class="w-full max-w-xl bg-white rounded-3xl shadow-inner border border-slate-200 px-5 py-4">
             <div class="flex justify-between items-center text-slate-600">
-                <button class="flex flex-col items-center gap-1 text-slate-900">
+                <a href="/chat" class="flex flex-col items-center gap-1 no-underline text-slate-600">
                     <span class="text-2xl">💬</span>
                     <span class="text-xs">ひとりごと</span>
-                </button>
-                <button class="flex flex-col items-center gap-1">
+                </a>
+                <a href="/home" class="flex flex-col items-center gap-1 no-underline text-slate-600">
                     <span class="text-2xl">🏠</span>
                     <span class="text-xs">ホーム</span>
-                </button>
-                <button class="flex flex-col items-center gap-1 text-slate-900">
+                </a>
+                <a href="/calendar" class="flex flex-col items-center gap-1 no-underline text-slate-900 font-bold">
                     <span class="text-2xl">📅</span>
                     <span class="text-xs">ToDo</span>
-                </button>
-                <button class="flex flex-col items-center gap-1">
+                </a>
+                <a href="/setting" class="flex flex-col items-center gap-1 no-underline text-slate-600">
                     <span class="text-2xl">⚙️</span>
                     <span class="text-xs">設定</span>
-                </button>
+                </a>
             </div>
         </nav>
     </div>
