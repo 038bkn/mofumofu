@@ -51,12 +51,27 @@ function renderCalendar() {
 }
 
 // ────────────────────────────────────────────────
-// localStorageから該当月のタスクを取得して表示
+// API から該当月のタスクを取得して表示
 // ────────────────────────────────────────────────
-function loadMonthTasks(year, month) {
+async function loadMonthTasks(year, month) {
     const monthStr = `${year}-${String(month + 1).padStart(2, '0')}`;
-    const allTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-    const tasks    = allTasks.filter(t => (t.due_date || '').startsWith(monthStr));
+
+    let tasks = [];
+    try {
+        const response = await fetch(`/api/tasks?month=${monthStr}`, {
+            headers: { 'Accept': 'application/json' },
+        });
+        const json = await response.json();
+
+        if (!response.ok || json.status !== 'success') {
+            renderError(json.message || 'タスクの取得に失敗しました。');
+            return;
+        }
+        tasks = Array.isArray(json.data) ? json.data : [];
+    } catch (e) {
+        renderError('通信エラーが発生しました。');
+        return;
+    }
 
     const now = new Date();
     const todoList      = [];
@@ -68,7 +83,8 @@ function loadMonthTasks(year, month) {
             : null;
         const isPast = endDatetime && endDatetime < now;
 
-        if (task.completed || isPast) {
+        // status === 1（完了済み）or 期限切れ で「完了」扱い
+        if (Number(task.status) === 1 || isPast) {
             completedList.push(task);
         } else {
             todoList.push(task);
@@ -80,6 +96,15 @@ function loadMonthTasks(year, month) {
 
     renderTodoList(todoList);
     renderCompletedList(completedList);
+}
+
+function renderError(message) {
+    const todo      = document.getElementById('todoList');
+    const completed = document.getElementById('completedList');
+    if (todo) {
+        todo.innerHTML = `<div class="rounded-2xl bg-rose-50 border border-rose-200 p-3 text-sm text-rose-600">${escHtml(message)}</div>`;
+    }
+    if (completed) completed.innerHTML = '';
 }
 
 function sortKey(task) {
