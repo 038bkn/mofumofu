@@ -15,7 +15,7 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::get('/register', function () {
-    return view('auth.Register'); 
+    return view('auth.register'); 
 })->name('register');
 
 Route::get('/forgot-password', function () {
@@ -66,4 +66,11 @@ Route::get('/homete', function () {
 // routes/web.php に追記
 Route::get('/nagusame', function () {
     return view('nagusame_screen');
+});
+
+// ==========================================
+// コレクション・ショップ系画面
+// ==========================================
+Route::get('/collection', function () {
+    return view('collection');
 });
