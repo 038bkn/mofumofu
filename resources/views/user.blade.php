@@ -92,7 +92,7 @@
                 <div class="flex justify-end mt-3">
                     <button
                         type="button"
-                        onclick="location.href='/email-password'"
+                        onclick="location.href='/pass'"
                         class="px-5 py-1.5 rounded-full bg-slate-200 text-slate-700 text-sm hover:bg-slate-300 transition">
                         変更
                     </button>

@@ -40,6 +40,15 @@ Route::get('/user', function () {
     return view('user');
 });
 
+Route::get('/pass', function () {
+    return view('pass');
+});
+
+// 保存処理
+Route::post('/pass/update', function () {
+    return redirect('/user');
+});
+
 Route::post('/logout', function () {
     Auth::logout();
     return redirect('/login');
