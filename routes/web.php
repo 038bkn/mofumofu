@@ -61,3 +61,10 @@ Route::get('/homete', function () {
 Route::get('/nagusame', function () {
     return view('nagusame_screen');
 });
+
+// ==========================================
+// コレクション・ショップ系画面
+// ==========================================
+Route::get('/collection', function () {
+    return view('collection');
+});
