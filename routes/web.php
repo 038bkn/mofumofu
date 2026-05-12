@@ -15,7 +15,7 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::get('/register', function () {
-    return view('auth.Register'); 
+    return view('auth.register'); 
 })->name('register');
 
 Route::get('/forgot-password', function () {
