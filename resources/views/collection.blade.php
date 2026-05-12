@@ -55,7 +55,7 @@
                     data-item="bell"
                     class="item-btn aspect-square bg-white rounded-full shadow-sm flex items-center justify-center border-2 border-transparent overflow-hidden"
                 >
-                    <img src="{{ asset('images/item/bell.png') }}" alt="bell" class="w-full h-full object-cover">
+                    <img src="{{ asset('images/item/bell.png') }}" alt="bell" class="w-4/5 h-4/5 object-contain">
                 </button>
 
                 <!-- dango -->
@@ -64,7 +64,7 @@
                     data-item="dango"
                     class="item-btn aspect-square bg-white rounded-full shadow-sm flex items-center justify-center border-2 border-transparent overflow-hidden"
                 >
-                    <img src="{{ asset('images/item/dango.png') }}" alt="dango" class="w-full h-full object-cover">
+                    <img src="{{ asset('images/item/dango.png') }}" alt="dango" class="w-4/5 h-4/5 object-contain">
                 </button>
 
                 <!-- doll_boy -->
@@ -73,7 +73,7 @@
                     data-item="doll_boy"
                     class="item-btn aspect-square bg-white rounded-full shadow-sm flex items-center justify-center border-2 border-transparent overflow-hidden"
                 >
-                    <img src="{{ asset('images/item/doll_boy.png') }}" alt="doll_boy" class="w-full h-full object-cover">
+                    <img src="{{ asset('images/item/doll_boy.png') }}" alt="doll_boy" class="w-4/5 h-4/5 object-contain">
                 </button>
 
                 <!-- doll_girl -->
@@ -82,7 +82,7 @@
                     data-item="doll_girl"
                     class="item-btn aspect-square bg-white rounded-full shadow-sm flex items-center justify-center border-2 border-transparent overflow-hidden"
                 >
-                    <img src="{{ asset('images/item/doll_girl.png') }}" alt="doll_girl" class="w-full h-full object-cover">
+                    <img src="{{ asset('images/item/doll_girl.png') }}" alt="doll_girl" class="w-4/5 h-4/5 object-contain">
                 </button>
 
                 <!-- hat -->
@@ -91,7 +91,7 @@
                     data-item="hat"
                     class="item-btn aspect-square bg-white rounded-full shadow-sm flex items-center justify-center border-2 border-transparent overflow-hidden"
                 >
-                    <img src="{{ asset('images/item/hat.png') }}" alt="hat" class="w-full h-full object-cover">
+                    <img src="{{ asset('images/item/hat.png') }}" alt="hat" class="w-4/5 h-4/5 object-contain">
                 </button>
 
                 <!-- helmet_blue -->
@@ -100,7 +100,7 @@
                     data-item="helmet_blue"
                     class="item-btn aspect-square bg-white rounded-full shadow-sm flex items-center justify-center border-2 border-transparent overflow-hidden"
                 >
-                    <img src="{{ asset('images/item/helmet_blue.png') }}" alt="helmet_blue" class="w-full h-full object-cover">
+                    <img src="{{ asset('images/item/helmet_blue.png') }}" alt="helmet_blue" class="w-4/5 h-4/5 object-contain">
                 </button>
 
                 <!-- helmet_red -->
@@ -109,7 +109,7 @@
                     data-item="helmet_red"
                     class="item-btn aspect-square bg-white rounded-full shadow-sm flex items-center justify-center border-2 border-transparent overflow-hidden"
                 >
-                    <img src="{{ asset('images/item/helmet_red.png') }}" alt="helmet_red" class="w-full h-full object-cover">
+                    <img src="{{ asset('images/item/helmet_red.png') }}" alt="helmet_red" class="w-4/5 h-4/5 object-contain">
                 </button>
 
                 <!-- rainy -->
@@ -118,7 +118,7 @@
                     data-item="rainy"
                     class="item-btn aspect-square bg-white rounded-full shadow-sm flex items-center justify-center border-2 border-transparent overflow-hidden"
                 >
-                    <img src="{{ asset('images/item/rainy.png') }}" alt="rainy" class="w-full h-full object-cover">
+                    <img src="{{ asset('images/item/rainy.png') }}" alt="rainy" class="w-4/5 h-4/5 object-contain">
                 </button>
 
                 <!-- ribbon -->
@@ -127,7 +127,7 @@
                     data-item="ribbon"
                     class="item-btn aspect-square bg-white rounded-full shadow-sm flex items-center justify-center border-2 border-transparent overflow-hidden"
                 >
-                    <img src="{{ asset('images/item/ribbon.png') }}" alt="ribbon" class="w-full h-full object-cover">
+                    <img src="{{ asset('images/item/ribbon.png') }}" alt="ribbon" class="w-4/5 h-4/5 object-contain">
                 </button>
 
                 <!-- sakura -->
@@ -136,7 +136,7 @@
                     data-item="sakura"
                     class="item-btn aspect-square bg-white rounded-full shadow-sm flex items-center justify-center border-2 border-transparent overflow-hidden"
                 >
-                    <img src="{{ asset('images/item/sakura.png') }}" alt="sakura" class="w-full h-full object-cover">
+                    <img src="{{ asset('images/item/sakura.png') }}" alt="sakura" class="w-4/5 h-4/5 object-contain">
                 </button>
 
                 <!-- sunflower -->
@@ -145,7 +145,7 @@
                     data-item="sunflower"
                     class="item-btn aspect-square bg-white rounded-full shadow-sm flex items-center justify-center border-2 border-transparent overflow-hidden"
                 >
-                    <img src="{{ asset('images/item/sunflower.png') }}" alt="sunflower" class="w-full h-full object-cover">
+                    <img src="{{ asset('images/item/sunflower.png') }}" alt="sunflower" class="w-4/5 h-4/5 object-contain">
                 </button>
 
                 <!-- sunglasses -->
@@ -154,7 +154,7 @@
                     data-item="sunglasses"
                     class="item-btn aspect-square bg-white rounded-full shadow-sm flex items-center justify-center border-2 border-transparent overflow-hidden"
                 >
-                    <img src="{{ asset('images/item/sunglasses.png') }}" alt="sunglasses" class="w-full h-full object-cover">
+                    <img src="{{ asset('images/item/sunglasses.png') }}" alt="sunglasses" class="w-4/5 h-4/5 object-contain">
                 </button>
 
                 <!-- tanabata_man -->
@@ -163,7 +163,7 @@
                     data-item="tanabata_man"
                     class="item-btn aspect-square bg-white rounded-full shadow-sm flex items-center justify-center border-2 border-transparent overflow-hidden"
                 >
-                    <img src="{{ asset('images/item/tanabata_man.png') }}" alt="tanabata_man" class="w-full h-full object-cover">
+                    <img src="{{ asset('images/item/tanabata_man.png') }}" alt="tanabata_man" class="w-4/5 h-4/5 object-contain">
                 </button>
 
                 <!-- tanabata_woman -->
@@ -172,7 +172,7 @@
                     data-item="tanabata_woman"
                     class="item-btn aspect-square bg-white rounded-full shadow-sm flex items-center justify-center border-2 border-transparent overflow-hidden"
                 >
-                    <img src="{{ asset('images/item/tanabata_woman.png') }}" alt="tanabata_woman" class="w-full h-full object-cover">
+                    <img src="{{ asset('images/item/tanabata_woman.png') }}" alt="tanabata_woman" class="w-4/5 h-4/5 object-contain">
                 </button>
 
                 <!-- tophat -->
@@ -181,7 +181,7 @@
                     data-item="tophat"
                     class="item-btn aspect-square bg-white rounded-full shadow-sm flex items-center justify-center border-2 border-transparent overflow-hidden"
                 >
-                    <img src="{{ asset('images/item/tophat.png') }}" alt="tophat" class="w-full h-full object-cover">
+                    <img src="{{ asset('images/item/tophat.png') }}" alt="tophat" class="w-4/5 h-4/5 object-contain">
                 </button>
 
                 <!-- valentine -->
@@ -190,7 +190,7 @@
                     data-item="valentine"
                     class="item-btn aspect-square bg-white rounded-full shadow-sm flex items-center justify-center border-2 border-transparent overflow-hidden"
                 >
-                    <img src="{{ asset('images/item/valentine.png') }}" alt="valentine" class="w-full h-full object-cover">
+                    <img src="{{ asset('images/item/valentine.png') }}" alt="valentine" class="w-4/5 h-4/5 object-contain">
                 </button>
 
             </div>
