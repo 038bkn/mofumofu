@@ -58,4 +58,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Task::class);
     }
+
+    /**
+     * このユーザーのつぶやき（ひとりごと）
+     */
+    public function soliloquies(): HasMany
+    {
+        return $this->hasMany(Soliloquy::class);
+    }
 }
