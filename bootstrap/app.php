@@ -31,9 +31,17 @@ return Application::configure(basePath: dirname(__DIR__))
         // 存在しないモデルに対する操作（route model binding の 404）
         $exceptions->render(function (ModelNotFoundException $e, Request $request) {
             if ($request->expectsJson()) {
+                $labels = [
+                    'Task'      => 'タスク',
+                    'Item'      => 'アイテム',
+                    'OwnedItem' => '所持アイテム',
+                    'Soliloquy' => 'つぶやき',
+                ];
+                $label = $labels[class_basename($e->getModel())] ?? 'データ';
+
                 return response()->json([
                     'status'  => 'error',
-                    'message' => 'タスクが見つかりません。',
+                    'message' => $label . 'が見つかりません。',
                 ], 404);
             }
         });
