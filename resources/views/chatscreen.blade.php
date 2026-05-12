@@ -86,7 +86,7 @@
 
     <!-- ホームへ戻るボタン -->
     <div class="top-nav">
-        <button class="home-btn" onclick="location.href='/home'">
+        <button class="home-btn" onclick=location.href='/home'>
              🏠
         </button>
     </div>
