@@ -23,6 +23,10 @@ Route::get('/forgot-password', function () {
 })->name('password.request');
 
 
+Route::get('/home', function () {
+    return view('home');
+})->name('home');
+
 // ==========================================
 // メイン機能画面
 // ==========================================
