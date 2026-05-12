@@ -38,7 +38,7 @@
         </div>
 
         <!-- アイテムグリッド -->
-        <div class="flex-1 px-4 pb-6">
+        <div class="flex-1 px-1 pb-6">
             <div class="grid grid-cols-4 gap-3" id="itemGrid">
 
                 <!-- 装備なし -->
