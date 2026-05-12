@@ -43,9 +43,17 @@ document.addEventListener('DOMContentLoaded', function () {
     confirmOk.addEventListener('click', function () {
         if (isSubmitting) return;
 
+        // 重複送信防止フラグをON
+        isSubmitting = true;
+        confirmOk.disabled = true;
+
         // TODO: バックエンド実装後にAPIを呼ぶ
         // POST /api/items/{id}/buy
         alert('この機能はバックエンド実装後に有効になります。');
+
+        // フラグをOFFに戻す
+        isSubmitting = false;
+        confirmOk.disabled = false;
         closeConfirm();
     });
 
