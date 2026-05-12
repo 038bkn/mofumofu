@@ -2,12 +2,17 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
+<<<<<<< HEAD
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+=======
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+>>>>>>> 43c5473 (fix:レイアウト修正　各画面に飛ぶように修正)
     <title>タスク詳細</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: 'Hiragino Sans', 'Hiragino Kino Gothic ProN', 'Noto Sans JP', sans-serif; }
+<<<<<<< HEAD
 
         /* 完了演出 */
         #pointToast {
@@ -24,62 +29,66 @@
             opacity: 1;
             transform: translate(-50%, -50%) scale(1);
         }
+=======
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+>>>>>>> 43c5473 (fix:レイアウト修正　各画面に飛ぶように修正)
     </style>
 </head>
-<body class="bg-slate-100 text-slate-900">
+<body class="bg-slate-100 text-slate-900 flex justify-center items-center min-h-screen p-0 sm:p-4">
     @php
         use Carbon\Carbon;
         $dateObject = Carbon::parse($date);
     @endphp
 
-    <div class="min-h-screen flex flex-col items-center p-4 gap-4">
-        <div class="w-full max-w-xl bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
-
+    <div class="w-full max-w-md h-screen sm:h-[90vh] flex flex-col bg-white shadow-2xl overflow-hidden sm:rounded-[2.5rem] border border-slate-200">
+        
+        <div class="flex-1 flex flex-col overflow-hidden">
             {{-- ヘッダー --}}
-            <div class="flex items-center justify-between px-5 py-4">
+            <div class="flex items-center justify-between px-5 py-4 flex-shrink-0 border-b" style="background-color: #fffacc; border-color: #f5f0bb;">
                 <a href="/day-schedule?date={{ $dateObject->format('Y-m-d') }}"
-                   class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-slate-100 transition text-slate-600 text-lg">
+                   class="w-9 h-9 flex items-center justify-center rounded-full bg-white/50 hover:bg-white transition text-slate-600 text-lg shadow-sm">
                     ←
                 </a>
-                <span class="text-base font-semibold text-slate-800">詳細</span>
+                <span class="text-base font-bold text-slate-800">詳細</span>
                 <div class="w-9"></div>
             </div>
 
-            {{-- タスク詳細カード --}}
-            <div class="mx-5 mb-5 bg-slate-50 rounded-2xl p-5 border border-slate-100">
-                <div id="taskContent" class="space-y-3">
-                    <div class="text-sm text-slate-300 text-center py-4">読み込み中…</div>
+            {{-- 詳細エリア --}}
+            <div class="flex-1 overflow-y-auto hide-scrollbar px-6 py-6">
+                <div id="taskContent" class="bg-slate-50 rounded-3xl p-6 border border-slate-100 shadow-sm min-h-[200px]">
+                    <p class="text-sm text-slate-400 text-center py-8">読み込み中...</p>
+                </div>
+
+                <div class="mt-8 flex flex-col gap-3">
+                    <button id="deleteBtn" class="w-full py-4 rounded-2xl bg-rose-50 text-rose-500 font-bold text-sm hover:bg-rose-100 transition shadow-sm border border-rose-100">
+                        この予定を削除する
+                    </button>
+                    <a href="/day-schedule?date={{ $dateObject->format('Y-m-d') }}" class="w-full py-4 rounded-2xl bg-slate-100 text-slate-500 font-bold text-sm text-center hover:bg-slate-200 transition">
+                        戻る
+                    </a>
                 </div>
             </div>
-
-            {{-- アクションボタン --}}
-            <div class="px-5 pb-6 flex justify-center gap-3">
-                <button id="completeBtn" type="button"
-                        class="hidden px-8 py-3 bg-emerald-400 hover:bg-emerald-500 active:bg-emerald-600 text-white text-sm font-semibold rounded-full shadow transition">
-                    完了にする
-                </button>
-                <button id="deleteBtn" type="button"
-                        class="px-8 py-3 bg-rose-400 hover:bg-rose-500 active:bg-rose-600 text-white text-sm font-semibold rounded-full shadow transition">
-                    予定を削除
-                </button>
-            </div>
-
         </div>
 
-        {{-- ボトムナビ --}}
-        <nav class="w-full max-w-xl bg-white rounded-3xl shadow border border-slate-200 px-6 py-3">
-            <div class="flex justify-between items-center">
-                <a href="/chat" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 transition no-underline">
-                    <span class="text-2xl">💬</span><span class="text-xs">ひとりごと</span>
+        {{-- ナビゲーション --}}
+        <nav class="w-full px-8 py-4 flex-shrink-0 border-t" style="background-color: #b5d9e4; border-color: #a3c9d6;">
+            <div class="flex justify-between items-center text-slate-600">
+                <a href="/chat" class="flex flex-col items-center gap-1">
+                    <span class="text-xl">💬</span>
+                    <span class="text-[10px] font-bold">ひとりごと</span>
                 </a>
-                <a href="/home" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 transition no-underline">
-                    <span class="text-2xl">🏠</span><span class="text-xs">ホーム</span>
+                <a href="/home" class="flex flex-col items-center gap-1">
+                    <span class="text-xl">🏠</span>
+                    <span class="text-[10px] font-bold">ホーム</span>
                 </a>
-                <a href="/calendar" class="flex flex-col items-center gap-1 text-slate-900 no-underline">
-                    <span class="text-2xl">📅</span><span class="text-xs font-semibold">ToDo</span>
+                <a href="/calendar" class="flex flex-col items-center gap-1 text-slate-900">
+                    <span class="text-xl">📅</span>
+                    <span class="text-[10px] font-bold underline decoration-2 underline-offset-4">ToDo</span>
                 </a>
-                <a href="/setting" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 transition no-underline">
-                    <span class="text-2xl">⚙️</span><span class="text-xs">設定</span>
+                <a href="/setting" class="flex flex-col items-center gap-1">
+                    <span class="text-xl">⚙️</span>
+                    <span class="text-[10px] font-bold">設定</span>
                 </a>
             </div>
         </nav>
@@ -93,6 +102,7 @@
     </div>
 
     <script>
+<<<<<<< HEAD
         const params       = new URLSearchParams(location.search);
         const taskId       = params.get('id');
         const scheduleDate = "{{ $dateObject->format('Y-m-d') }}";
@@ -243,6 +253,11 @@
         });
 
         loadTask();
+=======
+        // JS側で使えるように変数を定義
+        window.scheduleDate = "{{ $dateObject->format('Y-m-d') }}";
+>>>>>>> 43c5473 (fix:レイアウト修正　各画面に飛ぶように修正)
     </script>
+    <script src="{{ asset('js/detail.js') }}"></script>
 </body>
 </html>
