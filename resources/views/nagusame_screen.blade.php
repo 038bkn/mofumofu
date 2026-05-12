@@ -50,19 +50,25 @@
             word-wrap: break-word;
         }
 
-        .mascot-container {
-            text-align: center;
-            padding: 8px 0 4px;
-        }
-        .mascot-container img {
-            width: 200px;
-        }
-        .mascot-label {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.8);
-            margin-top: 2px;
+      .mascot-container {
+       text-align: center;
+       padding: 0; /* paddingを最小限に */
         }
 
+      .mascot-container img {
+       width: 300px;
+       display: block;
+       margin: 0 auto;
+    }
+
+     .mascot-label {
+      margin-top: -30px; /* ここを大きくマイナスにする */
+      font-size: 20px;
+      color: #ffffff;
+      position: relative;
+      z-index: 5;
+      font-weight: bold; /* 文字を見やすく */
+      }
         .input-area {
             background: #b0e0e6; padding: 15px;
             display: flex; align-items: center; gap: 10px;
@@ -88,8 +94,8 @@
     <div class="chat-area" id="chatArea"></div>
 
     <div class="mascot-container">
-        <img src="{{ asset('images/sleep_white.png') }}" alt="羊">
-        <div class="mascot-label">nagusamete</div>
+        <img src="{{ asset('images/sheep.png') }}" alt="羊">
+        <div class="mascot-label" style="font-size:20px;">nagusamete</div>
     </div>
 
     <div class="input-area">
