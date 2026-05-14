@@ -6,78 +6,108 @@
     <title>もふすけ - ホーム</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* =============================================
-           羊：画面中央下部に大きく固定
-           ============================================= */
-        .sheep-img {
-            position: fixed;
-            bottom: 68px;
-            left: 50%;
-            transform: translateX(-50%); /* 完全中央 */
-            width: min(80vh, 700px);
-            z-index: 0;
-            pointer-events: none;
-        }
+        body { background: #fde8e8; overflow-x: hidden; }
 
-        /* =============================================
-           吹き出し：コンテナ左上に固定
-           left は JS で動的計算
-           ============================================= */
-        .cloud-wrap {
-            position: fixed;
-            top: 40px;
-            z-index: 10;
-        }
-
-        /* PC（601px以上）：吹き出し大きめ */
+        /* ========== PC（601px以上） ========== */
         @media (min-width: 601px) {
+            .sp-only { display: none !important; }
+
+            .sheep-img {
+                position: fixed;
+                bottom: 68px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: min(80vh, 700px);
+                z-index: 0;
+                pointer-events: none;
+            }
             .cloud-wrap {
+                position: fixed;
+                top: 40px;
                 width: 520px;
                 height: 330px;
+                z-index: 10;
             }
-            .cloud-inner {
-                padding: 0 50px 40px 100px; /* 左を多めに取りテキストを中央寄りに */
-                font-size: 15px;
-            }
+            .cloud-inner { padding: 0 50px 40px 100px; font-size: 15px; }
+            .collection-btn { position: fixed; z-index: 10; }
         }
 
-        /* スマホ（600px以下）：吹き出し小さめ */
+        /* ========== スマホ（600px以下） ========== */
         @media (max-width: 600px) {
-            .cloud-wrap {
-                width: 190px;
-                height: 130px;
-            }
-            .cloud-inner {
-                padding: 0 26px 14px 26px;
-                font-size: 11px;
-            }
-        }
+            .pc-only { display: none !important; }
 
-        /* =============================================
-           コレクション・ショップボタン
-           left・top は JS で動的計算
-           ============================================= */
-        .collection-btn {
-            position: fixed;
-            z-index: 10;
+            /* 羊：画面下半分を大きく占有 */
+            .sp-sheep {
+                position: fixed;
+                bottom: 68px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 140vw;       /* 画面幅より大きくして迫力を出す */
+                max-width: 560px;
+                z-index: 1;
+                pointer-events: none;
+            }
+
+            /* 吹き出し：羊の頭あたり（画面下から計算）・左 */
+            .sp-cloud {
+                position: fixed;
+                bottom: calc(68px + 140vw * 0.55); /* 羊bottom + 羊高さの55%あたり = 頭 */
+                left: 8px;
+                width: 210px;
+                height: 148px;
+                z-index: 10;
+            }
+            .sp-cloud-inner {
+                padding: 0 24px 20px 20px;
+                font-size: 11px;
+                line-height: 1.6;
+            }
+
+            /* ボタン：吹き出しと同じ高さ・右 */
+            .sp-btn {
+                position: fixed;
+                bottom: calc(68px + 140vw * 0.52);
+                right: 12px;
+                z-index: 10;
+            }
         }
     </style>
 </head>
+<body class="flex justify-center items-start min-h-screen">
 
-<body class="bg-[#fde8e8] min-h-screen flex justify-center items-start overflow-x-hidden">
+    <!-- ========== PC ========== -->
+    <div class="pc-only w-full max-w-[390px] min-h-screen bg-[#fde8e8] relative">
+        <div class="cloud-wrap" id="cloud-wrap">
+            <div class="w-full h-full bg-contain bg-no-repeat bg-center flex items-center justify-center"
+                style="background-image: url('{{ asset('images/cloud.png') }}');">
+                <div class="cloud-inner text-[#4a3f3f] leading-relaxed text-left w-full">
+                    <p class="font-bold mb-1">今日も1日がんばろうメ〜！</p>
+                    <p>今日が期限のやることがあるメ〜！</p>
+                    {{-- @foreach($todayTasks as $task) --}}
+                    {{-- <p>・{{ $task->title }}　{{ $task->due_time }}まで</p> --}}
+                    {{-- @endforeach --}}
+                </div>
+            </div>
+        </div>
+        <div class="collection-btn" id="collection-btn">
+            <button onclick="openPopup()"
+                class="bg-[#efe8cf] border border-[#b6aa83] rounded-2xl px-6 py-3 text-[#4a3f3f] text-sm font-bold leading-tight shadow-sm active:scale-95 transition">
+                コレクション<br>ショップ
+            </button>
+        </div>
+        <img src="{{ asset('images/sheep.png') }}" alt="羊" class="sheep-img">
+    </div>
 
-    <!-- 中央コンテナ（スマホ上限390px、PC画面では中央寄せ） -->
-    <div id="main-container" class="w-full max-w-[390px] min-h-screen bg-[#fde8e8] relative">
+    <!-- ========== スマホ ========== -->
+    <div class="sp-only">
+        <!-- 羊 -->
+        <img src="{{ asset('images/sheep.png') }}" alt="羊" class="sp-sheep">
 
         <!-- 吹き出し -->
-        <div class="cloud-wrap" id="cloud-wrap">
-            <div
-                class="w-full h-full bg-contain bg-no-repeat bg-center flex items-center justify-center"
-                style="background-image: url('{{ asset('images/cloud.png') }}');"
-            >
-                <div class="cloud-inner text-[#4a3f3f] leading-relaxed text-left w-full">
-                    {{-- カレンダー画面で登録した今日期限のタスクをここに表示する --}}
-                    {{-- 例: $todayTasks = Task::whereDate('due_date', today())->get() --}}
+        <div class="sp-cloud">
+            <div class="w-full h-full bg-contain bg-no-repeat bg-center flex items-center justify-center"
+                style="background-image: url('{{ asset('images/cloud.png') }}');">
+                <div class="sp-cloud-inner text-[#4a3f3f] text-left w-full">
                     <p class="font-bold mb-1">今日も1日がんばろうメ〜！</p>
                     <p>今日が期限のやることがあるメ〜！</p>
                     {{-- @foreach($todayTasks as $task) --}}
@@ -87,124 +117,85 @@
             </div>
         </div>
 
-        <!-- コレクション・ショップボタン -->
-        <div class="collection-btn" id="collection-btn">
-            <button
-                onclick="openPopup()"
-                class="bg-[#efe8cf] border border-[#b6aa83] rounded-2xl px-4 py-2 text-[#4a3f3f] text-xs font-bold leading-tight shadow-sm active:scale-95 transition"
-            >
+        <!-- ボタン -->
+        <div class="sp-btn">
+            <button onclick="openPopup()"
+                class="bg-[#efe8cf] border border-[#b6aa83] rounded-2xl px-4 py-2 text-[#4a3f3f] text-xs font-bold leading-tight shadow-sm active:scale-95 transition">
                 コレクション<br>ショップ
             </button>
         </div>
-
-        <!-- 羊 -->
-        <img
-            src="{{ asset('images/sheep.png') }}"
-            alt="羊"
-            class="sheep-img"
-        >
-
-        <!-- 下ナビ -->
-        <nav class="fixed bottom-0 left-0 w-full h-[68px] bg-[#cdeef9] border-t border-[#b5d9e4] z-20">
-            <div class="w-full max-w-[390px] mx-auto h-full flex justify-around items-center">
-
-                <a href="/chat" class="flex flex-col items-center gap-1 text-[#5b5b5b]">
-                    <img src="{{ asset('images/icon/fukidashi.png') }}" alt="ひとりごと" class="w-7 h-7 object-contain">
-                    <span class="text-[10px]">ひとりごと</span>
-                </a>
-
-                <a href="/home" class="flex flex-col items-center gap-1 text-[#5b5b5b]">
-                    <img src="{{ asset('images/icon/home.png') }}" alt="ホーム" class="w-7 h-7 object-contain">
-                    <span class="text-[10px]">ホーム</span>
-                </a>
-
-                <a href="/calendar" class="flex flex-col items-center gap-1 text-[#5b5b5b]">
-                    <img src="{{ asset('images/icon/calendar.png') }}" alt="ToDo" class="w-7 h-7 object-contain">
-                    <span class="text-[10px]">ToDo</span>
-                </a>
-
-                <a href="/setting" class="flex flex-col items-center gap-1 text-[#5b5b5b]">
-                    <img src="{{ asset('images/icon/haguruma.png') }}" alt="設定" class="w-7 h-7 object-contain">
-                    <span class="text-[10px]">設定</span>
-                </a>
-
-            </div>
-        </nav>
-
     </div>
 
-    <!-- ポップアップ -->
-    <div
-        id="popup"
-        class="hidden fixed inset-0 bg-black/20 z-50 flex justify-center items-center"
-        onclick="closePopup()"
-    >
-        <div
-            class="relative w-[280px] h-[200px] flex items-center justify-center bg-contain bg-no-repeat bg-center"
-            style="background-image: url('{{ asset('images/cloud.png') }}');"
-            onclick="event.stopPropagation()"
-        >
-            <div class="flex flex-col gap-3 mt-[-10px]">
-                <a
-                    href="/collection"
-                    class="bg-[#fff9e6] active:bg-[#efe8cf] active:scale-95 transition-all rounded-full py-3 px-8 text-[#4a3f3f] font-bold shadow-sm border border-[#e8dfc5] text-center text-sm"
-                >
-                    コレクション画面
-                </a>
-                <a
-                    href="/shop"
-                    class="bg-[#fff9e6] active:bg-[#efe8cf] active:scale-95 transition-all rounded-full py-3 px-8 text-[#4a3f3f] font-bold shadow-sm border border-[#e8dfc5] text-center text-sm"
-                >
-                    ショップ画面
-                </a>
+    <!-- ========== フッター ========== -->
+    <nav class="fixed bottom-0 left-0 w-full h-[68px] bg-[#cdeef9] border-t border-[#b5d9e4] z-20">
+        <div class="w-full max-w-[390px] mx-auto h-full flex justify-around items-center">
+            <a href="/chat" class="flex flex-col items-center gap-1 text-[#5b5b5b]">
+                <img src="{{ asset('images/icon/fukidashi.png') }}" alt="ひとりごと" class="w-7 h-7 object-contain">
+                <span class="text-[10px]">ひとりごと</span>
+            </a>
+            <a href="/home" class="flex flex-col items-center gap-1 text-[#5b5b5b]">
+                <img src="{{ asset('images/icon/home.png') }}" alt="ホーム" class="w-7 h-7 object-contain">
+                <span class="text-[10px]">ホーム</span>
+            </a>
+            <a href="/calendar" class="flex flex-col items-center gap-1 text-[#5b5b5b]">
+                <img src="{{ asset('images/icon/calendar.png') }}" alt="ToDo" class="w-7 h-7 object-contain">
+                <span class="text-[10px]">ToDo</span>
+            </a>
+            <a href="/setting" class="flex flex-col items-center gap-1 text-[#5b5b5b]">
+                <img src="{{ asset('images/icon/haguruma.png') }}" alt="設定" class="w-7 h-7 object-contain">
+                <span class="text-[10px]">設定</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- ========== ポップアップ ========== -->
+    <div id="popup" class="hidden fixed inset-0 z-50" onclick="closePopup()">
+        <div id="popup-bubble" class="absolute flex flex-col items-center"
+            style="bottom: calc(68px + 48%); left: 50%; transform: translateX(-50%);"
+            onclick="event.stopPropagation()">
+            <div id="popup-cloud"
+                class="relative flex items-center justify-center bg-contain bg-no-repeat bg-center"
+                style="background-image: url('{{ asset('images/cloud.png') }}');">
+                <div class="flex flex-col gap-3 mt-[-40px]">
+                    <a href="/collection"
+                        class="bg-[#fff9e6] active:bg-[#efe8cf] active:scale-95 transition-all rounded-full py-3 px-10 text-[#4a3f3f] font-bold shadow-sm border border-[#e8dfc5] text-center text-sm">
+                        コレクション画面
+                    </a>
+                    <a href="/shop"
+                        class="bg-[#fff9e6] active:bg-[#efe8cf] active:scale-95 transition-all rounded-full py-3 px-10 text-[#4a3f3f] font-bold shadow-sm border border-[#e8dfc5] text-center text-sm">
+                        ショップ画面
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        /* =============================================
-           コンテナの実際の left を取得し、
-           吹き出し・ボタンをピクセル精度で配置する
-           ============================================= */
-        function positionElements() {
-            const container = document.getElementById('main-container');
-            const rect      = container.getBoundingClientRect();
-            const cLeft     = rect.left;
-            const cRight    = rect.right;
-            const isMobile  = window.innerWidth <= 600;
-
-            // --- 吹き出し ---
-            const cloud = document.getElementById('cloud-wrap');
-            const cloudW2 = cloud.offsetWidth;
-            // PC：画面中央に吹き出しを配置
-            cloud.style.left = isMobile
-                ? cLeft + 'px'
-                : (window.innerWidth / 2 - cloudW2 / 2) + 'px';
-
-            // --- コレクション・ショップボタン ---
-            const btn        = document.getElementById('collection-btn');
-
-            if (isMobile) {
-                // スマホ：コンテナ右端から内側に配置
-                btn.style.left = (cRight - 90) + 'px';
-                btn.style.top  = '110px';
-            } else {
-                // PC：吹き出しの右隣に配置
-                btn.style.left = (window.innerWidth / 2 - cloudW2 / 2 + cloudW2 + 8) + 'px';
-                btn.style.top  = '220px';
-            }
+        /* PCのみJS配置 */
+        function positionPC() {
+            if (window.innerWidth <= 600) return;
+            const cloud  = document.getElementById('cloud-wrap');
+            const btn    = document.getElementById('collection-btn');
+            const cloudW = cloud.offsetWidth;
+            cloud.style.left = (window.innerWidth / 2 - cloudW / 2) + 'px';
+            btn.style.left   = (window.innerWidth / 2 + cloudW / 2 + 8) + 'px';
+            btn.style.top    = '220px';
         }
-
-        positionElements();
-        window.addEventListener('resize', positionElements);
+        positionPC();
+        window.addEventListener('resize', positionPC);
 
         function openPopup() {
-            document.getElementById('popup').classList.remove('hidden');
+            const popup    = document.getElementById('popup');
+            const cloud    = document.getElementById('popup-cloud');
+            const isMobile = window.innerWidth <= 600;
+            cloud.style.width  = isMobile ? '280px' : '380px';
+            cloud.style.height = isMobile ? '200px' : '260px';
+            popup.classList.remove('hidden');
+            popup.style.background = 'rgba(0,0,0,0.15)';
         }
         function closePopup() {
             document.getElementById('popup').classList.add('hidden');
         }
     </script>
-
 </body>
 </html>
