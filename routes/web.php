@@ -22,81 +22,88 @@ Route::get('/forgot-password', function () {
     return view('auth.forgot_password');
 })->name('password.request');
 
-Route::get('/setting', function () {
-    return view('setting');
-})->name('setting');
-
-Route::get('/user', function () {
-    return view('user');
-})->name('user');
-
-
-
-Route::get('/home', function () {
-    return view('home');
-})->name('home');
-
-Route::get('/user', function () {
-    return view('user');
-});
-
-Route::get('/pass', function () {
-    return view('pass');
-});
-
-// 保存処理
-Route::post('/pass/update', function () {
-    return redirect('/user');
-});
-
-Route::post('/logout', function () {
-    Auth::logout();
-    return redirect('/login');
-})->name('logout');
-
 // ==========================================
-// メイン機能画面
+// 認証が必須のルート
 // ==========================================
-Route::get('/calendar', function () {
-    return view('calendar_screen');
-});
+Route::middleware('auth')->group(function () {
+    Route::get('/setting', function () {
+        return view('setting');
+    })->name('setting');
 
-// ※ダミーデータとして日付（date）を受け取る処理
-// 画面の動作確認用
-Route::get('/day-schedule', function (Request $request) {
-    $date = $request->query('date', date('Y-m-d'));
-    return view('day_schedule', compact('date'));
-});
+    Route::get('/user', function () {
+        return view('user');
+    })->name('user');
 
-Route::get('/task/create', function (Request $request) {
-    $date = $request->query('date', date('Y-m-d'));
-    return view('task_create', compact('date'));
-})->name('task.create');
+    Route::get('/home', function () {
+        return view('home');
+    })->name('home');
 
-Route::get('/task/detail', function (Request $request) {
-    $date = $request->query('date', date('Y-m-d'));
-    return view('task_detail', compact('date'));
-});
+    Route::get('/pass', function () {
+        return view('pass');
+    });
 
-Route::get('/chat', function () {
-    return view('chatscreen');
-})->name('chat');
+    // 保存処理
+    Route::post('/pass/update', function () {
+        return redirect('/user');
+    });
 
-Route::get('/homete', function () {
-    return view('homete_screen');
-});
-// routes/web.php に追記
-Route::get('/nagusame', function () {
-    return view('nagusame_screen');
-});
+    // ==========================================
+    // メイン機能画面
+    // ==========================================
+    Route::get('/calendar', function () {
+        return view('calendar_screen');
+    });
 
-// ==========================================
-// コレクション・ショップ系画面
-// ==========================================
-Route::get('/collection', function () {
-    return view('collection');
-});
+    // ※ダミーデータとして日付（date）を受け取る処理
+    // 画面の動作確認用
+    Route::get('/day-schedule', function (Request $request) {
+        $date = $request->query('date', date('Y-m-d'));
+        return view('day_schedule', compact('date'));
+    });
 
-Route::get('/shop', function () {
-    return view('shop');
+    Route::get('/task/create', function (Request $request) {
+        $date = $request->query('date', date('Y-m-d'));
+        return view('task_create', compact('date'));
+    })->name('task.create');
+
+    Route::get('/task/detail', function (Request $request) {
+        $date = $request->query('date', date('Y-m-d'));
+        return view('task_detail', compact('date'));
+    });
+
+    Route::get('/chat', function () {
+        return view('chatscreen');
+    })->name('chat');
+
+    Route::get('/homete', function () {
+        return view('homete_screen');
+    });
+
+    Route::get('/nagusame', function () {
+        return view('nagusame_screen');
+    });
+
+    Route::get('/hitorigoto', function () {
+        return view('homete_screen');
+    });
+
+    Route::get('/todo', function () {
+        return view('home');
+    });
+
+    // ==========================================
+    // コレクション・ショップ系画面
+    // ==========================================
+    Route::get('/collection', function () {
+        return view('collection');
+    });
+
+    Route::get('/shop', function () {
+        return view('shop');
+    });
+
+    Route::post('/logout', function () {
+        session()->flush();
+        return redirect('/login');
+    })->name('logout');
 });
