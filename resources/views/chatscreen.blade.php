@@ -47,7 +47,7 @@
             padding: 10px 0 5px;
         }
         .mascot-area img {
-            width: 200px;
+            width: 300px;
             opacity: 0.9;
         }
 
@@ -84,9 +84,9 @@
 <body>
 <div class="phone-frame">
 
-    <!-- ホームへ戻るボタン（仮） -->
+    <!-- ホームへ戻るボタン -->
     <div class="top-nav">
-        <button class="home-btn" onclick="alert('ホーム画面は未実装です')">
+        <button class="home-btn" onclick=location.href='/home'>
              🏠
         </button>
     </div>
@@ -96,7 +96,7 @@
 
     <!-- 羊のキャラクター -->
     <div class="mascot-area">
-        <img src="{{ asset('images/sleep_white.png') }}" alt="羊">
+        <img src="{{ asset('images/sheep.png') }}" alt="羊">
     </div>
 
     <!-- 入力エリア -->
