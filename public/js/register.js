@@ -88,10 +88,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function showError(msg) {
         errorMsg.textContent = msg;
+        errorMsg.classList.remove('hidden');
         errorMsg.classList.add('show');
     }
 
     function hideError() {
+        errorMsg.classList.add('hidden');
         errorMsg.classList.remove('show');
     }
 
