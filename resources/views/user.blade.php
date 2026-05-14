@@ -17,7 +17,8 @@
         }
     </style>
 </head>
-<body class="bg-rose-50 text-slate-900 font-sans">
+<body style="background:#FDE8E8;"
+      class="text-slate-900 font-sans">
     <div class="screen-label">設定</div>
     <div class="min-h-screen flex flex-col items-center p-4">
         <div class="w-full max-w-sm">
@@ -25,7 +26,7 @@
             <div class="mt-5">
                 <button
                     type="button"
-                    onclick="history.back()"
+                    onclick="location.href='/setting'"
                     class="w-11 h-11 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 flex items-center justify-center text-lg shadow-sm">
                     ←
                 </button>
