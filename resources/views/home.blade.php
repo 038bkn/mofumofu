@@ -132,7 +132,7 @@
         </div>
 
         <!-- ポイント表示 -->
-        <div class="fixed top-4 right-4 z-10 bg-[#efe8cf] border border-[#b6aa83] rounded-2xl px-3 py-1.5 text-[#4a3f3f] text-xs font-bold shadow-sm">
+        <div class="fixed top-4 right-4 z-10 bg-[#efe8cf] border border-[#b6aa83] rounded-2xl px-5 py-2.5 text-[#4a3f3f] text-base font-bold shadow-sm">
             ⭐ {{ $points }} pt
         </div>
     </div>
