@@ -39,34 +39,37 @@
             /* 羊：画面下半分を大きく占有 */
             .sp-sheep {
                 position: fixed;
-                bottom: 68px;
-                left: 50%;
+                bottom: 0px;
+                left: 85%;
                 transform: translateX(-50%);
-                width: 140vw;       /* 画面幅より大きくして迫力を出す */
-                max-width: 560px;
+                width: 1300px;       /* 画面幅より大きくして迫力を出す */
                 z-index: 1;
                 pointer-events: none;
+                max-width: none;
+                height: 550px;
+                object-fit: cover;
             }
 
-            /* 吹き出し：羊の頭あたり（画面下から計算）・左 */
+            /* 吹き出し：画面中央上側に大きく */
             .sp-cloud {
                 position: fixed;
-                bottom: calc(68px + 140vw * 0.55); /* 羊bottom + 羊高さの55%あたり = 頭 */
-                left: 8px;
-                width: 210px;
-                height: 148px;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 130vw;
+                height: 82vw;
                 z-index: 10;
             }
             .sp-cloud-inner {
-                padding: 0 24px 20px 20px;
-                font-size: 11px;
+                padding: 6px 30px 28px 28px;
+                font-size: 13px;
                 line-height: 1.6;
             }
 
-            /* ボタン：吹き出しと同じ高さ・右 */
+            /* ボタン：吹き出しの下あたり・右 */
             .sp-btn {
                 position: fixed;
-                bottom: calc(68px + 140vw * 0.52);
+                top: 80vw;
                 right: 12px;
                 z-index: 10;
             }
@@ -78,7 +81,7 @@
     <!-- ========== PC ========== -->
     <div class="pc-only w-full max-w-[390px] min-h-screen bg-[#fde8e8] relative">
         <div class="cloud-wrap" id="cloud-wrap">
-            <div class="w-full h-full bg-contain bg-no-repeat bg-center flex items-center justify-center"
+            <div class="w-full h-full bg-contain bg-no-repeat bg-center flex items-start justify-center pt-[10%] pb-[22%]"
                 style="background-image: url('{{ asset('images/cloud.png') }}');">
                 <div class="cloud-inner text-[#4a3f3f] leading-relaxed text-left w-full">
                     <p class="font-bold mb-1">今日も1日がんばろうメ〜！</p>
@@ -105,9 +108,9 @@
 
         <!-- 吹き出し -->
         <div class="sp-cloud">
-            <div class="w-full h-full bg-contain bg-no-repeat bg-center flex items-center justify-center"
+            <div class="w-full h-full bg-contain bg-no-repeat bg-center flex items-start justify-center pt-[10%] pb-[28%]"
                 style="background-image: url('{{ asset('images/cloud.png') }}');">
-                <div class="sp-cloud-inner text-[#4a3f3f] text-left w-full">
+                <div class="sp-cloud-inner text-[#4a3f3f] text-left">
                     <p class="font-bold mb-1">今日も1日がんばろうメ〜！</p>
                     <p>今日が期限のやることがあるメ〜！</p>
                     {{-- @foreach($todayTasks as $task) --}}
