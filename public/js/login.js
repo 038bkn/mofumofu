@@ -66,11 +66,13 @@ function setLoading(isLoading) {
 function showError(msg) {
     const errorMsg = document.getElementById('errorMsg');
     errorMsg.textContent = msg;
+    errorMsg.classList.remove('hidden');
     errorMsg.classList.add('show');
 }
 
 function hideError() {
     const errorMsg = document.getElementById('errorMsg');
+    errorMsg.classList.add('hidden');
     errorMsg.classList.remove('show');
 }
 
