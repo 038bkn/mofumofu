@@ -78,15 +78,19 @@ async function loadMonthTasks(year, month) {
     const completedList = [];
 
     tasks.forEach(task => {
+        const isDone = Number(task.status) === 1;
+
+        // 終了日時を組み立て（due_date + end_time）
         const endDatetime = task.due_date && task.end_time
             ? new Date(`${task.due_date}T${task.end_time}`)
             : null;
-        const isPast = endDatetime && endDatetime < now;
 
-        // status === 1（完了済み）or 期限切れ で「完了」扱い
-        if (Number(task.status) === 1 || isPast) {
+        if (isDone) {
+            // status=1（明示的に完了済み）→ 完了欄
             completedList.push(task);
-        } else {
+        } 
+            else {
+            // それ以外（未完了 or 終了時間未到達）→ ToDo欄
             todoList.push(task);
         }
     });

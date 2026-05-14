@@ -19,7 +19,7 @@
         $targetDate = isset($date) ? Carbon::parse($date) : Carbon::now();
     @endphp
 
-    <div class="w-full max-w-[450px] h-[92vh] max-h-[900px] flex flex-col gap-3">
+    <div class="w-full max-w-[450px] h-[92vh] max-h-[900px] flex flex-col gap-3 pb-[72px]">
         
         <div class="flex-1 custom-bg rounded-[2rem] shadow-xl border border-slate-200 overflow-hidden flex flex-col">
             {{-- ヘッダー --}}
@@ -70,33 +70,30 @@
                 </div>
             </div>
         </div>
-
-        {{-- ボトムナビ --}}
-       <nav class="w-full rounded-[2rem] shadow-lg border border-slate-200 px-6 py-3 flex-shrink-0" style="background-color: #b5d9e4;">
-        <div class="flex justify-between items-center text-slate-600">
-        <a href="/chat" class="flex flex-col items-center gap-1 {{ request()->is('chat*') ? 'text-slate-900' : '' }}">
-            <span class="text-xl">💬</span>
-            <span class="text-[9px] font-bold {{ request()->is('chat*') ? 'underline decoration-2 underline-offset-4' : '' }}">ひとりごと</span>
-        </a>
-
-        <a href="/home" class="flex flex-col items-center gap-1 {{ request()->is('home*') ? 'text-slate-900' : '' }}">
-            <span class="text-xl">🏠</span>
-            <span class="text-[9px] font-bold {{ request()->is('home*') ? 'underline decoration-2 underline-offset-4' : '' }}">ホーム</span>
-        </a>
-
-        <a href="/calendar" class="flex flex-col items-center gap-1 {{ request()->is('calendar*') ? 'text-slate-900' : '' }}">
-            <span class="text-xl">📅</span>
-            <span class="text-[9px] font-bold {{ request()->is('calendar*') ? 'underline decoration-2 underline-offset-4' : '' }}">ToDo</span>
-        </a>
-
-        <a href="/setting" class="flex flex-col items-center gap-1 {{ request()->is('setting*') ? 'text-slate-900' : '' }}">
-            <span class="text-xl">⚙️</span>
-            <span class="text-[9px] font-bold {{ request()->is('setting*') ? 'underline decoration-2 underline-offset-4' : '' }}">設定</span>
-        </a>
-      </div>
-    </nav>
     </div>
 
     <script src="{{ asset('js/calendar.js') }}"></script>
+
+    {{-- ボトムナビ（フル幅・画面固定） --}}
+    <nav class="fixed bottom-0 left-0 w-full z-50 border-t border-[#9ecfde]" style="background-color: #b5d9e4;">
+        <div class="w-full max-w-[450px] mx-auto px-6 py-3 flex justify-between items-center text-slate-600">
+            <a href="/chat" class="flex flex-col items-center gap-1 {{ request()->is('chat*') ? 'text-slate-900' : '' }}">
+                <span class="text-xl">💬</span>
+                <span class="text-[9px] font-bold {{ request()->is('chat*') ? 'underline decoration-2 underline-offset-4' : '' }}">ひとりごと</span>
+            </a>
+            <a href="/home" class="flex flex-col items-center gap-1 {{ request()->is('home*') ? 'text-slate-900' : '' }}">
+                <span class="text-xl">🏠</span>
+                <span class="text-[9px] font-bold {{ request()->is('home*') ? 'underline decoration-2 underline-offset-4' : '' }}">ホーム</span>
+            </a>
+            <a href="/calendar" class="flex flex-col items-center gap-1 {{ request()->is('calendar*') ? 'text-slate-900' : '' }}">
+                <span class="text-xl">📅</span>
+                <span class="text-[9px] font-bold {{ request()->is('calendar*') ? 'underline decoration-2 underline-offset-4' : '' }}">ToDo</span>
+            </a>
+            <a href="/setting" class="flex flex-col items-center gap-1 {{ request()->is('setting*') ? 'text-slate-900' : '' }}">
+                <span class="text-xl">⚙️</span>
+                <span class="text-[9px] font-bold {{ request()->is('setting*') ? 'underline decoration-2 underline-offset-4' : '' }}">設定</span>
+            </a>
+        </div>
+    </nav>
 </body>
 </html>

@@ -15,103 +15,125 @@
         }
         body {
             font-family: 'Noto Sans JP', sans-serif;
-            background: #f0f0f0;
-            display: flex; justify-content: center;
-            height: 100vh; overflow: hidden;
+            background: var(--pink-bg); /* 全体をピンクに */
+            display: flex; 
+            justify-content: center;
+            height: 100vh; 
+            overflow: hidden;
         }
 
         .phone-frame {
-            width: 100%; max-width: 450px; height: 100%;
-            background: var(--pink-bg); display: flex; flex-direction: column;
+            width: 100%; /* 幅を100%に広げる */
+            height: 100%;
+            display: flex; 
+            flex-direction: column;
         }
 
         /* ホームボタンエリア */
-        .top-nav { padding: 12px 15px; }
+        .top-nav { padding: 15px; }
         .home-btn {
             width: 48px; height: 48px; border-radius: 50%;
             background: white; border: none; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
-        .home-btn img { width: 26px; height: 26px; }
 
-        /* チャットエリア（吹き出しが上に積まれる） */
+        /* チャットエリア */
         .chat-area {
             flex: 1; overflow-y: auto;
-            padding: 10px 20px; display: flex; flex-direction: column; gap: 15px;
+            padding: 20px; display: flex; flex-direction: column; gap: 15px;
         }
 
-        /* 羊のエリア（画面中央に固定表示） */
+        /* 羊のエリア（画面下部に固定） */
         .mascot-area {
             display: flex; justify-content: center; align-items: center;
-            padding: 10px 0 5px;
+            padding-bottom: 20px;
         }
         .mascot-area img {
-            width: 300px;
+            width: 250px; /* PCでも大きすぎないサイズに調整 */
             opacity: 0.9;
         }
 
-        /* メッセージのスタイル */
-        .message-row { display: flex; align-items: flex-end; gap: 8px; margin-bottom: 5px; }
-        .message-row.user { flex-direction: row-reverse; }
-        .bubble {
-            max-width: 75%; padding: 12px 16px; border-radius: 20px;
-            font-size: 14px; background: var(--bubble-cream); color: var(--text-dark);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            word-wrap: break-word;
+        /* 入力エリア */
+        .input-area { 
+            background: var(--blue-bar);
+            padding: 15px 30px; /* 左右に少し余白 */
+            width: 100%;
         }
 
-        /* 入力エリア */
-        .input-area { background: var(--blue-bar); padding: 15px; }
-        .tag-row { display: flex; gap: 10px; margin-bottom: 10px; }
-        .tag-btn {
-            border: none; width: 40px; height: 40px; border-radius: 50%;
-            cursor: pointer; font-size: 18px; background: white;
-            display: flex; align-items: center; justify-content: center;
+        /* ボタンを横に並べて端に寄せる設定 */
+        .input-container {
+            max-width: 1200px; /* PCで広がりすぎないための上限（任意） */
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
-        .input-row { display: flex; gap: 10px; align-items: center; }
+
+        .tag-row { 
+            display: flex;
+            gap: 10px;
+            justify-content: flex-start; /* 左端に寄せる（右なら flex-end） */
+        }
+
+        .tag-btn {
+            border: none; width: 45px; height: 45px; border-radius: 50%;
+            cursor: pointer; font-size: 20px; background: white;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .input-row { display: flex; gap: 15px; align-items: center; }
         .text-input {
-            flex: 1; padding: 12px 20px; border-radius: 25px;
+            flex: 1; padding: 15px 25px; border-radius: 30px;
             border: none; outline: none; font-size: 16px;
         }
         .send-btn {
-            background: #e8e8e8; border: none; width: 45px; height: 45px;
+            background: #e8e8e8; border: none; width: 50px; height: 50px;
             border-radius: 50%; cursor: pointer; display: flex;
             align-items: center; justify-content: center;
+        }
+
+        /* メッセージのスタイル（既存維持） */
+        .message-row { display: flex; align-items: flex-end; gap: 8px; margin-bottom: 5px; }
+        .message-row.user { flex-direction: row-reverse; }
+        .bubble {
+            max-width: 70%; padding: 12px 18px; border-radius: 20px;
+            font-size: 15px; background: var(--bubble-cream); color: var(--text-dark);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            word-wrap: break-word;
         }
     </style>
 </head>
 <body>
 <div class="phone-frame">
 
-    <!-- ホームへ戻るボタン -->
     <div class="top-nav">
-        <button class="home-btn" onclick=location.href='/home'>
-             🏠
-        </button>
+        <button class="home-btn" onclick="location.href='/home'">🏠</button>
     </div>
 
-    <!-- チャット吹き出しエリア -->
-    <div class="chat-area" id="chatArea"></div>
+    <div class="chat-area" id="chatArea">
+        
+    </div>
 
-    <!-- 羊のキャラクター -->
     <div class="mascot-area">
         <img src="{{ asset('images/sheep.png') }}" alt="羊">
     </div>
 
-    <!-- 入力エリア -->
     <div class="input-area">
-        <div class="tag-row">
-            <button class="tag-btn" onclick="location.href='/homete'">🌸</button>
-            <button class="tag-btn" onclick="location.href='/nagusame'">💧</button>
-        </div>
-        <div class="input-row">
-            <input type="text" id="messageInput" class="text-input" placeholder="ひとりごとを入力...">
-            <button class="send-btn" id="sendBtn">
-                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#5a4a4a" stroke-width="2">
-                    <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
-                </svg>
-            </button>
+        <div class="input-container">
+            <div class="tag-row">
+                <button class="tag-btn" onclick="location.href='/homete'">🌸</button>
+                <button class="tag-btn" onclick="location.href='/nagusame'">💧</button>
+            </div>
+            <div class="input-row">
+                <input type="text" id="messageInput" class="text-input" placeholder="ひとりごとを入力...">
+                <button class="send-btn" id="sendBtn">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#5a4a4a" stroke-width="2">
+                        <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
 
