@@ -3,110 +3,137 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ホーム画面</title>
+    <title>もふすけ - ホーム</title>
     <script src="https://cdn.tailwindcss.com"></script>
-  </head>
+    <style>
+        /*
+         * 羊・吹き出しはコンテナ(390px)ではなく画面全体を基準に配置する。
+         * fixed にすることで max-w-[390px] の制約を外れ、PC でも大きく表示される。
+         */
 
-  <body class="bg-[#f6f6f6] flex justify-center py-6 font-sans">
+        /* 羊：画面下部中央〜右寄りに大きく */
+        .sheep-img {
+            position: fixed;
+            bottom: 68px;          /* フッター分 */
+            left: 50%;
+            transform: translateX(-30%); /* 中央より少し右 */
+            width: min(55vw, 480px);     /* 画面幅の55%、最大480px */
+            z-index: 0;
+            pointer-events: none;
+        }
 
-    <!-- スマホ画面 -->
-    <div class="relative w-[375px] h-[812px] bg-[#f6dede] overflow-hidden shadow-xl rounded-[40px] border border-gray-200">
+        /* 吹き出し：左上（画面基準）に配置 */
+        .cloud-wrap {
+            position: fixed;
+            top: 16px;
+            left: max(calc(50% - 390px / 2 - 10px), 0px); /* コンテナ左端に合わせる */
+            width: min(45vw, 320px);
+            height: min(32vw, 220px);
+            z-index: 10;
+        }
+    </style>
+</head>
 
-    <!-- 吹き出し -->
-    <div 
-      class="absolute top-10 left-1/2 -translate-x-1/2 w-[540px] h-[280px] bg-contain bg-no-repeat bg-center z-10 flex items-center justify-center p-8"
-      style="background-image: url('/images/cloud.png');"
-    >
-    <div class="text-[#4a3f3f] font-bold text-sm leading-relaxed text-center mt-[-10px]">
+<body class="bg-[#fde8e8] min-h-screen flex justify-center items-start overflow-x-hidden">
+
+    <div class="w-full max-w-[390px] min-h-screen bg-[#fde8e8] flex flex-col relative overflow-hidden">
+
+        <!-- 吹き出し（左上・やや左にはみ出し） -->
+        <div class="cloud-wrap">
+            <div
+                class="w-full h-full bg-contain bg-no-repeat bg-center flex items-center justify-center px-8 pb-4"
+                style="background-image: url('{{ asset('images/cloud.png') }}');"
+            >
+                <div class="text-[#4a3f3f] text-[11px] leading-relaxed text-left w-full">
+                    <!-- TODO: バックエンド実装後に今日のタスクを表示 -->
+                    <p class="font-bold mb-1">今日も1日がんばろうメ〜！</p>
+                    <p>今日が期限のやることがあるメ〜！</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- コレクション・ショップボタン（右上・画面基準） -->
+        <div class="fixed z-10" style="top: 160px; left: min(calc(50% + 390px / 2 - 100px), calc(100% - 100px));">
+            <button
+                onclick="openPopup()"
+                class="bg-[#efe8cf] border border-[#b6aa83] rounded-2xl px-4 py-2 text-[#4a3f3f] text-xs font-bold leading-tight shadow-sm active:scale-95 transition"
+            >
+                コレクション<br>ショップ
+            </button>
+        </div>
+
+        <!-- 羊（大きく・画面下部） -->
+        <img
+            src="{{ asset('images/sheep.png') }}"
+            alt="羊"
+            class="sheep-img"
+        >
+
+        <!-- 下ナビ -->
+        <nav class="fixed bottom-0 left-0 w-full h-[68px] bg-[#cdeef9] border-t border-[#b5d9e4] z-20">
+            <div class="w-full max-w-[390px] mx-auto h-full flex justify-around items-center">
+
+                <a href="/chat" class="flex flex-col items-center gap-1 text-[#5b5b5b]">
+                    <img src="{{ asset('images/icon/fukidashi.png') }}" alt="ひとりごと" class="w-7 h-7 object-contain">
+                    <span class="text-[10px]">ひとりごと</span>
+                </a>
+
+                <a href="/home" class="flex flex-col items-center gap-1 text-[#5b5b5b]">
+                    <img src="{{ asset('images/icon/home.png') }}" alt="ホーム" class="w-7 h-7 object-contain">
+                    <span class="text-[10px]">ホーム</span>
+                </a>
+
+                <a href="/calendar" class="flex flex-col items-center gap-1 text-[#5b5b5b]">
+                    <img src="{{ asset('images/icon/calendar.png') }}" alt="ToDo" class="w-7 h-7 object-contain">
+                    <span class="text-[10px]">ToDo</span>
+                </a>
+
+                <a href="/setting" class="flex flex-col items-center gap-1 text-[#5b5b5b]">
+                    <img src="{{ asset('images/icon/haguruma.png') }}" alt="設定" class="w-7 h-7 object-contain">
+                    <span class="text-[10px]">設定</span>
+                </a>
+
+            </div>
+        </nav>
+
     </div>
-    </div>
 
-
-    <!-- 羊画像 -->
-    <img
-      src="/images/sheep.png"
-      alt="羊"
-      class="absolute bottom-[70px] left-1/2 -translate-x-1/2 w-[600px] z-10"
-    />
-
-    <!-- コレクションボタン -->
-    <button
-      onclick="openPopup()"
-      class="absolute right-8 top-[300px] bg-[#efe8cf] border border-[#b6aa83] rounded-full px-7 py-4 text-[#4a3f3f] font-bold leading-tight z-20 shadow-sm hover:scale-105 transition"
-    >
-      コレクション<br />
-      ショップ
-    </button>
-
-  <!-- ポップアップ -->
-    <div id="popup"
-    class="hidden absolute inset-0 bg-black/20 z-50 flex justify-center items-end pb-[420px] p-6"
-    onclick="closePopup()">
-  
+    <!-- ポップアップ -->
     <div
-      class="relative w-[320px] h-[220px] flex items-center justify-center bg-contain bg-no-repeat bg-center"
-      style="background-image: url('/images/cloud.png');"
-      onclick="event.stopPropagation()"
+        id="popup"
+        class="hidden fixed inset-0 bg-black/20 z-50 flex justify-center items-center"
+        onclick="closePopup()"
     >
-    <div class="flex flex-col gap-3 mt-[-20px]">
-      <a href="/collection"
-        class="text-center bg-[#fff9e6] hover:bg-[#efe8cf] active:scale-95 transition-all rounded-full py-3 px-8 text-[#4a3f3f] font-bold shadow-sm border border-[#e8dfc5] no-underline"
-      >
-        コレクション画面
-      </a>
-
-      <a href="/shop"
-        class="text-center bg-[#fff9e6] hover:bg-[#efe8cf] active:scale-95 transition-all rounded-full py-3 px-8 text-[#4a3f3f] font-bold shadow-sm border border-[#e8dfc5] no-underline"
-      >
-        ショップ画面
-      </a>
+        <div
+            class="relative w-[280px] h-[200px] flex items-center justify-center bg-contain bg-no-repeat bg-center"
+            style="background-image: url('{{ asset('images/cloud.png') }}');"
+            onclick="event.stopPropagation()"
+        >
+            <div class="flex flex-col gap-3 mt-[-10px]">
+                <a
+                    href="/collection"
+                    class="bg-[#fff9e6] active:bg-[#efe8cf] active:scale-95 transition-all rounded-full py-3 px-8 text-[#4a3f3f] font-bold shadow-sm border border-[#e8dfc5] text-center text-sm"
+                >
+                    コレクション画面
+                </a>
+                <a
+                    href="/shop"
+                    class="bg-[#fff9e6] active:bg-[#efe8cf] active:scale-95 transition-all rounded-full py-3 px-8 text-[#4a3f3f] font-bold shadow-sm border border-[#e8dfc5] text-center text-sm"
+                >
+                    ショップ画面
+                </a>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <div class="absolute top-[350px] right-[20px] transform pointer-events-none">
-    <img
-      src="/images/sheep.png" 
-      alt="小さな羊"
-      class="w-300 h-auto filter drop-shadow-md"
-    />
-  </div>
-</div>
-
-    <!-- 下ナビ -->
-    <nav class="absolute bottom-0 left-0 w-full h-[90px] bg-[#cdeef9] flex justify-around items-center border-t border-[#b5d9e4] z-20">
-
-      <a href="/chat" class="flex flex-col items-center text-[#5b5b5b] no-underline">
-        <span class="text-3xl">💬</span>
-        <span class="text-xs mt-1">ひとりごと</span>
-      </a>
-
-      <a href="/home" class="flex flex-col items-center text-[#5b5b5b] font-bold no-underline">
-        <span class="text-3xl">🏠</span>
-        <span class="text-xs mt-1">ホーム</span>
-      </a>
-
-      <a href="/calendar" class="flex flex-col items-center text-[#5b5b5b] no-underline">
-        <span class="text-3xl">📅</span>
-        <span class="text-xs mt-1">ToDo</span>
-      </a>
-
-      <a href="/setting" class="flex flex-col items-center text-[#5b5b5b] no-underline">
-        <span class="text-3xl">⚙️</span>
-        <span class="text-xs mt-1">設定</span>
-      </a>
-
-    </nav>
-
-  </div>
-  <script>
-  function openPopup() {
-    document.getElementById("popup").classList.remove("hidden");
-  }
-
-  function closePopup() {
-    document.getElementById("popup").classList.add("hidden");
-  }
-</script>
+    <script>
+        function openPopup() {
+            document.getElementById('popup').classList.remove('hidden');
+        }
+        function closePopup() {
+            document.getElementById('popup').classList.add('hidden');
+        }
+    </script>
 
 </body>
 </html>
