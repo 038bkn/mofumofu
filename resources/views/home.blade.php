@@ -98,6 +98,9 @@
                 コレクション<br>ショップ
             </button>
         </div>
+        <div class="fixed top-4 right-4 z-10 bg-[#efe8cf] border border-[#b6aa83] rounded-2xl px-4 py-2 text-[#4a3f3f] text-sm font-bold shadow-sm">
+            ⭐ {{ $points }} pt
+        </div>
         <img src="{{ asset('images/sheep.png') }}" alt="羊" class="sheep-img">
     </div>
 
@@ -126,6 +129,11 @@
                 class="bg-[#efe8cf] border border-[#b6aa83] rounded-2xl px-4 py-2 text-[#4a3f3f] text-xs font-bold leading-tight shadow-sm active:scale-95 transition">
                 コレクション<br>ショップ
             </button>
+        </div>
+
+        <!-- ポイント表示 -->
+        <div class="fixed top-4 right-4 z-10 bg-[#efe8cf] border border-[#b6aa83] rounded-2xl px-3 py-1.5 text-[#4a3f3f] text-xs font-bold shadow-sm">
+            ⭐ {{ $points }} pt
         </div>
     </div>
 

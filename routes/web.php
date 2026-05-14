@@ -33,7 +33,8 @@ Route::get('/user', function () {
 
 
 Route::get('/home', function () {
-    return view('home');
+    $points = auth()->user()?->points ?? 0;
+    return view('home', compact('points'));
 })->name('home');
 
 Route::get('/user', function () {
