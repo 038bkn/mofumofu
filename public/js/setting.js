@@ -8,20 +8,20 @@ function selectMode(mode) {
     const mode2 = document.getElementById("mode2");
 
     if (mode === "sweet") {
-        mode1.style.backgroundColor = "#f4a0a0";
-        mode1.style.color = "#ffffff";
+        mode1.classList.add("bg-rose-300", "text-white");
+        mode1.classList.remove("bg-white", "text-slate-700");
         mode1.setAttribute("aria-pressed", "true");
 
-        mode2.style.backgroundColor = "#ffffff";
-        mode2.style.color = "#333333";
+        mode2.classList.add("bg-white", "text-slate-700");
+        mode2.classList.remove("bg-rose-300", "text-white");
         mode2.setAttribute("aria-pressed", "false");
     } else {
-        mode2.style.backgroundColor = "#f4a0a0";
-        mode2.style.color = "#ffffff";
+        mode2.classList.add("bg-rose-300", "text-white");
+        mode2.classList.remove("bg-white", "text-slate-700");
         mode2.setAttribute("aria-pressed", "true");
 
-        mode1.style.backgroundColor = "#ffffff";
-        mode1.style.color = "#333333";
+        mode1.classList.add("bg-white", "text-slate-700");
+        mode1.classList.remove("bg-rose-300", "text-white");
         mode1.setAttribute("aria-pressed", "false");
     }
 }
@@ -35,6 +35,7 @@ function saveMode() {
 // フォントサイズをCSS変数に反映
 function applyFontSize(size) {
     document.documentElement.style.setProperty("--font-size-base", size + "px");
+    document.documentElement.style.fontSize = size + "px";
 }
 
 // フォント保存
