@@ -42,7 +42,7 @@
                 bottom: 0px;
                 left: 85%;
                 transform: translateX(-50%);
-                width: 1300px;       /* 画面幅より大きくして迫力を出す */
+                width: 1300px;
                 z-index: 1;
                 pointer-events: none;
                 max-width: none;
@@ -101,13 +101,13 @@
         <div class="fixed top-4 right-4 z-10 bg-[#efe8cf] border border-[#b6aa83] rounded-2xl px-4 py-2 text-[#4a3f3f] text-sm font-bold shadow-sm">
             ⭐ {{ $points }} pt
         </div>
-        <img src="{{ asset('images/sheep.png') }}" alt="羊" class="sheep-img">
+        <img src="{{ asset('images/sheep.png') }}" alt="羊" class="sheep-img" id="pc-sheep">
     </div>
 
     <!-- ========== スマホ ========== -->
     <div class="sp-only">
         <!-- 羊 -->
-        <img src="{{ asset('images/sheep.png') }}" alt="羊" class="sp-sheep">
+        <img src="{{ asset('images/sheep.png') }}" alt="羊" class="sp-sheep" id="sp-sheep">
 
         <!-- 吹き出し -->
         <div class="sp-cloud">
@@ -194,6 +194,38 @@
         }
         positionPC();
         window.addEventListener('resize', positionPC);
+
+        /* ============================================================
+           コレクション画面で選択したアイテムを羊に反映
+           ============================================================ */
+        const FILE_NAME_MAP = {
+            'bell':           's_ bell.png',
+            'doll_boy':       's_ doll_boy.png',
+            'doll_girl':      's_ doll_girl.png',
+            'rainy':          's_ rainy.png',
+            'ribbon':         's_ ribbon.png',
+            'sunglasses':     's_ sunglasses.png',
+            'valentine':      's_ valentine.png',
+            'dango':          's_dango.png',
+            'hat':            's_hat.png',
+            'helmet_blue':    's_helmet_blue.png',
+            'helmet_red':     's_helmet_red.png',
+            'sakura':         's_sakura.png',
+            'sunflower':      's_sunflower.png',
+            'tanabata_man':   's_tanabata_man.png',
+            'tanabata_woman': 's_tanabata_woman.png',
+            'tophat':         's_tophat.png',
+        };
+
+        (function applyEquippedItem() {
+            const item = localStorage.getItem('equippedItem');
+            if (!item || item === 'none' || !FILE_NAME_MAP[item]) return;
+            const src = '/images/with_sheep/' + FILE_NAME_MAP[item];
+            const pcSheep = document.getElementById('pc-sheep');
+            const spSheep = document.getElementById('sp-sheep');
+            if (pcSheep) pcSheep.src = src;
+            if (spSheep) spSheep.src = src;
+        })();
 
         function openPopup() {
             const popup    = document.getElementById('popup');
