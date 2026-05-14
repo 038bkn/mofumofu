@@ -15,10 +15,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        // 未ログインで保護ルートにアクセスした場合（JSONリクエストのみ）
+        // 未ログインで保護ルートにアクセスした場合
         $exceptions->render(function (AuthenticationException $e, Request $request) {
             if ($request->expectsJson()) {
                 return response()->json([
@@ -26,6 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
                     'message' => 'ログインが必要です。',
                 ], 401);
             }
+            return redirect('/login');
         });
 
         // 存在しないモデルに対する操作（route model binding の 404）
