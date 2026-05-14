@@ -6,20 +6,29 @@
     <title>もふすけ - ホーム</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /*
+         * 羊・吹き出しはコンテナ(390px)ではなく画面全体を基準に配置する。
+         * fixed にすることで max-w-[390px] の制約を外れ、PC でも大きく表示される。
+         */
+
+        /* 羊：画面下部中央〜右寄りに大きく */
         .sheep-img {
-            width: 700px;
-            max-width: none;
-            position: absolute;
-            bottom: 50px;
-            right: -100px;
+            position: fixed;
+            bottom: 68px;          /* フッター分 */
+            left: 50%;
+            transform: translateX(-30%); /* 中央より少し右 */
+            width: min(55vw, 480px);     /* 画面幅の55%、最大480px */
             z-index: 0;
+            pointer-events: none;
         }
+
+        /* 吹き出し：左上（画面基準）に配置 */
         .cloud-wrap {
-            width: 400px;
-            height: 280px;
-            position: absolute;
-            top: -50px;
-            left: -20px;
+            position: fixed;
+            top: 16px;
+            left: max(calc(50% - 390px / 2 - 10px), 0px); /* コンテナ左端に合わせる */
+            width: min(45vw, 320px);
+            height: min(32vw, 220px);
             z-index: 10;
         }
     </style>
@@ -27,15 +36,15 @@
 
 <body class="bg-[#fde8e8] min-h-screen flex justify-center items-start overflow-x-hidden">
 
-    <div class="w-full max-w-[390px] min-h-screen bg-[#fde8e8] flex flex-col relative overflow-visible">
+    <div class="w-full max-w-[390px] min-h-screen bg-[#fde8e8] flex flex-col relative overflow-hidden">
 
-        <!-- 吹き出し（左上・はみ出し） -->
+        <!-- 吹き出し（左上・やや左にはみ出し） -->
         <div class="cloud-wrap">
             <div
-                class="w-full h-full bg-contain bg-no-repeat bg-center flex items-end justify-center pb-10 px-12"
+                class="w-full h-full bg-contain bg-no-repeat bg-center flex items-center justify-center px-8 pb-4"
                 style="background-image: url('{{ asset('images/cloud.png') }}');"
             >
-                <div class="text-[#4a3f3f] text-xs leading-relaxed text-left w-full">
+                <div class="text-[#4a3f3f] text-[11px] leading-relaxed text-left w-full">
                     <!-- TODO: バックエンド実装後に今日のタスクを表示 -->
                     <p class="font-bold mb-1">今日も1日がんばろうメ〜！</p>
                     <p>今日が期限のやることがあるメ〜！</p>
@@ -43,8 +52,8 @@
             </div>
         </div>
 
-        <!-- コレクション・ショップボタン（右上） -->
-        <div class="absolute z-10" style="top: 200px; right: 16px;">
+        <!-- コレクション・ショップボタン（右上・画面基準） -->
+        <div class="fixed z-10" style="top: 160px; left: min(calc(50% + 390px / 2 - 100px), calc(100% - 100px));">
             <button
                 onclick="openPopup()"
                 class="bg-[#efe8cf] border border-[#b6aa83] rounded-2xl px-4 py-2 text-[#4a3f3f] text-xs font-bold leading-tight shadow-sm active:scale-95 transition"
@@ -53,7 +62,7 @@
             </button>
         </div>
 
-        <!-- 羊（大きく・右寄せ） -->
+        <!-- 羊（大きく・画面下部） -->
         <img
             src="{{ asset('images/sheep.png') }}"
             alt="羊"
