@@ -29,6 +29,10 @@ document.addEventListener('DOMContentLoaded', function () {
             showError('ユーザ名を入力してください。');
             return;
         }
+        if (name.length > 255) {
+            showError('ユーザ名は255文字以内で入力してください。');
+            return;
+        }
         if (!email) {
             showError('メールアドレスを入力してください。');
             return;
