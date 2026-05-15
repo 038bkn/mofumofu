@@ -4,7 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>新規登録</title>
+    
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+    <title>タスク登録</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { 
@@ -43,7 +46,7 @@
             {{-- ヘッダー --}}
             <div class="flex items-center justify-between px-5 py-4 bg-white border-b border-slate-100 flex-shrink-0">
                 <a href="/day-schedule?date={{ $taskDate }}" class="text-xl p-2 -ml-2 text-slate-400">←</a>
-                <span class="font-bold text-lg text-slate-700">新規登録</span>
+                <span class="font-bold text-lg text-slate-700">タスク登録</span>
                 <button type="submit" id="saveBtn" class="text-blue-500 font-bold px-2 py-1 active:opacity-50">保存</button>
             </div>
 
