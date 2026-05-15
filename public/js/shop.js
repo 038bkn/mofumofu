@@ -3,18 +3,84 @@
 // 配置先: public/js/shop.js
 // ============================================================
 
+const ITEM_ID_MAP = {
+    'bell':           9,
+    'ribbon':         10,
+    'sunglasses':     11,
+    'dango':          12,
+    'valentine':      13,
+    'sakura':         14,
+    'sunflower':      15,
+    'rainy':          16,
+    'doll_boy':       1,
+    'doll_girl':      2,
+    'tanabata_man':   3,
+    'tanabata_woman': 4,
+    'hat':            5,
+    'helmet_blue':    6,
+    'helmet_red':     7,
+    'tophat':         8,
+};
+
 document.addEventListener('DOMContentLoaded', function () {
 
-    const confirmPopup  = document.getElementById('confirmPopup');
-    const confirmClose  = document.getElementById('confirmClose');
+    const confirmPopup   = document.getElementById('confirmPopup');
+    const confirmClose   = document.getElementById('confirmClose');
     const confirmOverlay = document.getElementById('confirmOverlay');
-    const confirmOk     = document.getElementById('confirmOk');
+    const confirmOk      = document.getElementById('confirmOk');
     const confirmMessage = document.getElementById('confirmMessage');
 
-    // 重複送信防止フラグ
-    let isSubmitting = false;
+    // ============================================================
+    // エラーポップアップを動的生成
+    // ============================================================
+    const errorPopup = document.createElement('div');
+    errorPopup.id        = 'errorPopup';
+    errorPopup.className = 'hidden fixed inset-0 flex items-center justify-center px-8 z-50';
+    errorPopup.innerHTML = `
+        <div class="absolute inset-0 bg-black/20" id="errorOverlay"></div>
+        <div class="relative bg-white rounded-2xl shadow-lg p-6 w-full max-w-[320px]">
+            <button id="errorClose" class="absolute top-3 right-3 w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                    <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
+                </svg>
+            </button>
+            <p id="errorMessage" class="text-[14px] text-[#3a3a3a] leading-relaxed mt-2 mb-5"></p>
+            <button id="errorOk" class="w-full h-11 bg-[#f4a0a0] rounded-full text-white text-[15px] font-medium active:scale-95 transition-transform">
+                閉じる
+            </button>
+        </div>
+    `;
+    document.body.appendChild(errorPopup);
+
+    function showError(msg) {
+        document.getElementById('errorMessage').textContent = msg;
+        errorPopup.classList.remove('hidden');
+    }
+    function closeError() {
+        errorPopup.classList.add('hidden');
+    }
+    document.getElementById('errorClose').addEventListener('click', closeError);
+    document.getElementById('errorOk').addEventListener('click', closeError);
+    document.getElementById('errorOverlay').addEventListener('click', closeError);
+
+    let isSubmitting  = false;
     let selectedItem  = null;
     let selectedPrice = null;
+
+    // ============================================================
+    // ユーザーのポイント取得
+    // ============================================================
+    async function loadUserPoints() {
+        try {
+            const res  = await fetch('/api/user', { headers: { 'Accept': 'application/json' } });
+            const data = await res.json();
+            const pts  = data.points ?? data.point ?? data.score ?? 0;
+            document.getElementById('userPoints').textContent = pts;
+        } catch (e) {
+            document.getElementById('userPoints').textContent = '-';
+        }
+    }
+    loadUserPoints();
 
     // ============================================================
     // 購入確認ポップアップを開く
@@ -27,7 +93,6 @@ document.addEventListener('DOMContentLoaded', function () {
         confirmOk.focus();
     };
 
-    // ポップアップを閉じる
     confirmClose.addEventListener('click', closeConfirm);
     confirmOverlay.addEventListener('click', closeConfirm);
 
@@ -40,29 +105,49 @@ document.addEventListener('DOMContentLoaded', function () {
     // ============================================================
     // 購入処理
     // ============================================================
-    confirmOk.addEventListener('click', function () {
-        if (isSubmitting) return;
+    confirmOk.addEventListener('click', async function () {
+        if (isSubmitting || !selectedItem) return;
 
-        // 重複送信防止フラグをON
-        isSubmitting = true;
+        const itemId = ITEM_ID_MAP[selectedItem];
+        if (!itemId) {
+            showError('アイテムが見つかりませんでした。');
+            return;
+        }
+
+        isSubmitting       = true;
         confirmOk.disabled = true;
 
-        // TODO: バックエンド実装後にAPIを呼ぶ
-        // POST /api/items/{id}/buy
-        alert('この機能はバックエンド実装後に有効になります。');
+        try {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
-        // フラグをOFFに戻す
-        isSubmitting = false;
-        confirmOk.disabled = false;
-        closeConfirm();
+            const res  = await fetch('/api/items/' + itemId + '/buy', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept':       'application/json',
+                },
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+                if (data.points !== undefined) {
+                    document.getElementById('userPoints').textContent = data.points;
+                } else {
+                    await loadUserPoints();
+                }
+                closeConfirm();
+            } else {
+                closeConfirm();
+                showError(data.message ?? '購入に失敗しました。もう一度お試しください。');
+            }
+        } catch (e) {
+            closeConfirm();
+            showError('通信エラーが発生しました。もう一度お試しください。');
+        } finally {
+            isSubmitting       = false;
+            confirmOk.disabled = false;
+        }
     });
-
-    // ============================================================
-    // ユーザーのポイント取得
-    // TODO: バックエンド実装後にAPIから取得する
-    // GET /api/user
-    // ============================================================
-    // 現在はダミーで0を表示
-    document.getElementById('userPoints').textContent = 0;
 
 });

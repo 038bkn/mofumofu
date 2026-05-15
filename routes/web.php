@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 // ==========================================
@@ -15,7 +16,7 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::get('/register', function () {
-    return view('auth.register'); 
+    return view('auth.register');
 })->name('register');
 
 Route::get('/forgot-password', function () {
@@ -26,6 +27,12 @@ Route::get('/forgot-password', function () {
 // 認証が必須のルート
 // ==========================================
 Route::middleware('auth')->group(function () {
+
+    Route::get('/home', function () {
+        $points = auth()->user()?->points ?? 0;
+        return view('home', compact('points'));
+    })->name('home');
+
     Route::get('/setting', function () {
         return view('setting');
     })->name('setting');
@@ -34,15 +41,10 @@ Route::middleware('auth')->group(function () {
         return view('user');
     })->name('user');
 
-    Route::get('/home', function () {
-        return view('home');
-    })->name('home');
-
     Route::get('/pass', function () {
         return view('pass');
     });
 
-    // 保存処理
     Route::post('/pass/update', function () {
         return redirect('/user');
     });
@@ -54,8 +56,6 @@ Route::middleware('auth')->group(function () {
         return view('calendar_screen');
     });
 
-    // ※ダミーデータとして日付（date）を受け取る処理
-    // 画面の動作確認用
     Route::get('/day-schedule', function (Request $request) {
         $date = $request->query('date', date('Y-m-d'));
         return view('day_schedule', compact('date'));
@@ -103,7 +103,9 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::post('/logout', function () {
+        Auth::logout();
         session()->flush();
         return redirect('/login');
     })->name('logout');
+
 });

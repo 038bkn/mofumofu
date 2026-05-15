@@ -3,10 +3,8 @@
 // 配置先: public/js/collection.js
 // ============================================================
 
-// Blade側のasset()で生成したベースURLを使用
-// collection.blade.phpのmeta[name="base-url"]から取得
 const BASE_URL = '';
-// with_sheepフォルダーのファイル名マッピング
+
 const FILE_NAME_MAP = {
     'bell':           's_ bell.png',
     'doll_boy':       's_ doll_boy.png',
@@ -34,7 +32,6 @@ let selectedItem = 'none';
 function selectItem(itemName) {
     selectedItem = itemName;
 
-    // キャラクター画像を切り替え（asset()ベースURLを使用）
     const characterImg = document.getElementById('characterImg');
     if (itemName === 'none' || !FILE_NAME_MAP[itemName]) {
         characterImg.src = BASE_URL + '/images/sheep.png';
@@ -43,7 +40,6 @@ function selectItem(itemName) {
         characterImg.src = BASE_URL + '/images/with_sheep/' + fileName;
     }
 
-    // 選択中のアイテムにボーダーをつける
     document.querySelectorAll('.item-btn').forEach(function (btn) {
         btn.classList.remove('border-[#f4a0a0]');
         btn.classList.add('border-transparent');
@@ -56,12 +52,11 @@ function selectItem(itemName) {
 }
 
 // ============================================================
-// 保存処理
+// 保存処理：選択アイテムをlocalStorageに保存してホームへ戻る
 // ============================================================
 function saveEquip() {
-    // TODO: バックエンド実装後にAPIを呼ぶ
-    // PUT /api/user/items/{id}/equip
-    alert('この機能はバックエンド実装後に有効になります。');
+    localStorage.setItem('equippedItem', selectedItem);
+    window.location.href = '/home';
 }
 
 // ============================================================
