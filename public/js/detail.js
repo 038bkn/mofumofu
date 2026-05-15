@@ -1,79 +1,74 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(location.search);
-    const taskId = params.get('id');
-    // Blade側の window.scheduleDate から取得
+/* detail.js */
+document.addEventListener('DOMContentLoaded', async () => {
+    const taskId = window.taskId;
     const scheduleDate = window.scheduleDate;
-    const weekDays = ['日', '月', '火', '水', '木', '金', '土'];
+    const contentArea = document.getElementById('taskContent');
 
-    function escHtml(str) {
-        return String(str)
-            .replace(/&/g, '&amp;').replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    if (!taskId) {
+        contentArea.innerHTML = '<p class="text-center text-red-400">IDが正しくありません</p>';
+        return;
     }
 
-    function loadTask() {
-        if (!taskId) {
-            showError('タスクIDが指定されていません。');
-            return;
+    try {
+        const response = await fetch(`/api/tasks/${taskId}`);
+        const result = await response.json();
+
+        if (response.ok && result.status === 'success') {
+            const task = result.data;
+            
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                stars += i <= (task.difficulty || 0) ? '★' : '☆';
+            }
+
+            const formattedDate = task.due_date.replace(/-/g, '/');
+
+            contentArea.innerHTML = `
+                <div class="text-center">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-2">${task.title}</h2>
+                    <p class="text-slate-500 mb-2">${formattedDate}</p>
+                    <div class="text-amber-400 text-2xl mb-4 tracking-widest">${stars}</div>
+                    
+                    <p class="text-slate-600 font-bold text-lg mb-4">
+                        ${task.start_time ? task.start_time.substring(0,5) : ''} 
+                        ${task.end_time ? ' 〜 ' + task.end_time.substring(0,5) : ''}
+                    </p>
+                    
+                    ${task.location ? `<p class="text-sm text-slate-400 mb-4">📍 ${task.location}</p>` : ''}
+                    
+                    <div class="text-left bg-white p-5 rounded-2xl border border-slate-100 shadow-sm mt-6">
+                        <p class="font-bold mb-2 text-slate-700 border-b border-slate-50 pb-2">メモ</p>
+                        <p class="text-slate-600 whitespace-pre-wrap leading-relaxed text-sm">${task.note || 'メモはありません'}</p>
+                    </div>
+                </div>
+            `;
+        } else {
+            contentArea.innerHTML = '<p class="text-center text-red-400">タスクが見つかりませんでした</p>';
         }
+    } catch (e) {
+        contentArea.innerHTML = '<p class="text-center text-red-400">読み込みに失敗しました</p>';
+    }
 
-        const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-        const task = tasks.find(t => String(t.id) === String(taskId));
+    // 削除ボタン
+    document.getElementById('deleteBtn').addEventListener('click', async () => {
+        if (!confirm('この予定を削除しますか？')) return;
 
-        if (!task) {
-            showError('タスクが見つかりません。');
-            return;
+        try {
+            const response = await fetch(`/api/tasks/${taskId}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                window.location.href = `/day-schedule?date=${scheduleDate}`;
+            } else {
+                alert('削除に失敗しました');
+            }
+        } catch (e) {
+            alert('通信エラーが発生しました');
         }
-
-        renderTask(task);
-    }
-
-    function renderTask(task) {
-        const d = new Date(task.due_date + 'T00:00:00');
-        const dow = weekDays[d.getDay()];
-        const dateStr = `${task.due_date.replace(/-/g, '/')} ${dow}曜日`;
-
-        let stars = '';
-        for (let i = 1; i <= 5; i++) {
-            stars += i <= task.difficulty ? '★' : '☆';
-        }
-
-        const startStr = (task.start_time || '').slice(0, 5);
-        const endStr = (task.end_time || '').slice(0, 5);
-        const timeStr = startStr && endStr ? `${startStr} 〜 ${endStr}` : startStr;
-
-        document.getElementById('taskContent').innerHTML = `
-            <h2 class="text-base font-bold text-slate-800 mb-2">${escHtml(task.title)}</h2>
-            <div class="text-sm text-slate-500 space-y-1">
-                <p>${escHtml(dateStr)}</p>
-                <p>難易度　<span class="text-amber-400 tracking-widest">${stars}</span></p>
-                ${timeStr ? `<p class="text-slate-600 font-medium">${escHtml(timeStr)}</p>` : ''}
-            </div>
-            ${task.note
-                ? `<p class="text-sm text-slate-600 mt-4 p-3 bg-white rounded-xl border border-slate-100 whitespace-pre-wrap">${escHtml(task.note)}</p>`
-                : '<p class="text-sm text-slate-300 mt-4">メモなし</p>'}
-        `;
-    }
-
-    function showError(msg) {
-        document.getElementById('taskContent').innerHTML =
-            `<p class="text-sm text-red-400 text-center py-4">${escHtml(msg)}</p>`;
-    }
-
-    // 削除処理
-    const deleteBtn = document.getElementById('deleteBtn');
-    if (deleteBtn) {
-        deleteBtn.addEventListener('click', () => {
-            if (!taskId) return;
-            if (!confirm('この予定を削除しますか？')) return;
-
-            const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-            const updated = tasks.filter(t => String(t.id) !== String(taskId));
-            localStorage.setItem('tasks', JSON.stringify(updated));
-
-            window.location.href = `/day-schedule?date=${scheduleDate}`;
-        });
-    }
-
-    loadTask();
+    });
 });

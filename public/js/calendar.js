@@ -25,19 +25,25 @@ function renderCalendar() {
         calendarGrid.appendChild(span);
     }
 
-    // 日付セル
+    // 日付セル（ここを修正：aタグにする）
     for (let day = 1; day <= lastDate; day++) {
-        const span = document.createElement('span');
-        span.className = 'text-sm text-slate-900 py-2 cursor-pointer hover:bg-slate-100 rounded';
-        span.textContent = day;
-        span.addEventListener('click', () => {
-            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-            window.location.href = `/day-schedule?date=${dateStr}`;
-        });
-        calendarGrid.appendChild(span);
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        
+        const a = document.createElement('a');
+        a.href = `/day-schedule?date=${dateStr}`;
+        a.className = 'text-sm text-slate-900 py-2 cursor-pointer hover:bg-slate-100 rounded font-semibold no-underline flex items-center justify-center';
+        a.textContent = day;
+        
+        // 今日の日付に色をつける（オプション）
+        const today = new Date();
+        if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
+            a.className += ' bg-rose-500 text-white hover:bg-rose-600';
+        }
+
+        calendarGrid.appendChild(a);
     }
 
-    // 末尾の空白（6行揃え）
+    // 末尾の空白
     const totalCells = (firstDay + lastDate) % 7;
     if (totalCells !== 0) {
         for (let i = 0; i < 7 - totalCells; i++) {
@@ -49,6 +55,9 @@ function renderCalendar() {
 
     loadMonthTasks(year, month);
 }
+
+// ── 以下、loadMonthTasks 等の関数は変更なしのため省略 ──
+// （元のファイルの中身をそのまま続けてください）
 
 // ────────────────────────────────────────────────
 // API から該当月のタスクを取得して表示
@@ -78,15 +87,20 @@ async function loadMonthTasks(year, month) {
     const completedList = [];
 
     tasks.forEach(task => {
+        const isDone = Number(task.status) === 1;
+
+        // 終了日時を組み立て（due_date + end_time）
         const endDatetime = task.due_date && task.end_time
             ? new Date(`${task.due_date}T${task.end_time}`)
             : null;
-        const isPast = endDatetime && endDatetime < now;
 
-        // status === 1（完了済み）or 期限切れ で「完了」扱い
-        if (Number(task.status) === 1 || isPast) {
+        if (isDone) {
+            // status=1（明示的に完了済み）→ 完了欄
             completedList.push(task);
-        } else {
+        } 
+    
+    else {
+            // それ以外（未完了 or 終了時間未到達）→ ToDo欄
             todoList.push(task);
         }
     });

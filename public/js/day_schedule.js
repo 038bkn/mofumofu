@@ -1,33 +1,53 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const scheduleContainer = document.getElementById('scheduleContainer');
-    const scheduleDate = window.scheduleDate;
+document.addEventListener('DOMContentLoaded', async () => {
+    const container = document.getElementById('scheduleContainer');
+    const date = window.scheduleDate;
 
-    function escHtml(str) {
-        return String(str)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;');
+    if (!container || !date) return;
+
+    // 1. 24時間の枠を生成
+    container.innerHTML = '';
+    for (let hour = 0; hour < 24; hour++) {
+        const row = document.createElement('div');
+        row.className = 'flex gap-3 sm:gap-4 items-stretch border-b border-slate-100';
+        row.innerHTML = `
+            <div class="w-12 sm:w-14 text-right text-[10px] text-slate-300 pt-3 flex-shrink-0 font-mono">
+                ${String(hour).padStart(2, '0')}:00
+            </div>
+            <div class="flex-1 py-2 min-h-[64px] relative task-slot" id="slot-${hour}"></div>
+        `;
+        container.appendChild(row);
     }
 
-    // API から該当日のタスクを取得
-    async function fetchTasks() {
-        try {
-            const response = await fetch(`/api/tasks?date=${scheduleDate}`, {
-                headers: { 'Accept': 'application/json' },
+    // 2. タスクを取得して配置
+    try {
+        const response = await fetch(`/api/tasks?date=${date}`);
+        const result = await response.json();
+
+        if (result.status === 'success' && Array.isArray(result.data)) {
+            result.data.forEach(task => {
+                if (!task.start_time) return;
+                
+                const hour = parseInt(task.start_time.split(':')[0]);
+                const slot = document.getElementById(`slot-${hour}`);
+                
+                if (slot) {
+                    const el = document.createElement('div');
+                    const isDone = task.is_completed;
+                    el.className = `mb-1 p-2 rounded-lg text-white text-xs cursor-pointer ${isDone ? 'bg-slate-400 opacity-70' : 'bg-slate-800'}`;
+                    el.innerHTML = `
+                        <div class="font-bold ${isDone ? 'line-through' : ''}">${task.title}</div>
+                        ${task.start_time ? `<div class="text-[10px] opacity-80">${task.start_time}</div>` : ''}
+                    `;
+                    el.onclick = () => window.location.href = `/task/detail?id=${task.id}`;
+                    slot.appendChild(el);
+                }
             });
-            const json = await response.json();
-
-            if (!response.ok || json.status !== 'success') {
-                renderError(json.message || 'タスクの取得に失敗しました。');
-                return [];
-            }
-            return Array.isArray(json.data) ? json.data : [];
-        } catch (e) {
-            renderError('通信エラーが発生しました。');
-            return [];
         }
+    } catch (e) {
+        console.error("Task fetch error:", e);
     }
+});
+
 
     function renderError(message) {
         scheduleContainer.innerHTML = `
@@ -89,4 +109,3 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     fetchTasks().then(renderTasks);
-});

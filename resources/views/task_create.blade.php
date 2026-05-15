@@ -1,117 +1,80 @@
+{{-- task_create.blade.php --}}
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>タスク登録</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>新規登録</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
-        body { font-family: 'Hiragino Sans', 'Hiragino Kino Gothic ProN', 'Noto Sans JP', sans-serif; }
-        input[type="date"], input[type="time"] { -webkit-appearance: none; appearance: none; }
-        input:focus, textarea:focus { outline: none; }
-        /* スクロールバー非表示 */
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        body { 
+            font-family: 'Hiragino Sans', 'Hiragino Kino Gothic ProN', 'Noto Sans JP', sans-serif;
+            height: 100vh;
+            height: -webkit-fill-available;
+        }
+        html { height: -webkit-fill-available; }
+        .input-card { background: white; border-radius: 1.2rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; border: 1px solid #f1f5f9; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-900 flex justify-center items-center min-h-screen p-2 sm:p-4">
-    @php
-        use Carbon\Carbon;
-        $dateObject = Carbon::parse($date);
-    @endphp
+<body class="bg-white text-slate-900 m-0 p-0 overflow-hidden">
+    @php $taskDate = request('date', date('Y-m-d')); @endphp
 
-    <div class="w-full max-w-[450px] h-[92vh] max-h-[900px] flex flex-col gap-3">
-        
-        <div class="flex-1 bg-white rounded-[2rem] shadow-xl border border-slate-200 overflow-hidden flex flex-col">
-
-            <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100 flex-shrink-0">
-                <a href="/day-schedule?date={{ $dateObject->format('Y-m-d') }}"
-                   class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 transition text-slate-600 text-xl">←</a>
-                <span class="text-lg font-bold text-slate-800">新規タスク</span>
-                <button type="submit" form="taskForm" id="saveBtn" aria-label="保存"
-                        class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-900 text-white shadow-sm hover:bg-slate-700 transition text-lg">✓</button>
+    <div class="w-full h-screen flex flex-col bg-slate-50 overflow-hidden">
+        <form id="taskForm" class="flex-1 flex flex-col min-h-0">
+            {{-- ヘッダー --}}
+            <div class="flex items-center justify-between px-5 py-4 bg-white border-b border-slate-100 flex-shrink-0">
+                <a href="/day-schedule?date={{ $taskDate }}" class="text-xl p-2 -ml-2 text-slate-400">←</a>
+                <span class="font-bold text-lg text-slate-700">新規登録</span>
+                <button type="submit" id="saveBtn" class="text-blue-500 font-bold px-2 py-1">保存</button>
             </div>
 
-            <div class="flex-1 overflow-y-auto p-5 hide-scrollbar">
-                <form id="taskForm" class="space-y-6 pb-4">
-                    <input type="hidden" id="taskDate" value="{{ $dateObject->format('Y-m-d') }}">
+            {{-- メインコンテンツ (スクロールエリア) --}}
+            <div class="flex-1 overflow-y-auto px-5 py-6">
+                <input type="hidden" id="taskDate" value="{{ $taskDate }}">
+                
+                <div class="input-card">
+                    <input type="text" id="taskTitle" placeholder="タイトル" class="w-full text-lg font-bold focus:outline-none" required>
+                </div>
 
-                    <div class="space-y-2 border-b border-slate-100 pb-4">
-                        <input type="text" id="taskTitle" placeholder="タイトル"
-                               class="w-full text-lg font-semibold text-slate-800 placeholder-slate-300 bg-transparent border-none focus:ring-0 py-1">
-                        <div class="flex items-center gap-2 text-slate-500">
-                           
-                            <input type="text" id="taskLocation" placeholder="場所またはビデオ通話"
-                                   class="w-full text-sm placeholder-slate-300 bg-transparent border-none focus:ring-0 py-1">
-                        </div>
-                    </div>
+                <div class="input-card">
+                    <input type="text" id="taskLocation" placeholder="場所を追加" class="w-full text-sm focus:outline-none">
+                </div>
 
-                    <div class="space-y-4 border-b border-slate-100 pb-5">
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm font-medium text-slate-500">開始</span>
-                            <div class="flex items-center gap-1.5">
-                                <input type="date" id="startDate" value="{{ $dateObject->format('Y-m-d') }}"
-                                       class="text-[12px] text-slate-700 bg-slate-100 rounded-lg px-2 py-1.5 border-none font-medium">
-                                <input type="time" id="taskStart" value="10:00"
-                                       class="text-[12px] font-bold text-rose-600 bg-rose-50 rounded-lg px-2 py-1.5 border-none">
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm font-medium text-slate-500">終了</span>
-                            <div class="flex items-center gap-1.5">
-                                <input type="date" id="endDate" value="{{ $dateObject->format('Y-m-d') }}"
-                                       class="text-[12px] text-slate-700 bg-slate-100 rounded-lg px-2 py-1.5 border-none font-medium">
-                                <input type="time" id="taskEnd" value="11:00"
-                                       class="text-[12px] font-bold text-rose-600 bg-rose-50 rounded-lg px-2 py-1.5 border-none">
-                            </div>
-                        </div>
-                    </div>
+                {{-- 時刻欄を縦並びに修正 --}}
+                <div class="input-card">
+                    <label class="block text-[10px] text-slate-400 mb-1">開始時刻</label>
+                    <input type="time" id="taskStart" class="w-full text-base focus:outline-none">
+                </div>
 
-                    <div class="flex items-center justify-between border-b border-slate-100 pb-5">
-                        <span class="text-sm font-medium text-slate-500">難易度</span>
-                        <div class="flex gap-1" id="difficultyStars">
-                            @for ($i = 1; $i <= 5; $i++)
-                                <button type="button" data-star="{{ $i }}"
-                                        class="star-btn text-2xl text-slate-200 hover:text-amber-400 transition">★</button>
-                            @endfor
-                        </div>
-                    </div>
+                <div class="input-card">
+                    <label class="block text-[10px] text-slate-400 mb-1">終了時刻</label>
+                    <input type="time" id="taskEnd" class="w-full text-base focus:outline-none">
+                </div>
 
-                    <div class="space-y-2">
-                        <label class="text-sm font-medium text-slate-500 ml-1">メモ</label>
-                        <textarea id="taskNote" placeholder="詳細を入力..." rows="5"
-                                  class="w-full text-sm text-slate-700 placeholder-slate-300 bg-slate-50 rounded-2xl px-4 py-3 border border-slate-100 resize-none focus:ring-0"></textarea>
+                <div class="input-card">
+                    <p class="text-xs text-slate-400 mb-3">難易度</p>
+                    <div class="flex gap-4 justify-center py-1">
+                        @foreach(range(1, 5) as $i)
+                            <button type="button" class="star-btn text-3xl text-slate-200" data-star="{{ $i }}">★</button>
+                        @endforeach
                     </div>
-                </form>
+                </div>
+
+                <div class="input-card">
+                    <textarea id="taskNote" rows="5" placeholder="詳細メモ..." class="w-full text-sm focus:outline-none resize-none"></textarea>
+                </div>
             </div>
-        </div>
+        </form>
 
-        {{-- ボトムナビゲーション --}}
-       {{-- ボトムナビゲーション --}}
-       <nav class="w-full rounded-[2rem] shadow-lg border border-slate-200 px-6 py-3 flex-shrink-0" style="background-color: #b5d9e4;">
-        <div class="flex justify-between items-center text-slate-600">
-        <a href="/chat" class="flex flex-col items-center gap-1 {{ request()->is('chat*') ? 'text-slate-900' : '' }}">
-            <span class="text-xl">💬</span>
-            <span class="text-[9px] font-bold {{ request()->is('chat*') ? 'underline decoration-2 underline-offset-4' : '' }}">ひとりごと</span>
-        </a>
-
-        <a href="/home" class="flex flex-col items-center gap-1 {{ request()->is('home*') ? 'text-slate-900' : '' }}">
-            <span class="text-xl">🏠</span>
-            <span class="text-[9px] font-bold {{ request()->is('home*') ? 'underline decoration-2 underline-offset-4' : '' }}">ホーム</span>
-        </a>
-
-        <a href="/calendar" class="flex flex-col items-center gap-1 {{ request()->is('calendar*') ? 'text-slate-900' : '' }}">
-            <span class="text-xl">📅</span>
-            <span class="text-[9px] font-bold {{ request()->is('calendar*') ? 'underline decoration-2 underline-offset-4' : '' }}">ToDo</span>
-        </a>
-
-        <a href="/setting" class="flex flex-col items-center gap-1 {{ request()->is('setting*') ? 'text-slate-900' : '' }}">
-            <span class="text-xl">⚙️</span>
-            <span class="text-[9px] font-bold {{ request()->is('setting*') ? 'underline decoration-2 underline-offset-4' : '' }}">設定</span>
-        </a>
-      </div>
-   </nav>
+        {{-- ボトムナビ --}}
+        <nav class="w-full flex justify-center items-center text-slate-600 flex-shrink-0 border-t border-[#9ecfde]" style="background-color: #b8e0e9; height: 80px;">
+            <div class="w-full max-w-2xl px-6 flex justify-between items-center">
+                <a href="/chat" class="flex flex-col items-center gap-1"><span>💬</span><span class="text-[10px] font-bold">ひとりごと</span></a>
+                <a href="/home" class="flex flex-col items-center gap-1"><span>🏠</span><span class="text-[10px] font-bold">ホーム</span></a>
+                <a href="/calendar" class="flex flex-col items-center gap-1 text-slate-900"><span>🗓️</span><span class="text-[10px] font-bold border-b-2 border-slate-900">ToDo</span></a>
+                <a href="/setting" class="flex flex-col items-center gap-1"><span>⚙️</span><span class="text-[10px] font-bold">設定</span></a>
+            </div>
+        </nav>
     </div>
 
     <script src="{{ asset('js/task_create.js') }}"></script>
