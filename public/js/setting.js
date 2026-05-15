@@ -28,8 +28,12 @@ function selectMode(mode) {
 
 // モード保存
 function saveMode() {
-    localStorage.setItem("mode", selectedMode);
-    alert("モードを保存しました");
+    try {
+        localStorage.setItem("mode", selectedMode);
+        hideError();
+    } catch (e) {
+        showError("設定の保存に失敗しました。もう一度お試しください。");
+    }
 }
 
 // フォントサイズをCSS変数に反映
@@ -40,10 +44,26 @@ function applyFontSize(size) {
 
 // フォント保存
 function saveFont() {
-    const size = document.getElementById("fontSlider").value;
-    localStorage.setItem("fontSize", size);
-    applyFontSize(size);
-    alert("フォントサイズを保存しました");
+    try {
+        const size = document.getElementById("fontSlider").value;
+        localStorage.setItem("fontSize", size);
+        applyFontSize(size);
+        hideError();
+    } catch (e) {
+        showError("フォントサイズの保存に失敗しました。もう一度お試しください。");
+    }
+}
+
+// エラー表示・非表示
+function showError(msg) {
+    const errorMsg = document.getElementById("errorMsg");
+    errorMsg.textContent = msg;
+    errorMsg.classList.remove("hidden");
+}
+
+function hideError() {
+    const errorMsg = document.getElementById("errorMsg");
+    errorMsg.classList.add("hidden");
 }
 
 // 初期ロード
@@ -63,4 +83,6 @@ window.addEventListener("DOMContentLoaded", function () {
         document.getElementById("fontSlider").value = savedFont;
         applyFontSize(savedFont);
     }
+
+    hideError();
 });
