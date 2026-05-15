@@ -13,7 +13,26 @@
             height: -webkit-fill-available;
         }
         html { height: -webkit-fill-available; }
-        .input-card { background: white; border-radius: 1.2rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; border: 1px solid #f1f5f9; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .input-card { 
+            background: white; 
+            border-radius: 1.2rem; 
+            padding: 1rem 1.25rem; 
+            margin-bottom: 0.75rem; 
+            border: 1px solid #f1f5f9; 
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05); 
+        }
+        input[type="time"]::-webkit-calendar-picker-indicator {
+            background: transparent;
+            bottom: 0;
+            color: transparent;
+            cursor: pointer;
+            height: auto;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: auto;
+        }
     </style>
 </head>
 <body class="bg-white text-slate-900 m-0 p-0 overflow-hidden">
@@ -25,43 +44,48 @@
             <div class="flex items-center justify-between px-5 py-4 bg-white border-b border-slate-100 flex-shrink-0">
                 <a href="/day-schedule?date={{ $taskDate }}" class="text-xl p-2 -ml-2 text-slate-400">←</a>
                 <span class="font-bold text-lg text-slate-700">新規登録</span>
-                <button type="submit" id="saveBtn" class="text-blue-500 font-bold px-2 py-1">保存</button>
+                <button type="submit" id="saveBtn" class="text-blue-500 font-bold px-2 py-1 active:opacity-50">保存</button>
             </div>
 
-            {{-- メインコンテンツ (スクロールエリア) --}}
+            {{-- メインコンテンツ --}}
             <div class="flex-1 overflow-y-auto px-5 py-6">
                 <input type="hidden" id="taskDate" value="{{ $taskDate }}">
                 
+                {{-- タイトル --}}
                 <div class="input-card">
-                    <input type="text" id="taskTitle" placeholder="タイトル" class="w-full text-lg font-bold focus:outline-none" required>
+                    <input type="text" id="taskTitle" name="title" placeholder="タイトル" class="w-full text-lg font-bold focus:outline-none" required>
                 </div>
 
+                {{-- 場所 --}}
                 <div class="input-card">
-                    <input type="text" id="taskLocation" placeholder="場所を追加" class="w-full text-sm focus:outline-none">
+                    <input type="text" id="taskLocation" name="location" placeholder="場所を追加" class="w-full text-sm focus:outline-none">
                 </div>
 
-                {{-- 時刻欄を縦並びに修正 --}}
-                <div class="input-card">
+                {{-- 開始時刻 --}}
+                <div class="input-card relative">
                     <label class="block text-[10px] text-slate-400 mb-1">開始時刻</label>
-                    <input type="time" id="taskStart" class="w-full text-base focus:outline-none">
+                    <input type="time" id="taskStart" name="start_time" class="w-full text-base focus:outline-none bg-transparent">
                 </div>
 
-                <div class="input-card">
+                {{-- 終了時刻 --}}
+                <div class="input-card relative">
                     <label class="block text-[10px] text-slate-400 mb-1">終了時刻</label>
-                    <input type="time" id="taskEnd" class="w-full text-base focus:outline-none">
+                    <input type="time" id="taskEnd" name="end_time" class="w-full text-base focus:outline-none bg-transparent">
                 </div>
 
+                {{-- 難易度 --}}
                 <div class="input-card">
                     <p class="text-xs text-slate-400 mb-3">難易度</p>
                     <div class="flex gap-4 justify-center py-1">
                         @foreach(range(1, 5) as $i)
-                            <button type="button" class="star-btn text-3xl text-slate-200" data-star="{{ $i }}">★</button>
+                            <button type="button" class="star-btn text-3xl text-slate-200 transition-colors" data-star="{{ $i }}">★</button>
                         @endforeach
                     </div>
                 </div>
 
+                {{-- メモ --}}
                 <div class="input-card">
-                    <textarea id="taskNote" rows="5" placeholder="詳細メモ..." class="w-full text-sm focus:outline-none resize-none"></textarea>
+                    <textarea id="taskNote" name="note" rows="5" placeholder="詳細メモ..." class="w-full text-sm focus:outline-none resize-none"></textarea>
                 </div>
             </div>
         </form>
