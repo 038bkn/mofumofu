@@ -235,6 +235,9 @@
                 </button>
             </div>
         </div>
+
+        <!-- エラーメッセージ -->
+        <div id="errorMsg" class="hidden mt-4 bg-[#fff0f0] border border-[#f4a0a0] rounded-lg px-3.5 py-2.5 text-[13px] text-[#c0392b] leading-relaxed"></div>
     </div>
 </div>
 

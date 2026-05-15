@@ -69,7 +69,7 @@
             >
 
             <div class="text-right mt-2.5">
-                <a href="/forgot-password" class="text-[12px] text-[#6a9fd8] no-underline">パスワードを忘れたはこちらから</a>
+                <a href="/forgot-password" class="text-[12px] text-[#6a9fd8] no-underline">パスワードを忘れた方はこちらから</a>
             </div>
 
             <!-- エラーメッセージ -->
