@@ -2,12 +2,10 @@ const chatArea = document.getElementById('chatArea');
 const messageInput = document.getElementById('messageInput');
 const sendBtn = document.getElementById('sendBtn');
 
-// 送信ボタンクリック時のイベント
 sendBtn.addEventListener('click', () => {
     handleSend();
 });
 
-// Enterキーでの送信
 messageInput.addEventListener('keydown', (e) => {
     if (e.isComposing || e.keyCode === 229) return;
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -23,20 +21,16 @@ function handleSend() {
     addMessage(text, 'user');
     messageInput.value = '';
 
-    // 1つぶやきにつき5ポイント付与
     addPoints(5);
 }
 
-// ポイントを加算してトースト通知を表示
 function addPoints(amount) {
     const current = parseInt(localStorage.getItem('total_points') || '0', 10);
     const newTotal = current + amount;
     localStorage.setItem('total_points', newTotal);
-
     showPointToast(amount, newTotal);
 }
 
-// 「+5pt」トースト表示
 function showPointToast(amount, total) {
     const toast = document.createElement('div');
     toast.textContent = `+${amount}pt ⭐ 合計 ${total}pt`;
@@ -48,7 +42,6 @@ function showPointToast(amount, total) {
         white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     `;
     document.body.appendChild(toast);
-
     setTimeout(() => { toast.style.opacity = '0'; }, 1500);
     setTimeout(() => { toast.remove(); }, 2500);
 }
