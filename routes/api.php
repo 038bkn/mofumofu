@@ -5,15 +5,8 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\SoliloquyController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserItemController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-| セッション認証 + CSRF を使うため、いずれのルートにも web ミドルウェアを付与する。
-|--------------------------------------------------------------------------
-*/
 
 // 認証不要（ログイン・新規登録）
 Route::middleware('web')->group(function () {
@@ -22,7 +15,7 @@ Route::middleware('web')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
 });
 
-// 認証必須（ログインユーザー自身のタスクのみ操作可能）
+// 認証必須
 Route::middleware(['web', 'auth'])->group(function () {
     Route::apiResource('tasks', TaskController::class);
 
@@ -38,7 +31,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::put('user/items/{ownedItem}/equip',     [UserItemController::class, 'equip']);
 
     // ユーザー情報取得
-    Route::get('user', [AuthController::class, 'show']);
+    Route::get('user', [UserController::class, 'show']);
 
     // ユーザー設定：モード更新
     Route::put('user/mode', [AuthController::class, 'updateMode']);

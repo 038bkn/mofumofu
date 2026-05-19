@@ -381,6 +381,7 @@
 
         document.addEventListener('DOMContentLoaded', updatePoints);
 
+        // --- 2. レイアウト調整関数 ---
         function positionPC() {
 
             if (window.innerWidth <= 600) return;
@@ -406,6 +407,7 @@
 
         positionPC();
 
+        // --- 3. ポップアップ制御 ---
         function openPopup() {
 
             const popup = document.getElementById('popup');
@@ -425,6 +427,7 @@
             document.getElementById('popup').classList.add('hidden');
         }
 
+        // --- 4. 装備アイテム反映（ここは現状を維持） ---
         (function() {
 
             const item = localStorage.getItem('equippedItem');

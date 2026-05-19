@@ -119,7 +119,7 @@ class TaskController extends Controller
 
             if ($isCompleting) {
                 // ポイント計算（難易度 × 10）
-                $earnedPoints = $task->difficulty * 10;
+                $earnedPoints = $task->difficulty * 5;
 
                 $user = $task->user;
                 $user->increment('points', $earnedPoints);

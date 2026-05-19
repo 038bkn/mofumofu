@@ -60,8 +60,8 @@
                 カレンダー
             </h1>
 
-            
-                href="/task/create?date={{ Carbon::now()->format('Y-m-d') }}"
+            <a
+                href="/task/create?date={{ $targetDate->format('Y-m-d') }} "
                 class="w-14 h-14 sm:w-16 sm:h-16 bg-slate-800 text-white rounded-full flex items-center justify-center text-3xl shadow-lg hover:bg-slate-700 transition-colors"
             >
                 ＋
@@ -179,7 +179,7 @@
     </div>
 
     {{-- ボトムナビ --}}
-    <nav class="fixed bottom-0 left-0 w-full h-[68px] bg-[#cdeef9] border-t border-[#b5d9e4] z-20">
+     <nav class="fixed bottom-0 left-0 w-full h-[68px] bg-[#cdeef9] border-t border-[#b5d9e4] z-20">
         <div class="w-full max-w-[390px] mx-auto h-full flex justify-around items-center">
             <a href="/chat" class="flex flex-col items-center justify-center">
                 <img src="{{ asset('images/icon/chat.png') }}" class="w-16 h-16 object-contain">
