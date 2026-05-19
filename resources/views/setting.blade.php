@@ -186,7 +186,7 @@
                     id="mode2"
                     class="mode-btn"
                     aria-pressed="false"
-                    onclick="selectMode('strict')">
+                    onclick="selectMode('spicy')">
 
                     飴と鞭
 

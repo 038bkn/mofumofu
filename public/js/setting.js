@@ -28,12 +28,32 @@ function selectMode(mode) {
 
 // モード保存
 function saveMode() {
-    try {
-        localStorage.setItem("mode", selectedMode);
-        hideError();
-    } catch (e) {
-        showError("設定の保存に失敗しました。もう一度お試しください。");
-    }
+    fetch("/api/user/mode", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        },
+        body: JSON.stringify({ mode: selectedMode }),
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("ネットワークエラー");
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === "success") {
+                localStorage.setItem("mode", selectedMode);
+                hideError();
+            } else {
+                showError("設定の保存に失敗しました。もう一度お試しください。");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            showError("設定の保存に失敗しました。もう一度お試しください。");
+        });
 }
 
 // フォントサイズをCSS変数に反映
