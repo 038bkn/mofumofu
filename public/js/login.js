@@ -3,6 +3,21 @@
 // 配置先: public/js/login.js
 // ============================================================
 
+// Laravelのバリデーションキー → 日本語メッセージ変換
+const VALIDATION_MESSAGES = {
+    'validation.email':    'メールアドレスの形式が正しくありません。',
+    'validation.required': '入力してください。',
+    'validation.min':      'パスワードは8文字以上で入力してください。',
+    'validation.max':      '入力が長すぎます。',
+    'validation.unique':   'すでに使用されています。',
+};
+
+function translateError(msg) {
+    if (!msg) return 'メールアドレスまたはパスワードが正しくありません。';
+    // キーが一致すれば日本語に変換、なければそのまま返す
+    return VALIDATION_MESSAGES[msg] ?? msg;
+}
+
 // login.blade.php の onclick="handleLogin()" からグローバルで呼ばれる
 async function handleLogin() {
     const email    = document.getElementById('email').value.trim();
@@ -35,11 +50,9 @@ async function handleLogin() {
         const data = await response.json();
 
         if (response.ok && data.status === 'success') {
-            // ログイン成功 → ホーム画面へ
             window.location.href = '/home';
         } else {
-            const msg = data.message || 'メールアドレスまたはパスワードが正しくありません。';
-            showError(msg);
+            showError(translateError(data.message));
         }
 
     } catch (e) {
