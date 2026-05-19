@@ -89,13 +89,26 @@
         </div>
     </div>
 
-    <script>
-        function updatePoints() {
-            const points = localStorage.getItem('total_points') || '0';
-            document.querySelectorAll('.total-points-display').forEach(el => el.textContent = points);
+  <script>
+        // --- 1. ポイント取得・同期関数（APIリアルタイム専用） ---
+        async function updatePoints() {
+            try {
+                const response = await fetch('/api/user', {
+                    headers: { 'Accept': 'application/json' }
+                });
+                if (response.ok) {
+                    const json = await response.json();
+                    // レスポンスの全パターンに対応
+                    const pts = json.points ?? json.point ?? (json.data?.points) ?? 0;
+                    document.querySelectorAll('.total-points-display').forEach(el => el.textContent = pts);
+                }
+            } catch (e) {
+                console.error('ユーザーポイントの取得に失敗しました:', e);
+            }
         }
         document.addEventListener('DOMContentLoaded', updatePoints);
 
+        // --- 2. レイアウト調整関数 ---
         function positionPC() {
             if (window.innerWidth <= 600) return;
             const cloud = document.getElementById('cloud-wrap');
@@ -110,6 +123,7 @@
         window.addEventListener('resize', positionPC);
         positionPC();
 
+        // --- 3. ポップアップ制御 ---
         function openPopup() {
             const popup = document.getElementById('popup');
             const cloud = document.getElementById('popup-cloud');
@@ -121,6 +135,7 @@
         }
         function closePopup() { document.getElementById('popup').classList.add('hidden'); }
 
+        // --- 4. 装備アイテム反映（ここは現状を維持） ---
         (function() {
             const item = localStorage.getItem('equippedItem');
             const map = {'bell':'s_ bell.png','doll_boy':'s_ doll_boy.png','doll_girl':'s_ doll_girl.png','rainy':'s_ rainy.png','ribbon':'s_ ribbon.png','sunglasses':'s_ sunglasses.png','valentine':'s_ valentine.png','dango':'s_dango.png','hat':'s_hat.png','helmet_blue':'s_helmet_blue.png','helmet_red':'s_helmet_red.png','sakura':'s_sakura.png','sunflower':'s_sunflower.png','tanabata_man':'s_tanabata_man.png','tanabata_woman':'s_tanabata_woman.png','tophat':'s_tophat.png'};
@@ -131,5 +146,6 @@
             }
         })();
     </script>
+   
 </body>
 </html>

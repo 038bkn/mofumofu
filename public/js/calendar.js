@@ -100,12 +100,26 @@ async function updateTaskStatus(task) {
         });
 
         if (response.ok) {
-            // ポイント計算とlocalStorage保存
-            const earned = DIFFICULTY_POINTS[task.difficulty || 1] || 5;
-            let current = parseInt(localStorage.getItem('total_points') || '0');
-            localStorage.setItem('total_points', current + earned);
+            // --- 修正部分 ---
+            // サーバー側でポイントが加算されているため、フロントでの足し算は削除します。
+            // 代わりに、最新の正しいポイントをAPIから取得して同期します。
+            try {
+                const userResponse = await fetch('/api/user', {
+                    headers: { 'Accept': 'application/json' }
+                });
+                if (userResponse.ok) {
+                    const userJson = await userResponse.json();
+                    if (userJson.status === 'success' && userJson.points !== undefined) {
+                        // サーバーの正確な値でローカルストレージを更新
+                        localStorage.setItem('total_points', userJson.points);
+                    }
+                }
+            } catch (userError) {
+                console.error('最新ポイントの同期に失敗しました:', userError);
+            }
             
-            renderCalendar(); // 画面更新
+            renderCalendar(); // カレンダー画面の更新
+            // ----------------
         } else {
             alert('更新に失敗しました。');
         }
