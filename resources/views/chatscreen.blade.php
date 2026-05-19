@@ -15,7 +15,7 @@
         }
         body {
             font-family: 'Noto Sans JP', sans-serif;
-            background: var(--pink-bg); /* 全体をピンクに */
+            background: var(--pink-bg);
             display: flex; 
             justify-content: center;
             height: 100vh; 
@@ -23,13 +23,12 @@
         }
 
         .phone-frame {
-            width: 100%; /* 幅を100%に広げる */
+            width: 100%;
             height: 100%;
             display: flex; 
             flex-direction: column;
         }
 
-        /* ホームボタンエリア */
         .top-nav { padding: 15px; }
         .home-btn {
             width: 48px; height: 48px; border-radius: 50%;
@@ -37,33 +36,32 @@
             display: flex; align-items: center; justify-content: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
+        .home-btn img {
+            width: 28px; height: 28px; object-fit: contain;
+        }
 
-        /* チャットエリア */
         .chat-area {
             flex: 1; overflow-y: auto;
             padding: 20px; display: flex; flex-direction: column; gap: 15px;
         }
 
-        /* 羊のエリア（画面下部に固定） */
         .mascot-area {
             display: flex; justify-content: center; align-items: center;
             padding-bottom: 20px;
         }
         .mascot-area img {
-            width: 250px; /* PCでも大きすぎないサイズに調整 */
+            width: 250px;
             opacity: 0.9;
         }
 
-        /* 入力エリア */
         .input-area { 
             background: var(--blue-bar);
-            padding: 15px 30px; /* 左右に少し余白 */
+            padding: 15px 30px;
             width: 100%;
         }
 
-        /* ボタンを横に並べて端に寄せる設定 */
         .input-container {
-            max-width: 1200px; /* PCで広がりすぎないための上限（任意） */
+            max-width: 1200px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
@@ -73,7 +71,7 @@
         .tag-row { 
             display: flex;
             gap: 10px;
-            justify-content: flex-start; /* 左端に寄せる（右なら flex-end） */
+            justify-content: flex-start;
         }
 
         .tag-btn {
@@ -94,7 +92,6 @@
             align-items: center; justify-content: center;
         }
 
-        /* メッセージのスタイル（既存維持） */
         .message-row { display: flex; align-items: flex-end; gap: 8px; margin-bottom: 5px; }
         .message-row.user { flex-direction: row-reverse; }
         .bubble {
@@ -109,7 +106,9 @@
 <div class="phone-frame">
 
     <div class="top-nav">
-        <button class="home-btn" onclick="location.href='/home'">🏠</button>
+        <button class="home-btn" onclick="location.href='/home'">
+            <img src="{{ asset('images/icon/home.png') }}" alt="ホーム">
+        </button>
     </div>
 
     <div class="chat-area" id="chatArea">
