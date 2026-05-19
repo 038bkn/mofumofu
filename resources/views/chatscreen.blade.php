@@ -12,25 +12,35 @@
             --blue-bar: #c8e6f5;
             --bubble-cream: #fef9e7;
             --text-dark: #5a4a4a;
+            --scrollbar-color: transparent;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
         }
         body {
             font-family: 'Noto Sans JP', sans-serif;
             background: var(--pink-bg);
-            display: flex; 
-            justify-content: center;
-            height: 100vh; 
-            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .phone-frame {
             width: 100%;
             height: 100%;
-            display: flex; 
+            display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
 
-        .top-nav { padding: 15px; }
         .home-btn {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 100;
             width: 80px; height: 80px; border-radius: 50%;
             background: white; border: none; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
@@ -39,35 +49,83 @@
         .home-btn img {
             width: 64px; height: 64px; object-fit: contain;
         }
+
         .chat-area {
-            flex: 1; overflow-y: auto;
-            padding: 20px; display: flex; flex-direction: column; gap: 15px;
+            flex: 1;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            padding: 110px 20px 20px 20px;
+            min-height: 0;
+        }
+
+        .chat-area::-webkit-scrollbar {
+            width: 5px;
+        }
+        .chat-area::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .chat-area::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-color);
+            border-radius: 10px;
+        }
+        .chat-area {
+            scrollbar-width: thin;
+            scrollbar-color: var(--scrollbar-color) transparent;
+        }
+
+        .message-row {
+            display: block; /* flexをやめてblock */
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .bubble {
+            display: inline-block;
+            max-width: 70%;
+            padding: 12px 18px;
+            border-radius: 20px;
+            font-size: 15px;
+            background: var(--bubble-cream);
+            color: var(--text-dark);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+
+        .message-row.user {
+            text-align: right; /* 右寄せ */
         }
 
         .mascot-area {
-            display: flex; justify-content: center; align-items: center;
-            padding-bottom: 20px;
+            position: fixed;
+            bottom: 130px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 0;
+            pointer-events: none;
         }
         .mascot-area img {
             width: 250px;
             opacity: 0.9;
         }
 
-        .input-area { 
+        .input-area {
             background: var(--blue-bar);
             padding: 15px 30px;
             width: 100%;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 2;
         }
 
         .input-container {
-            max-width: 1200px;
-            margin: 0 auto;
+            width: 100%;
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
 
-        .tag-row { 
+        .tag-row {
             display: flex;
             gap: 10px;
             justify-content: flex-start;
@@ -90,28 +148,16 @@
             border-radius: 50%; cursor: pointer; display: flex;
             align-items: center; justify-content: center;
         }
-
-        .message-row { display: flex; align-items: flex-end; gap: 8px; margin-bottom: 5px; }
-        .message-row.user { flex-direction: row-reverse; }
-        .bubble {
-            max-width: 70%; padding: 12px 18px; border-radius: 20px;
-            font-size: 15px; background: var(--bubble-cream); color: var(--text-dark);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            word-wrap: break-word;
-        }
     </style>
 </head>
 <body>
 <div class="phone-frame">
 
-    <div class="top-nav">
-        <button class="home-btn" onclick="location.href='/home'">
-            <img src="{{ asset('images/icon/home.png') }}" alt="ホーム">
-        </button>
-    </div>
+    <button class="home-btn" onclick="location.href='/home'">
+        <img src="{{ asset('images/icon/home.png') }}" alt="ホーム">
+    </button>
 
     <div class="chat-area" id="chatArea">
-        
     </div>
 
     <div class="mascot-area">
@@ -137,5 +183,19 @@
 
 </div>
 <script src="{{ asset('js/chatscreen.js') }}"></script>
+<script>
+    let _scrollTimer;
+    const _chatArea = document.getElementById('chatArea');
+
+    function showScrollbar() {
+        document.documentElement.style.setProperty('--scrollbar-color', 'rgba(90, 74, 74, 0.4)');
+        clearTimeout(_scrollTimer);
+        _scrollTimer = setTimeout(() => {
+            document.documentElement.style.setProperty('--scrollbar-color', 'transparent');
+        }, 1000);
+    }
+
+    _chatArea.addEventListener('scroll', showScrollbar);
+</script>
 </body>
 </html>
