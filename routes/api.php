@@ -5,7 +5,6 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\SoliloquyController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserItemController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 // 認証不要（ログイン・新規登録）
@@ -31,7 +30,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::put('user/items/{ownedItem}/equip',     [UserItemController::class, 'equip']);
 
     // ユーザー情報取得
-    Route::get('user', [UserController::class, 'show']);
+    Route::get('user', [AuthController::class, 'show']);
 
     // ユーザー設定：モード更新
     Route::put('user/mode', [AuthController::class, 'updateMode']);
