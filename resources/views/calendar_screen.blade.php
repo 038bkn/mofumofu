@@ -179,58 +179,21 @@
     </div>
 
     {{-- ボトムナビ --}}
-    <nav
-        class="w-full flex justify-center items-end text-slate-600 py-3 flex-shrink-0 border-t border-[#9ecfde]"
-        style="background-color: #b5d9e4;"
-    >
-
-        <div class="w-full max-w-[450px] mx-auto px-6 py-1 flex justify-between items-center">
-
-            <a href="/chat" class="flex flex-col items-center gap-1">
-
-                <span class="text-2xl">💬</span>
-
-                <span class="text-[9px] font-bold">
-                    ひとりごと
-                </span>
-
+     <nav class="fixed bottom-0 left-0 w-full h-[68px] bg-[#cdeef9] border-t border-[#b5d9e4] z-20">
+        <div class="w-full max-w-[390px] mx-auto h-full flex justify-around items-center">
+            <a href="/chat" class="flex flex-col items-center justify-center">
+                <img src="{{ asset('images/icon/chat.png') }}" class="w-16 h-16 object-contain">
             </a>
-
-            <a href="/home" class="flex flex-col items-center gap-1">
-
-                <span class="text-2xl">🏠</span>
-
-                <span class="text-[9px] font-bold">
-                    ホーム
-                </span>
-
+            <a href="/home" class="flex flex-col items-center justify-center">
+                <img src="{{ asset('images/icon/home.png') }}" class="w-16 h-16 object-contain">
             </a>
-
-            <a
-                href="/calendar"
-                class="flex flex-col items-center gap-1 text-slate-900"
-            >
-
-                <span class="text-2xl">📅</span>
-
-                <span class="text-[9px] font-bold underline decoration-2 underline-offset-4">
-                    ToDo
-                </span>
-
+            <a href="/calendar" class="flex flex-col items-center justify-center">
+                <img src="{{ asset('images/icon/todo.png') }}" class="w-16 h-16 object-contain">
             </a>
-
-            <a href="/setting" class="flex flex-col items-center gap-1">
-
-                <span class="text-2xl">⚙️</span>
-
-                <span class="text-[9px] font-bold">
-                    設定
-                </span>
-
+            <a href="/setting" class="flex flex-col items-center justify-center">
+                <img src="{{ asset('images/icon/setting.png') }}" class="w-16 h-16 object-contain">
             </a>
-
         </div>
-
     </nav>
 
 </div>
