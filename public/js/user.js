@@ -61,19 +61,36 @@ function hideLogoutModal() {
     document.getElementById("logoutModal").style.display = "none";
 }
 
-function executeLogout() {
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = "/logout";
+async function executeLogout() {
 
-    const token = document.createElement("input");
-    token.type = "hidden";
-    token.name = "_token";
-    token.value = document.querySelector('meta[name="csrf-token"]').content;
+    try {
 
-    form.appendChild(token);
-    document.body.appendChild(form);
-    form.submit();
+        const response = await fetch('/logout', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document
+                    .querySelector('meta[name="csrf-token"]')
+                    .content
+            }
+        });
+
+        // 未ログイン
+        if (response.status === 401) {
+
+            alert('ログインしていません');
+
+            return;
+        }
+
+        // 成功
+        alert('ログアウトしました');
+
+        location.href = '/login';
+
+    } catch (error) {
+
+        console.error(error);
+    }
 }
 
 // ===== 初期ロード =====

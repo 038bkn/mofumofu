@@ -246,7 +246,7 @@
     <div class="flex justify-between items-center text-slate-600">
         <button
             type="button"
-            onclick="location.href='/hitorigoto'"
+            onclick="location.href='/chat'"
             class="flex flex-col items-center gap-1">
             <span class="text-2xl">💬</span>
             <span class="text-xs">ひとりごと</span>
@@ -260,7 +260,7 @@
         </button>
         <button
             type="button"
-            onclick="location.href='/todo'"
+            onclick="location.href='/calandar'"
             class="flex flex-col items-center gap-1">
             <span class="text-2xl">📅</span>
             <span class="text-xs">ToDo</span>
