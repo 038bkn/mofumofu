@@ -59,7 +59,7 @@
                     >
                         <img src="{{ asset('images/item/dango.png') }}" alt="dango" class="w-4/5 h-4/5 object-contain">
                     </button>
-                    <span class="text-[11px] text-[#555]">必要ポイント 150</span>
+                    <span class="text-[11px] text-[#555]">必要ポイント 120</span>
                 </div>
 
                 <!-- doll_boy -->
