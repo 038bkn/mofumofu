@@ -159,6 +159,10 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        const currentPoints = parseInt(document.getElementById('userPoints').textContent);
+        const selectedPrice = parseInt(document.querySelector('[data-item="' + selectedItem + '"]').getAttribute('data-price'));
+        console.log('Purchase debug:', { itemId, selectedItem, currentPoints, selectedPrice });
+
         isSubmitting       = true;
         confirmOk.disabled = true;
 
@@ -176,8 +180,8 @@ document.addEventListener('DOMContentLoaded', function () {
             const data = await res.json();
 
             if (res.ok) {
-                if (data.points !== undefined) {
-                    document.getElementById('userPoints').textContent = data.points;
+                if (data.data?.total_points !== undefined) {
+                    document.getElementById('userPoints').textContent = data.data.total_points;
                 } else {
                     await loadUserPoints();
                 }
