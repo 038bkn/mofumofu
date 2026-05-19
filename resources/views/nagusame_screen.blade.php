@@ -12,23 +12,24 @@
             --bubble-cream: #fef9e7;
             --input-bg: #c8e6f5;
             --text-dark: #5a4a4a;
+            --scrollbar-color: transparent;
         }
         body {
            font-family: 'Noto Sans JP', sans-serif;
-           background: var(--nagusame-bg); /* 全体を水色に */
-           display: flex; 
+           background: var(--nagusame-bg);
+           display: flex;
            justify-content: center;
-           height: 100vh; 
+           height: 100vh;
            overflow: hidden;
         }
         .phone-frame {
-           width: 100%; 
+           width: 100%;
            height: 100%;
-           display: flex; 
+           display: flex;
            flex-direction: column;
         }
 
-        .back-nav { padding: 15px; }
+        .back-nav { padding: 15px; flex-shrink: 0; }
         .back-link {
             display: inline-block; background: var(--bubble-cream);
             padding: 8px 20px; border-radius: 20px;
@@ -37,33 +38,62 @@
         }
 
         .chat-area {
-            flex: 1; overflow-y: auto; padding: 20px;
+            flex: 1;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            padding: 20px;
             display: flex; flex-direction: column; gap: 14px;
+            min-height: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .chat-area::-webkit-scrollbar {
+            width: 5px;
+        }
+        .chat-area::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .chat-area::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-color);
+            border-radius: 10px;
+        }
+        .chat-area {
+            scrollbar-width: thin;
+            scrollbar-color: var(--scrollbar-color) transparent;
         }
 
         .mascot-container {
-           text-align: center;
-           padding: 10px 0;
+            position: fixed;
+            bottom: 110px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 0;
+            pointer-events: none;
         }
         .mascot-container img {
-           width: 250px;
-           display: block;
-           margin: 0 auto;
+            width: 250px;
+            display: block;
+            margin: 0 auto;
         }
         .mascot-label {
-          margin-top: -30px;
-          font-size: 20px;
-          color: #ffffff;
-          position: relative;
-          z-index: 5;
-          font-weight: bold;
-          text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+            margin-top: -30px;
+            font-size: 20px;
+            color: #ffffff;
+            position: relative;
+            z-index: 5;
+            font-weight: bold;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
         }
 
         .input-area {
            background: var(--input-bg);
            padding: 20px;
            width: 100%;
+           flex-shrink: 0;
+           position: relative;
+           z-index: 2;
         }
         .input-container {
             max-width: 1000px;
@@ -81,7 +111,6 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        /* メッセージスタイル（共通） */
         .message-row { display: flex; align-items: flex-end; gap: 8px; margin-bottom: 5px; }
         .message-row.user { flex-direction: row-reverse; }
         .bubble {
@@ -116,5 +145,19 @@
     </div>
 </div>
 <script src="{{ asset('js/nagusame_screen.js') }}"></script>
+<script>
+    let _scrollTimer;
+    const _chatArea = document.getElementById('chatArea');
+
+    function showScrollbar() {
+        document.documentElement.style.setProperty('--scrollbar-color', 'rgba(90, 74, 74, 0.4)');
+        clearTimeout(_scrollTimer);
+        _scrollTimer = setTimeout(() => {
+            document.documentElement.style.setProperty('--scrollbar-color', 'transparent');
+        }, 1000);
+    }
+
+    _chatArea.addEventListener('scroll', showScrollbar);
+</script>
 </body>
 </html>
