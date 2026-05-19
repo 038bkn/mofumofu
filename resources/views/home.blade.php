@@ -359,12 +359,24 @@
 
     <script>
 
-        function updatePoints() {
+        async function updatePoints() {
 
-            const points = localStorage.getItem('total_points') || '0';
+            try {
+                const res = await fetch('/api/user', {
+                    headers: { 'Accept': 'application/json' }
+                });
+                const data = await res.json();
+                const points = data.points ?? 0;
 
-            document.querySelectorAll('.total-points-display')
-                .forEach(el => el.textContent = points);
+                document.querySelectorAll('.total-points-display')
+                    .forEach(el => el.textContent = points);
+
+                localStorage.setItem('total_points', points);
+            } catch (e) {
+                const points = localStorage.getItem('total_points') || '0';
+                document.querySelectorAll('.total-points-display')
+                    .forEach(el => el.textContent = points);
+            }
         }
 
         document.addEventListener('DOMContentLoaded', updatePoints);
