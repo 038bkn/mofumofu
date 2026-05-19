@@ -37,6 +37,9 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('user/items',                       [UserItemController::class, 'index']);
     Route::put('user/items/{ownedItem}/equip',     [UserItemController::class, 'equip']);
 
+    // ユーザー情報取得
+    Route::get('user', [AuthController::class, 'show']);
+
     // ユーザー設定：モード更新
     Route::put('user/mode', [AuthController::class, 'updateMode']);
 });

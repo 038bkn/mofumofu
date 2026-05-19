@@ -73,6 +73,20 @@ class AuthController extends Controller
     }
 
     /**
+     * ユーザー情報取得
+     * GET /api/user
+     */
+    public function show(): JsonResponse
+    {
+        $user = Auth::user();
+
+        return response()->json([
+            'status' => 'success',
+            'points' => $user->points,
+        ]);
+    }
+
+    /**
      * モード更新処理
      * PUT /api/user/mode
      */
