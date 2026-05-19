@@ -37,7 +37,7 @@
                 メインプロフィール
             </h1>
 
-            <!-- アイコン -->
+            <!-- アイコン
             <div class="flex justify-center mb-8">
                 <div class="relative w-24 h-24">
                     <div class="w-24 h-24 rounded-full bg-slate-200 border-2 border-slate-300 overflow-hidden flex items-center justify-center" id="userIconWrapper">
@@ -53,7 +53,7 @@
                     </button>
                 </div>
                 <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="handleIconUpload(event)">
-            </div>
+            </div> -->
 
             <!-- ユーザー名 -->
             <div class="mb-8">
