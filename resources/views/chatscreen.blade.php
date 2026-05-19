@@ -31,15 +31,14 @@
 
         .top-nav { padding: 15px; }
         .home-btn {
-            width: 48px; height: 48px; border-radius: 50%;
+            width: 80px; height: 80px; border-radius: 50%;
             background: white; border: none; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
         .home-btn img {
-            width: 28px; height: 28px; object-fit: contain;
+            width: 64px; height: 64px; object-fit: contain;
         }
-
         .chat-area {
             flex: 1; overflow-y: auto;
             padding: 20px; display: flex; flex-direction: column; gap: 15px;
