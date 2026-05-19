@@ -66,6 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let isSubmitting  = false;
     let selectedItem  = null;
     let selectedPrice = null;
+    let ownedItemIds  = new Set();
 
     // ============================================================
     // ユーザーのポイント取得
@@ -81,6 +82,50 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
     loadUserPoints();
+
+    // ============================================================
+    // 所持アイテム一覧を取得
+    // ============================================================
+    async function loadOwnedItems() {
+        try {
+            const response = await fetch('/api/user/items');
+            const data = await response.json();
+
+            if (data.status === 'success' && data.data) {
+                data.data.forEach(function (ownedItem) {
+                    ownedItemIds.add(ownedItem.item.id);
+                });
+            }
+
+            updateShopDisplay();
+        } catch (error) {
+            console.error('Failed to load owned items:', error);
+        }
+    }
+    loadOwnedItems();
+
+    // ============================================================
+    // ショップ表示の更新：所持済みアイテムを灰色・無効化
+    // ============================================================
+    function updateShopDisplay() {
+        document.querySelectorAll('.shop-item-btn').forEach(function (btn) {
+            const itemName = btn.getAttribute('data-item');
+            const itemId = ITEM_ID_MAP[itemName];
+
+            if (itemId && ownedItemIds.has(itemId)) {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+
+                const label = btn.parentElement.querySelector('span');
+                if (label) {
+                    label.textContent = '所持済み';
+                    label.classList.add('text-[#999]');
+                }
+
+                btn.setAttribute('onclick', '');
+            }
+        });
+    }
 
     // ============================================================
     // 購入確認ポップアップを開く
