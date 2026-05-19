@@ -25,7 +25,7 @@
     <div class="w-full h-screen flex flex-col bg-slate-50 overflow-hidden">
         {{-- ヘッダー --}}
         <div class="flex items-center justify-between px-5 py-4 bg-white border-b border-slate-100 flex-shrink-0">
-            <a href="/day-schedule?date={{ $taskDate }}" class="text-xl p-2 -ml-2 text-slate-400">←</a>
+        <a href="#" class="text-xl p-2 -ml-2 text-slate-400" onclick="history.back(); return false;">←</a>
             <span class="font-bold text-lg text-slate-700">タスク詳細</span>
             <div class="w-8"></div>
         </div>
