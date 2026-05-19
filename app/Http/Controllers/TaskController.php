@@ -89,6 +89,10 @@ class TaskController extends Controller
             'title'      => ['sometimes', 'required', 'string', 'max:255'],
             'difficulty' => ['sometimes', 'required', 'integer', 'between:1,5'],
             'due_date'   => ['sometimes', 'nullable', 'date'],
+            'start_time' => ['sometimes', 'nullable', 'date_format:H:i'],
+            'end_time'   => ['sometimes', 'nullable', 'date_format:H:i', 'after:start_time'],
+            'location'   => ['sometimes', 'nullable', 'string', 'max:255'],
+            'note'       => ['sometimes', 'nullable', 'string'],
             'status'     => ['sometimes', 'required', 'integer', 'in:0,1'],
         ], $this->validationMessages());
 

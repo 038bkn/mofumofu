@@ -61,7 +61,7 @@
             </h1>
 
             <a
-                href="/task/create?date={{ Carbon::now()->format('Y-m-d') }}"
+                href="/task/create?date={{ $targetDate->format('Y-m-d') }} "
                 class="w-14 h-14 sm:w-16 sm:h-16 bg-slate-800 text-white rounded-full flex items-center justify-center text-3xl shadow-lg hover:bg-slate-700 transition-colors"
             >
                 ＋

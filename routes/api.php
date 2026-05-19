@@ -1,13 +1,13 @@
 <?php
-namespace App\Http\Controllers;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\SoliloquyController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserItemController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
 
 // 認証不要（ログイン・新規登録）
 Route::middleware('web')->group(function () {
@@ -31,18 +31,17 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('user/items',                       [UserItemController::class, 'index']);
     Route::put('user/items/{ownedItem}/equip',     [UserItemController::class, 'equip']);
 
-    // ★★★【追加・修正】ここを既存の認証必須グループの中に引っ越しました ★★★
-    Route::get('/user', [UserController::class, 'show']);
+    // ユーザー情報取得（★ここをUserControllerに変更しました）
+    Route::get('user', [UserController::class, 'show']);
+
+    // ユーザー設定：モード更新
+    Route::put('user/mode', [AuthController::class, 'updateMode']);
 });
 
-
-// ============================================================
-// UserController クラス（api.phpの中に一時的に同居させる場合）
-// ============================================================
-
-// ※ Route::middleware('auth:sanctum') の記述はエラーを招くため削除しました。
-
-class UserController extends Controller
+// ==========================================
+// UserController クラス (api.phpの中に一時的に同居させる場合)
+// ==========================================
+class UserController
 {
     /**
      * ログイン中ユーザーの情報（ポイント含む）を返す

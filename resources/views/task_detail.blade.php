@@ -25,7 +25,7 @@
     <div class="w-full h-screen flex flex-col bg-slate-50 overflow-hidden">
         {{-- ヘッダー --}}
         <div class="flex items-center justify-between px-5 py-4 bg-white border-b border-slate-100 flex-shrink-0">
-            <a href="/day-schedule?date={{ $taskDate }}" class="text-xl p-2 -ml-2 text-slate-400">←</a>
+        <a href="#" class="text-xl p-2 -ml-2 text-slate-400" onclick="history.back(); return false;">←</a>
             <span class="font-bold text-lg text-slate-700">タスク詳細</span>
             <div class="w-8"></div>
         </div>
@@ -37,20 +37,33 @@
                 <p class="text-center text-slate-400">読み込み中...</p>
             </div>
 
-            <div class="flex justify-center mt-10 mb-6">
-                <button id="deleteBtn" class="bg-white text-rose-500 font-bold px-12 py-3 rounded-full shadow-sm border border-rose-100 hover:bg-rose-50 transition">
+            <div class="flex flex-col gap-3 justify-center mt-10 mb-6">
+                <button id="editBtn"
+                    class="bg-[#b8e0e9] text-slate-700 font-bold px-12 py-3 rounded-full shadow-sm hover:opacity-90 transition">
+                    編集する
+                </button>
+
+                <button id="deleteBtn"
+                    class="bg-white text-rose-500 font-bold px-12 py-3 rounded-full shadow-sm border border-rose-100 hover:bg-rose-50 transition">
                     予定を削除する
                 </button>
             </div>
-        </div>
 
         {{-- ボトムナビ --}}
-        <nav class="w-full flex justify-center items-center text-slate-600 flex-shrink-0 border-t border-[#9ecfde]" style="background-color: #b8e0e9; height: 80px;">
-            <div class="w-full max-w-2xl px-6 flex justify-between items-center">
-                <a href="/chat" class="flex flex-col items-center gap-1"><span>💬</span><span class="text-[10px] font-bold">ひとりごと</span></a>
-                <a href="/home" class="flex flex-col items-center gap-1"><span>🏠</span><span class="text-[10px] font-bold">ホーム</span></a>
-                <a href="/calendar" class="flex flex-col items-center gap-1 text-slate-900"><span>🗓️</span><span class="text-[10px] font-bold border-b-2 border-slate-900">ToDo</span></a>
-                <a href="/setting" class="flex flex-col items-center gap-1"><span>⚙️</span><span class="text-[10px] font-bold">設定</span></a>
+        <nav class="fixed bottom-0 left-0 w-full h-[68px] bg-[#cdeef9] border-t border-[#b5d9e4] z-20">
+            <div class="w-full max-w-[390px] mx-auto h-full flex justify-around items-center">
+                <a href="/chat" class="flex flex-col items-center justify-center">
+                    <img src="{{ asset('images/icon/chat.png') }}" class="w-16 h-16 object-contain">
+                </a>
+                <a href="/home" class="flex flex-col items-center justify-center">
+                    <img src="{{ asset('images/icon/home.png') }}" class="w-16 h-16 object-contain">
+                </a>
+                <a href="/calendar" class="flex flex-col items-center justify-center">
+                    <img src="{{ asset('images/icon/todo.png') }}" class="w-16 h-16 object-contain">
+                </a>
+                <a href="/setting" class="flex flex-col items-center justify-center">
+                    <img src="{{ asset('images/icon/setting.png') }}" class="w-16 h-16 object-contain">
+                </a>
             </div>
         </nav>
     </div>
