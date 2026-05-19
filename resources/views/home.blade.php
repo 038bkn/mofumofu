@@ -357,21 +357,25 @@
 
     </div>
 
-  <script>
-        // --- 1. ポイント取得・同期関数（APIリアルタイム専用） ---
+    <script>
+
         async function updatePoints() {
+
             try {
-                const response = await fetch('/api/user', {
+                const res = await fetch('/api/user', {
                     headers: { 'Accept': 'application/json' }
                 });
-                if (response.ok) {
-                    const json = await response.json();
-                    // レスポンスの全パターンに対応
-                    const pts = json.points ?? json.point ?? (json.data?.points) ?? 0;
-                    document.querySelectorAll('.total-points-display').forEach(el => el.textContent = pts);
-                }
+                const data = await res.json();
+                const points = data.points ?? 0;
+
+                document.querySelectorAll('.total-points-display')
+                    .forEach(el => el.textContent = points);
+
+                localStorage.setItem('total_points', points);
             } catch (e) {
-                console.error('ユーザーポイントの取得に失敗しました:', e);
+                const points = localStorage.getItem('total_points') || '0';
+                document.querySelectorAll('.total-points-display')
+                    .forEach(el => el.textContent = points);
             }
         }
 

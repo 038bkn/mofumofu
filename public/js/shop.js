@@ -77,6 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const data = await res.json();
             const pts  = data.points ?? data.point ?? data.score ?? 0;
             document.getElementById('userPoints').textContent = pts;
+            localStorage.setItem('total_points', pts);
         } catch (e) {
             document.getElementById('userPoints').textContent = '-';
         }
@@ -181,7 +182,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (res.ok) {
                 if (data.data?.total_points !== undefined) {
-                    document.getElementById('userPoints').textContent = data.data.total_points;
+                    const newPoints = data.data.total_points;
+                    document.getElementById('userPoints').textContent = newPoints;
+                    localStorage.setItem('total_points', newPoints);
                 } else {
                     await loadUserPoints();
                 }
