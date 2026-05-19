@@ -260,7 +260,7 @@
         </button>
         <button
             type="button"
-            onclick="location.href='/calandar'"
+            onclick="location.href='/calendar'"
             class="flex flex-col items-center gap-1">
             <span class="text-2xl">📅</span>
             <span class="text-xs">ToDo</span>
