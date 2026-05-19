@@ -71,4 +71,23 @@ class AuthController extends Controller
 
         return response()->json(['status' => 'success']);
     }
+
+    /**
+     * モード更新処理
+     * PUT /api/user/mode
+     */
+    public function updateMode(Request $request): JsonResponse
+    {
+        $request->validate([
+            'mode' => ['required', 'in:sweet,spicy'],
+        ]);
+
+        $modeValue = $request->mode === 'sweet' ? 0 : 1;
+
+        auth()->user()->update([
+            'mode' => $modeValue,
+        ]);
+
+        return response()->json(['status' => 'success']);
+    }
 }
