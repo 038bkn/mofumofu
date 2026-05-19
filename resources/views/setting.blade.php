@@ -242,38 +242,22 @@
 </div>
 
 <!-- ナビゲーション -->
-<nav class="w-full max-w-sm bg-white rounded-3xl shadow-inner border border-slate-200 px-5 py-4 mb-4">
-    <div class="flex justify-between items-center text-slate-600">
-        <button
-            type="button"
-            onclick="location.href='/chat'"
-            class="flex flex-col items-center gap-1">
-            <span class="text-2xl">💬</span>
-            <span class="text-xs">ひとりごと</span>
-        </button>
-        <button
-            type="button"
-            onclick="location.href='/home'"
-            class="flex flex-col items-center gap-1">
-            <span class="text-2xl">🏠</span>
-            <span class="text-xs">ホーム</span>
-        </button>
-        <button
-            type="button"
-            onclick="location.href='/calendar'"
-            class="flex flex-col items-center gap-1">
-            <span class="text-2xl">📅</span>
-            <span class="text-xs">ToDo</span>
-        </button>
-        <button
-            type="button"
-            onclick="location.href='/setting'"
-            class="flex flex-col items-center gap-1 text-rose-400 font-semibold">
-            <span class="text-2xl">⚙️</span>
-            <span class="text-xs">設定</span>
-        </button>
-    </div>
-</nav>
+<nav class="fixed bottom-0 left-0 w-full h-[68px] bg-[#cdeef9] border-t border-[#b5d9e4] z-20">
+        <div class="w-full max-w-[390px] mx-auto h-full flex justify-around items-center">
+            <a href="/chat" class="flex flex-col items-center justify-center">
+                <img src="{{ asset('images/icon/chat.png') }}" class="w-16 h-16 object-contain">
+            </a>
+            <a href="/home" class="flex flex-col items-center justify-center">
+                <img src="{{ asset('images/icon/home.png') }}" class="w-16 h-16 object-contain">
+            </a>
+            <a href="/calendar" class="flex flex-col items-center justify-center">
+                <img src="{{ asset('images/icon/todo.png') }}" class="w-16 h-16 object-contain">
+            </a>
+            <a href="/setting" class="flex flex-col items-center justify-center">
+                <img src="{{ asset('images/icon/setting.png') }}" class="w-16 h-16 object-contain">
+            </a>
+        </div>
+    </nav>
 
 <script src="{{ asset('js/setting.js') }}"></script>
 
