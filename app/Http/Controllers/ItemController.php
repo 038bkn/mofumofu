@@ -32,17 +32,23 @@ class ItemController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
+        $user->refresh();
 
         // 重複購入チェック
         if ($user->ownedItems()->where('item_id', $item->id)->exists()) {
+            file_put_contents(
+                storage_path('logs/points_debug.log'),
+                "DUPLICATE CHECK: Item {$item->id} already owned by user {$user->id}\n\n",
+                FILE_APPEND
+            );
             return response()->json([
                 'status'  => 'error',
                 'message' => 'このアイテムはすでに所持しています。',
             ], 422);
         }
 
-        // ポイント不足チェック
-        if ($user->points < $item->price) {
+        // ポイント不足チェック（ポイント >= 価格 なら購入可能）
+        if (!($user->points >= $item->price)) {
             return response()->json([
                 'status'  => 'error',
                 'message' => 'ポイントが足りません。',
