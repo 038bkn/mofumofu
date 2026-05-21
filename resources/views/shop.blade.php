@@ -32,217 +32,55 @@
             </div>
         </div>
 
+        @php
+            $ownedSet = array_flip($ownedItemIds);
+            $items = [
+                ['name' => 'bell',          'id' => 9,  'price' => 80],
+                ['name' => 'dango',         'id' => 12, 'price' => 120],
+                ['name' => 'doll_boy',      'id' => 1,  'price' => 500],
+                ['name' => 'doll_girl',     'id' => 2,  'price' => 500],
+                ['name' => 'hat',           'id' => 5,  'price' => 100],
+                ['name' => 'helmet_blue',   'id' => 6,  'price' => 150],
+                ['name' => 'helmet_red',    'id' => 7,  'price' => 150],
+                ['name' => 'rainy',         'id' => 16, 'price' => 150],
+                ['name' => 'ribbon',        'id' => 10, 'price' => 100],
+                ['name' => 'sakura',        'id' => 14, 'price' => 200],
+                ['name' => 'sunflower',     'id' => 15, 'price' => 200],
+                ['name' => 'sunglasses',    'id' => 11, 'price' => 200],
+                ['name' => 'tanabata_man',  'id' => 3,  'price' => 800],
+                ['name' => 'tanabata_woman','id' => 4,  'price' => 800],
+                ['name' => 'tophat',        'id' => 8,  'price' => 300],
+                ['name' => 'valentine',     'id' => 13, 'price' => 250],
+            ];
+        @endphp
+
         <!-- アイテムグリッド -->
         <div class="flex-1 px-4 pb-8">
             <div class="grid grid-cols-3 gap-x-4 gap-y-6">
 
-                <!-- bell -->
+                @foreach ($items as $item)
+                @php $owned = isset($ownedSet[$item['id']]); @endphp
                 <div class="flex flex-col items-center gap-1">
                     <button
-                        onclick="openConfirm('bell', 80)"
-                        data-item="bell"
-                        data-price="80"
-                        class="shop-item-btn w-full aspect-square bg-white rounded-full shadow-sm flex items-center justify-center overflow-hidden"
+                        @if(!$owned) onclick="openConfirm('{{ $item['name'] }}', {{ $item['price'] }})" @endif
+                        data-item="{{ $item['name'] }}"
+                        data-price="{{ $item['price'] }}"
+                        @if($owned) disabled data-owned="1" @endif
+                        class="shop-item-btn w-full aspect-square bg-white rounded-full shadow-sm flex items-center justify-center overflow-hidden @if($owned) opacity-50 cursor-not-allowed @endif"
+                        style="{{ $owned ? 'position:relative' : '' }}"
                     >
-                        <img src="{{ asset('images/item/bell.png') }}" alt="bell" class="w-4/5 h-4/5 object-contain">
+                        <img src="{{ asset('images/item/' . $item['name'] . '.png') }}" alt="{{ $item['name'] }}" class="w-4/5 h-4/5 object-contain">
+                        @if($owned)
+                            <div style="position:absolute;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;">
+                                <span style="color:#fff;font-size:11px;font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,0.5)">購入済み</span>
+                            </div>
+                        @endif
                     </button>
-                    <span class="text-[11px] text-[#555]">必要ポイント 80</span>
+                    <span class="text-[11px] {{ $owned ? 'text-[#999]' : 'text-[#555]' }}">
+                        {{ $owned ? '購入済み' : '必要ポイント ' . $item['price'] }}
+                    </span>
                 </div>
-
-                <!-- dango -->
-                <div class="flex flex-col items-center gap-1">
-                    <button
-                        onclick="openConfirm('dango', 120)"
-                        data-item="dango"
-                        data-price="120"
-                        class="shop-item-btn w-full aspect-square bg-white rounded-full shadow-sm flex items-center justify-center overflow-hidden"
-                    >
-                        <img src="{{ asset('images/item/dango.png') }}" alt="dango" class="w-4/5 h-4/5 object-contain">
-                    </button>
-                    <span class="text-[11px] text-[#555]">必要ポイント 120</span>
-                </div>
-
-                <!-- doll_boy -->
-                <div class="flex flex-col items-center gap-1">
-                    <button
-                        onclick="openConfirm('doll_boy', 500)"
-                        data-item="doll_boy"
-                        data-price="500"
-                        class="shop-item-btn w-full aspect-square bg-white rounded-full shadow-sm flex items-center justify-center overflow-hidden"
-                    >
-                        <img src="{{ asset('images/item/doll_boy.png') }}" alt="doll_boy" class="w-4/5 h-4/5 object-contain">
-                    </button>
-                    <span class="text-[11px] text-[#555]">必要ポイント 500</span>
-                </div>
-
-                <!-- doll_girl -->
-                <div class="flex flex-col items-center gap-1">
-                    <button
-                        onclick="openConfirm('doll_girl', 500)"
-                        data-item="doll_girl"
-                        data-price="500"
-                        class="shop-item-btn w-full aspect-square bg-white rounded-full shadow-sm flex items-center justify-center overflow-hidden"
-                    >
-                        <img src="{{ asset('images/item/doll_girl.png') }}" alt="doll_girl" class="w-4/5 h-4/5 object-contain">
-                    </button>
-                    <span class="text-[11px] text-[#555]">必要ポイント 500</span>
-                </div>
-
-                <!-- hat -->
-                <div class="flex flex-col items-center gap-1">
-                    <button
-                        onclick="openConfirm('hat', 100)"
-                        data-item="hat"
-                        data-price="100"
-                        class="shop-item-btn w-full aspect-square bg-white rounded-full shadow-sm flex items-center justify-center overflow-hidden"
-                    >
-                        <img src="{{ asset('images/item/hat.png') }}" alt="hat" class="w-4/5 h-4/5 object-contain">
-                    </button>
-                    <span class="text-[11px] text-[#555]">必要ポイント 100</span>
-                </div>
-
-                <!-- helmet_blue -->
-                <div class="flex flex-col items-center gap-1">
-                    <button
-                        onclick="openConfirm('helmet_blue', 150)"
-                        data-item="helmet_blue"
-                        data-price="150"
-                        class="shop-item-btn w-full aspect-square bg-white rounded-full shadow-sm flex items-center justify-center overflow-hidden"
-                    >
-                        <img src="{{ asset('images/item/helmet_blue.png') }}" alt="helmet_blue" class="w-4/5 h-4/5 object-contain">
-                    </button>
-                    <span class="text-[11px] text-[#555]">必要ポイント 150</span>
-                </div>
-
-                <!-- helmet_red -->
-                <div class="flex flex-col items-center gap-1">
-                    <button
-                        onclick="openConfirm('helmet_red', 150)"
-                        data-item="helmet_red"
-                        data-price="150"
-                        class="shop-item-btn w-full aspect-square bg-white rounded-full shadow-sm flex items-center justify-center overflow-hidden"
-                    >
-                        <img src="{{ asset('images/item/helmet_red.png') }}" alt="helmet_red" class="w-4/5 h-4/5 object-contain">
-                    </button>
-                    <span class="text-[11px] text-[#555]">必要ポイント 150</span>
-                </div>
-
-                <!-- rainy -->
-                <div class="flex flex-col items-center gap-1">
-                    <button
-                        onclick="openConfirm('rainy', 150)"
-                        data-item="rainy"
-                        data-price="150"
-                        class="shop-item-btn w-full aspect-square bg-white rounded-full shadow-sm flex items-center justify-center overflow-hidden"
-                    >
-                        <img src="{{ asset('images/item/rainy.png') }}" alt="rainy" class="w-4/5 h-4/5 object-contain">
-                    </button>
-                    <span class="text-[11px] text-[#555]">必要ポイント 150</span>
-                </div>
-
-                <!-- ribbon -->
-                <div class="flex flex-col items-center gap-1">
-                    <button
-                        onclick="openConfirm('ribbon', 100)"
-                        data-item="ribbon"
-                        data-price="100"
-                        class="shop-item-btn w-full aspect-square bg-white rounded-full shadow-sm flex items-center justify-center overflow-hidden"
-                    >
-                        <img src="{{ asset('images/item/ribbon.png') }}" alt="ribbon" class="w-4/5 h-4/5 object-contain">
-                    </button>
-                    <span class="text-[11px] text-[#555]">必要ポイント 100</span>
-                </div>
-
-                <!-- sakura -->
-                <div class="flex flex-col items-center gap-1">
-                    <button
-                        onclick="openConfirm('sakura', 200)"
-                        data-item="sakura"
-                        data-price="200"
-                        class="shop-item-btn w-full aspect-square bg-white rounded-full shadow-sm flex items-center justify-center overflow-hidden"
-                    >
-                        <img src="{{ asset('images/item/sakura.png') }}" alt="sakura" class="w-4/5 h-4/5 object-contain">
-                    </button>
-                    <span class="text-[11px] text-[#555]">必要ポイント 200</span>
-                </div>
-
-                <!-- sunflower -->
-                <div class="flex flex-col items-center gap-1">
-                    <button
-                        onclick="openConfirm('sunflower', 200)"
-                        data-item="sunflower"
-                        data-price="200"
-                        class="shop-item-btn w-full aspect-square bg-white rounded-full shadow-sm flex items-center justify-center overflow-hidden"
-                    >
-                        <img src="{{ asset('images/item/sunflower.png') }}" alt="sunflower" class="w-4/5 h-4/5 object-contain">
-                    </button>
-                    <span class="text-[11px] text-[#555]">必要ポイント 200</span>
-                </div>
-
-                <!-- sunglasses -->
-                <div class="flex flex-col items-center gap-1">
-                    <button
-                        onclick="openConfirm('sunglasses', 200)"
-                        data-item="sunglasses"
-                        data-price="200"
-                        class="shop-item-btn w-full aspect-square bg-white rounded-full shadow-sm flex items-center justify-center overflow-hidden"
-                    >
-                        <img src="{{ asset('images/item/sunglasses.png') }}" alt="sunglasses" class="w-4/5 h-4/5 object-contain">
-                    </button>
-                    <span class="text-[11px] text-[#555]">必要ポイント 200</span>
-                </div>
-
-                <!-- tanabata_man -->
-                <div class="flex flex-col items-center gap-1">
-                    <button
-                        onclick="openConfirm('tanabata_man', 800)"
-                        data-item="tanabata_man"
-                        data-price="800"
-                        class="shop-item-btn w-full aspect-square bg-white rounded-full shadow-sm flex items-center justify-center overflow-hidden"
-                    >
-                        <img src="{{ asset('images/item/tanabata_man.png') }}" alt="tanabata_man" class="w-4/5 h-4/5 object-contain">
-                    </button>
-                    <span class="text-[11px] text-[#555]">必要ポイント 800</span>
-                </div>
-
-                <!-- tanabata_woman -->
-                <div class="flex flex-col items-center gap-1">
-                    <button
-                        onclick="openConfirm('tanabata_woman', 800)"
-                        data-item="tanabata_woman"
-                        data-price="800"
-                        class="shop-item-btn w-full aspect-square bg-white rounded-full shadow-sm flex items-center justify-center overflow-hidden"
-                    >
-                        <img src="{{ asset('images/item/tanabata_woman.png') }}" alt="tanabata_woman" class="w-4/5 h-4/5 object-contain">
-                    </button>
-                    <span class="text-[11px] text-[#555]">必要ポイント 800</span>
-                </div>
-
-                <!-- tophat -->
-                <div class="flex flex-col items-center gap-1">
-                    <button
-                        onclick="openConfirm('tophat', 300)"
-                        data-item="tophat"
-                        data-price="300"
-                        class="shop-item-btn w-full aspect-square bg-white rounded-full shadow-sm flex items-center justify-center overflow-hidden"
-                    >
-                        <img src="{{ asset('images/item/tophat.png') }}" alt="tophat" class="w-4/5 h-4/5 object-contain">
-                    </button>
-                    <span class="text-[11px] text-[#555]">必要ポイント 300</span>
-                </div>
-
-                <!-- valentine -->
-                <div class="flex flex-col items-center gap-1">
-                    <button
-                        onclick="openConfirm('valentine', 250)"
-                        data-item="valentine"
-                        data-price="250"
-                        class="shop-item-btn w-full aspect-square bg-white rounded-full shadow-sm flex items-center justify-center overflow-hidden"
-                    >
-                        <img src="{{ asset('images/item/valentine.png') }}" alt="valentine" class="w-4/5 h-4/5 object-contain">
-                    </button>
-                    <span class="text-[11px] text-[#555]">必要ポイント 250</span>
-                </div>
+                @endforeach
 
             </div>
         </div>
@@ -280,6 +118,9 @@
         </div>
     </div>
 
+    <script>
+        window.INITIAL_OWNED_ITEM_IDS = @json($ownedItemIds);
+    </script>
     <script src="{{ asset('js/shop.js') }}"></script>
 </body>
 </html>

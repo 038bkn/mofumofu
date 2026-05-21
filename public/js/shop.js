@@ -114,16 +114,25 @@ document.addEventListener('DOMContentLoaded', function () {
             const itemId = ITEM_ID_MAP[itemName];
 
             if (itemId && ownedItemIds.has(itemId)) {
+                if (btn.hasAttribute('data-owned')) return;
+                btn.setAttribute('data-owned', '1');
+
                 btn.disabled = true;
                 btn.classList.add('opacity-50', 'cursor-not-allowed');
+                btn.style.position = 'relative';
+                btn.setAttribute('onclick', '');
+
+                const overlay = document.createElement('div');
+                overlay.style.cssText = 'position:absolute;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;border-radius:9999px;';
+                overlay.innerHTML = '<span style="color:#fff;font-size:11px;font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,0.5)">購入済み</span>';
+                btn.appendChild(overlay);
 
                 const label = btn.parentElement.querySelector('span');
                 if (label) {
-                    label.textContent = '所持済み';
+                    label.textContent = '購入済み';
+                    label.classList.remove('text-[#555]');
                     label.classList.add('text-[#999]');
                 }
-
-                btn.setAttribute('onclick', '');
             }
         });
     }
@@ -188,6 +197,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     await loadUserPoints();
                 }
+                ownedItemIds.add(itemId);
+                updateShopDisplay();
                 closeConfirm();
             } else {
                 closeConfirm();

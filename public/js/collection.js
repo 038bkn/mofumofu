@@ -45,6 +45,8 @@ const ITEM_ID_MAP = {
 
 let selectedItem = 'none';
 let ownedItemIds = new Set();
+let itemIdToOwnedItemId = {};
+let currentEquippedOwnedItemId = null;
 
 // ============================================================
 // 所持アイテム一覧を取得
@@ -58,6 +60,17 @@ async function loadOwnedItems() {
             data.data.forEach(function (ownedItem) {
                 if (ownedItem.item) {
                     ownedItemIds.add(ownedItem.item.id);
+                    itemIdToOwnedItemId[ownedItem.item.id] = ownedItem.id;
+
+                    if (ownedItem.is_equipped) {
+                        currentEquippedOwnedItemId = ownedItem.id;
+                        for (const [name, id] of Object.entries(ITEM_ID_MAP)) {
+                            if (id === ownedItem.item.id) {
+                                selectedItem = name;
+                                break;
+                            }
+                        }
+                    }
                 }
             });
         }
@@ -69,7 +82,7 @@ async function loadOwnedItems() {
 }
 
 // ============================================================
-// アイテム表示の更新：所持していないアイテムを灰色にする
+// アイテム表示の更新：所持していないアイテムを灰色にし、装備中をハイライト
 // ============================================================
 function updateItemDisplay() {
     document.querySelectorAll('.item-btn').forEach(function (btn) {
@@ -80,6 +93,11 @@ function updateItemDisplay() {
         if (!isOwned) {
             btn.classList.add('opacity-50', 'cursor-not-allowed');
             btn.disabled = true;
+        }
+
+        if (itemName === selectedItem) {
+            btn.classList.remove('border-transparent');
+            btn.classList.add('border-[#f4a0a0]');
         }
     });
 }
@@ -116,10 +134,35 @@ function selectItem(itemName) {
 }
 
 // ============================================================
-// 保存処理：選択アイテムをlocalStorageに保存してホームへ戻る
+// 保存処理：APIでDBを更新し、localStorageに保存してホームへ戻る
 // ============================================================
-function saveEquip() {
-    localStorage.setItem('equippedItem', selectedItem);
+async function saveEquip() {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    try {
+        if (selectedItem === 'none') {
+            if (currentEquippedOwnedItemId) {
+                await fetch('/api/user/items/' + currentEquippedOwnedItemId + '/equip', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+                    body: JSON.stringify({ is_equipped: false }),
+                });
+            }
+        } else {
+            const itemId = ITEM_ID_MAP[selectedItem];
+            const ownedItemId = itemIdToOwnedItemId[itemId];
+            if (ownedItemId) {
+                await fetch('/api/user/items/' + ownedItemId + '/equip', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+                    body: JSON.stringify({ is_equipped: true }),
+                });
+            }
+        }
+    } catch (error) {
+        console.error('Failed to update equip status:', error);
+    }
+
     window.location.href = '/home';
 }
 

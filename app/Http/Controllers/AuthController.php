@@ -16,13 +16,14 @@ class AuthController extends Controller
     public function login(Request $request): JsonResponse
     {
         $request->validate([
-            'email'    => ['required', 'email'],
+            'email'    => ['required', 'string'],
             'password' => ['required'],
         ]);
 
-        $credentials = $request->only('email', 'password');
+        $loginValue = $request->input('email');
+        $field      = filter_var($loginValue, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt([$field => $loginValue, 'password' => $request->password])) {
             $request->session()->regenerate();
 
             return response()->json(['status' => 'success']);
