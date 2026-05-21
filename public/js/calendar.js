@@ -61,19 +61,26 @@ async function loadMonthTasks(year, month) {
 function renderTodoList(tasks) {
     const container = document.getElementById('todoList');
     container.innerHTML = tasks.length === 0 ? '<div class="p-3 text-slate-400">予定がありません</div>' : '';
-    
+
+    const today = new Date().toISOString().split('T')[0];
+
     tasks.forEach(task => {
+        const isOverdue = task.due_date < today;
         const item = document.createElement('div');
-        item.className = 'rounded-2xl bg-slate-50 border border-slate-200 p-3 flex items-center justify-between mb-2 shadow-sm';
+        item.className = isOverdue
+            ? 'rounded-2xl bg-rose-50 border border-rose-200 p-3 flex items-center justify-between mb-2 shadow-sm'
+            : 'rounded-2xl bg-slate-50 border border-slate-200 p-3 flex items-center justify-between mb-2 shadow-sm';
         item.innerHTML = `
             <div class="flex items-center gap-3 flex-1 min-w-0">
                 <input type="checkbox" class="w-6 h-6 rounded border-slate-300 text-rose-500 task-check cursor-pointer">
                 <div class="flex flex-col flex-1 min-w-0 cursor-pointer task-link">
-                    <span class="text-sm font-bold text-slate-800 truncate">${task.title}</span>
-                    <span class="text-[10px] text-amber-500 font-bold">★${task.difficulty || 1}</span>
+                    <span class="text-sm font-bold ${isOverdue ? 'text-rose-600' : 'text-slate-800'} truncate">${task.title}</span>
+                    <span class="text-[10px] ${isOverdue ? 'text-rose-400' : 'text-amber-500'} font-bold">
+                        ${isOverdue ? '期日切れ · ' : ''}★${task.difficulty || 1}
+                    </span>
                 </div>
             </div>
-            <span class="text-xs text-slate-400 ml-2">${task.due_date.split('-').slice(1).join('/')}</span>
+            <span class="text-xs ${isOverdue ? 'text-rose-400' : 'text-slate-400'} ml-2">${task.due_date.split('-').slice(1).join('/')}</span>
         `;
         
         // チェックボックスで更新
@@ -121,26 +128,30 @@ async function updateTaskStatus(task) {
             renderCalendar(); // カレンダー画面の更新
             // ----------------
         } else {
-            alert('更新に失敗しました。');
+            showToast('更新に失敗しました。', 'error');
         }
     } catch (e) {
-        alert('ネットワークエラーが発生しました。');
+        showToast('ネットワークエラーが発生しました。', 'error');
     }
 }
 
 function renderCompletedList(tasks) {
     const container = document.getElementById('completedList');
     container.innerHTML = tasks.length === 0 ? '<p class="text-sm text-slate-400">完了済みはありません</p>' : '';
-    
+
     tasks.forEach(task => {
         const item = document.createElement('div');
-        item.className = 'rounded-2xl bg-white border border-slate-200 p-3 flex items-center justify-between opacity-60 mb-2';
+        item.className = 'rounded-2xl bg-white border border-slate-200 p-3 flex items-center justify-between opacity-60 mb-2 cursor-pointer hover:opacity-80 transition';
         item.innerHTML = `
             <div class="flex items-center gap-2 truncate">
                 <span class="text-emerald-500 font-bold">✓</span>
                 <span class="text-sm text-slate-400 line-through">${task.title}</span>
             </div>
+            <span class="text-xs text-slate-400 ml-2 flex-shrink-0">${task.due_date.split('-').slice(1).join('/')}</span>
         `;
+        item.addEventListener('click', () => {
+            window.location.href = `/task/detail?id=${task.id}&date=${task.due_date}`;
+        });
         container.appendChild(item);
     });
 }

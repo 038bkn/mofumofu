@@ -162,8 +162,8 @@
                 </button>
             </div>
         </div>
-        <!-- モード -->
-        <div class="setting-section">
+        {{-- モード（実装保留中のためコメントアウト） --}}
+        {{-- <div class="setting-section">
             <div class="field-label">
                 モード選択
             </div>
@@ -202,7 +202,7 @@
 
                 </button>
             </div>
-        </div>
+        </div> --}}
         <!-- フォント -->
         <div class="setting-section">
             <label

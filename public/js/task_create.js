@@ -36,15 +36,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // フロント側バリデーション
         if (!title) {
-            alert('タイトルを入力してください。');
+            showToast('タイトルを入力してください。', 'error');
             return;
         }
         if (!difficulty) {
-            alert('難易度を選択してください。');
+            showToast('難易度を選択してください。', 'error');
             return;
         }
         if (start && end && start >= end) {
-            alert('終了時刻は開始時刻より後にしてください。');
+            showToast('終了時刻は開始時刻より後にしてください。', 'error');
             return;
         }
 
@@ -79,9 +79,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            alert(json.message || 'タスクの登録に失敗しました。');
+            showToast(json.message || 'タスクの登録に失敗しました。', 'error');
         } catch (e) {
-            alert('通信エラーが発生しました。もう一度お試しください。');
+            showToast('通信エラーが発生しました。もう一度お試しください。', 'error');
         } finally {
             if (saveBtn) saveBtn.disabled = false;
         }

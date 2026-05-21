@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
@@ -85,6 +86,36 @@ class AuthController extends Controller
             'status' => 'success',
             'points' => $user->points,
         ]);
+    }
+
+    /**
+     * メールアドレス・パスワード更新処理
+     * PUT /api/user/credentials
+     */
+    public function updateCredentials(Request $request): JsonResponse
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'email'    => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
+            'password' => ['nullable', 'string', 'min:6', 'confirmed'],
+        ], [
+            'email.unique'    => 'このメールアドレスはすでに登録されています。',
+            'email.required'  => 'メールアドレスを入力してください。',
+            'email.email'     => '有効なメールアドレスを入力してください。',
+            'password.min'    => 'パスワードは6文字以上で入力してください。',
+            'password.confirmed' => 'パスワードが一致しません。',
+        ]);
+
+        $data = ['email' => $request->email];
+
+        if ($request->filled('password')) {
+            $data['password'] = $request->password;
+        }
+
+        $user->update($data);
+
+        return response()->json(['status' => 'success']);
     }
 
     /**
