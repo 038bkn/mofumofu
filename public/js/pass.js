@@ -10,14 +10,14 @@ function hideError() {
     el.style.display = "none";
 }
 
-function saveChanges() {
+async function saveChanges() {
     hideError();
 
     const email       = document.getElementById("emailInput").value.trim();
     const newPass     = document.getElementById("newPassword").value;
     const confirmPass = document.getElementById("confirmPassword").value;
 
-    // バリデーション
+    // フロントエンドバリデーション
     if (!email) {
         showError("メールアドレスを入力してください");
         return;
@@ -38,28 +38,47 @@ function saveChanges() {
         return;
     }
 
-    // Laravelへ送信
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = "/pass/update";
+    try {
+        const response = await fetch('/api/user/credentials', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            },
+            body: JSON.stringify({
+                email:                 email,
+                password:              newPass,
+                password_confirmation: confirmPass,
+            }),
+        });
 
-    const fields = {
-        "_token":                    document.querySelector('meta[name="csrf-token"]').content,
-        "email":                     email,
-        "new_password":              newPass,
-        "new_password_confirmation": confirmPass,
-    };
+        const data = await response.json();
 
-    Object.entries(fields).forEach(([name, value]) => {
-        const input = document.createElement("input");
-        input.type  = "hidden";
-        input.name  = name;
-        input.value = value;
-        form.appendChild(input);
-    });
+        if (response.ok && data.status === 'success') {
+            localStorage.setItem('email', email);
+            location.href = '/user';
+            return;
+        }
 
-    document.body.appendChild(form);
-    form.submit();
+        // バリデーションエラー (422)
+        if (response.status === 422 && data.errors) {
+            const errors = data.errors;
+            if (errors.email) {
+                showError(errors.email[0]);
+            } else if (errors.password) {
+                showError(errors.password[0]);
+            } else {
+                showError('入力内容を確認してください。');
+            }
+            return;
+        }
+
+        showError('保存に失敗しました。もう一度お試しください。');
+
+    } catch (err) {
+        console.error(err);
+        showError('通信エラーが発生しました。もう一度お試しください。');
+    }
 }
 
 // 初期ロード

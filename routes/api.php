@@ -32,6 +32,9 @@ Route::middleware(['web', 'auth'])->group(function () {
     // ユーザー情報取得
     Route::get('user', [AuthController::class, 'show']);
 
+    // ユーザー設定：メールアドレス・パスワード更新
+    Route::put('user/credentials', [AuthController::class, 'updateCredentials']);
+
     // ユーザー設定：モード更新
     Route::put('user/mode', [AuthController::class, 'updateMode']);
 });
