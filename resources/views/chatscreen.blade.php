@@ -13,6 +13,10 @@
             --bubble-cream: #fef9e7;
             --text-dark: #5a4a4a;
             --scrollbar-color: transparent;
+            --font-size-base: 16px;
+        }
+        html {
+            font-size: var(--font-size-base);
         }
         html, body {
             width: 100%;
@@ -84,7 +88,7 @@
             max-width: 70%;
             padding: 12px 18px;
             border-radius: 20px;
-            font-size: 15px;
+            font-size: 0.95rem;
             background: var(--bubble-cream);
             color: var(--text-dark);
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
@@ -141,7 +145,7 @@
         .input-row { display: flex; gap: 15px; align-items: center; }
         .text-input {
             flex: 1; padding: 15px 25px; border-radius: 30px;
-            border: none; outline: none; font-size: 16px;
+            border: none; outline: none; font-size: 1rem;
         }
         .send-btn {
             background: #e8e8e8; border: none; width: 50px; height: 50px;
