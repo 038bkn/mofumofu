@@ -31,7 +31,7 @@
         </div>
 
         {{-- メインコンテンツ --}}
-        <div class="flex-1 overflow-y-auto px-6 py-8">
+        <div class="flex-1 overflow-y-auto px-6 pt-8 pb-24">
             {{-- IDを detail.js と一致させています --}}
             <div id="taskContent" class="space-y-6">
                 <p class="text-center text-slate-400">読み込み中...</p>
@@ -73,6 +73,7 @@
         window.taskId = "{{ $taskId }}";
         window.scheduleDate = "{{ $taskDate }}";
     </script>
-    <script src="{{ asset('js/detail.js') }}"></script>
+    <script src="{{ asset('js/toast.js') }}?v={{ filemtime(public_path('js/toast.js')) }}"></script>
+    <script src="{{ asset('js/detail.js') }}?v={{ filemtime(public_path('js/detail.js')) }}"></script>
 </body>
 </html>

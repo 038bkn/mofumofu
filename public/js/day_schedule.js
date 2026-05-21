@@ -98,6 +98,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const isDone =
                     Number(task.status) === 1;
 
+                const today =
+                    new Date().toISOString().split('T')[0];
+
+                const isOverdue =
+                    !isDone && date < today;
+
                 const eventBox =
                     document.createElement('div');
 
@@ -109,7 +115,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     overflow-hidden
                     ${isDone
                         ? 'bg-slate-400 opacity-70'
-                        : 'bg-slate-800'}
+                        : isOverdue
+                            ? 'bg-rose-400'
+                            : 'bg-slate-800'}
                 `;
 
                 eventBox.style.top =
@@ -126,6 +134,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                             ? 'line-through'
                             : ''}">
                         ${task.title}
+                        ${isOverdue
+                            ? '<span style="font-size:9px;opacity:0.9;margin-left:4px;">期日切れ</span>'
+                            : ''}
                     </div>
 
                     <div class="text-[10px]

@@ -144,6 +144,7 @@
         </div>
     </div>
 
+    <script src="{{ asset('js/toast.js') }}"></script>
     <script src="{{ asset('js/user.js') }}"></script>
 </body>
 </html>

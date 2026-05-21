@@ -72,7 +72,7 @@ function saveName() {
     const name = input.value.trim();
 
     if (!name) {
-        alert("ユーザー名を入力してください");
+        showToast('ユーザー名を入力してください', 'error');
         return;
     }
 
@@ -111,6 +111,16 @@ async function executeLogout() {
         } else {
             alert('ログアウト処理に失敗しました');
         }
+
+        // 未ログイン
+        if (response.status === 401) {
+            showToast('ログインしていません', 'error');
+            return;
+        }
+
+        // 成功
+        showToast('ログアウトしました', 'success');
+        setTimeout(() => { location.href = '/login'; }, 1000);
 
     } catch (error) {
         console.error(error);

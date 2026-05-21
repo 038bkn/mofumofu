@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         const formattedDate = currentTask.due_date.replace(/-/g, '/');
+        const isDone = Number(currentTask.status) === 1;
 
         contentArea.innerHTML = `
             <div class="text-center">
@@ -67,8 +68,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                         ${currentTask.note || 'メモはありません'}
                     </p>
                 </div>
+
+                <button id="toggleStatusBtn"
+                    class="w-full mt-6 font-bold py-3 rounded-full
+                        ${isDone
+                            ? 'bg-slate-200 text-slate-600'
+                            : 'bg-green-400 text-white'}">
+                    ${isDone ? '未完了に戻す' : '完了にする'}
+                </button>
             </div>
         `;
+
+        document.getElementById('toggleStatusBtn')
+            .addEventListener('click', toggleStatus);
 
         editBtn.textContent = '編集する';
     }
@@ -87,12 +99,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <input id="editStart"
                         type="time"
                         class="flex-1 border rounded-xl p-3"
-                        value="${currentTask.start_time || ''}">
+                        value="${currentTask.start_time ? currentTask.start_time.substring(0,5) : ''}">
 
                     <input id="editEnd"
                         type="time"
                         class="flex-1 border rounded-xl p-3"
-                        value="${currentTask.end_time || ''}">
+                        value="${currentTask.end_time ? currentTask.end_time.substring(0,5) : ''}">
                 </div>
 
                 <input id="editLocation"
@@ -117,13 +129,44 @@ document.addEventListener('DOMContentLoaded', async () => {
             .addEventListener('click', saveTask);
     }
 
+    async function toggleStatus() {
+        const newStatus = Number(currentTask.status) === 1 ? 0 : 1;
+
+        try {
+            const response = await fetch(`/api/tasks/${taskId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN':
+                        document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ status: newStatus })
+            });
+
+            const json = await response.json();
+
+            if (response.ok) {
+                currentTask = { ...currentTask, status: newStatus };
+                if (newStatus === 1 && json.earned_points) {
+                    showToast(`完了！ +${json.earned_points}pt 獲得`, 'success');
+                }
+                renderViewMode();
+            } else {
+                showToast('ステータスの変更に失敗しました', 'error');
+            }
+        } catch {
+            showToast('通信エラーが発生しました', 'error');
+        }
+    }
+
     async function saveTask() {
         const data = {
             title: document.getElementById('editTitle').value,
-            start_time: document.getElementById('editStart').value,
-            end_time: document.getElementById('editEnd').value,
-            location: document.getElementById('editLocation').value,
-            note: document.getElementById('editNote').value
+            start_time: document.getElementById('editStart').value || null,
+            end_time: document.getElementById('editEnd').value || null,
+            location: document.getElementById('editLocation').value || null,
+            note: document.getElementById('editNote').value || null
         };
 
         try {
@@ -144,12 +187,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                     ...data
                 };
                 renderViewMode();
-                alert('保存しました');
+                showToast('保存しました', 'success');
             } else {
-                alert('保存に失敗しました');
+                showToast('保存に失敗しました', 'error');
             }
         } catch {
-            alert('通信エラーが発生しました');
+            showToast('通信エラーが発生しました', 'error');
         }
     }
 
@@ -161,28 +204,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    deleteBtn.addEventListener('click', async () => {
-        if (!confirm('この予定を削除しますか？')) return;
+    deleteBtn.addEventListener('click', () => {
+        showConfirm('この予定を削除しますか？', async () => {
+            try {
+                const response = await fetch(`/api/tasks/${taskId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN':
+                            document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json'
+                    }
+                });
 
-        try {
-            const response = await fetch(`/api/tasks/${taskId}`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN':
-                        document.querySelector('meta[name="csrf-token"]').content,
-                    'Accept': 'application/json'
+                if (response.ok) {
+                    window.location.href =
+                        `/day-schedule?date=${scheduleDate}`;
+                } else {
+                    showToast('削除に失敗しました', 'error');
                 }
-            });
-
-            if (response.ok) {
-                window.location.href =
-                    `/day-schedule?date=${scheduleDate}`;
-            } else {
-                alert('削除に失敗しました');
+            } catch {
+                showToast('通信エラーが発生しました', 'error');
             }
-        } catch {
-            alert('通信エラーが発生しました');
-        }
+        });
     });
 
     loadTask();
