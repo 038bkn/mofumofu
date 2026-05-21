@@ -163,7 +163,6 @@ async function saveEquip() {
         console.error('Failed to update equip status:', error);
     }
 
-    localStorage.setItem('equippedItem', selectedItem);
     window.location.href = '/home';
 }
 

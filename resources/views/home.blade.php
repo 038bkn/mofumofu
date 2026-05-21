@@ -427,10 +427,8 @@
             document.getElementById('popup').classList.add('hidden');
         }
 
-        // --- 4. 装備アイテム反映（ここは現状を維持） ---
-        (function() {
-
-            const item = localStorage.getItem('equippedItem');
+        // --- 4. 装備アイテム反映（APIから取得してユーザー間で混在しないようにする） ---
+        (async function() {
 
             const map = {
                 'bell':'s_ bell.png',
@@ -451,17 +449,38 @@
                 'tophat':'s_tophat.png'
             };
 
-            if (item && map[item]) {
+            const idToName = {
+                1:'doll_boy', 2:'doll_girl', 3:'tanabata_man', 4:'tanabata_woman',
+                5:'hat', 6:'helmet_blue', 7:'helmet_red', 8:'tophat',
+                9:'bell', 10:'ribbon', 11:'sunglasses', 12:'dango',
+                13:'valentine', 14:'sakura', 15:'sunflower', 16:'rainy'
+            };
 
-                const src = '/images/with_sheep/' + map[item];
+            try {
+                const res  = await fetch('/api/user/items');
+                const data = await res.json();
 
-                if(document.getElementById('pc-sheep')) {
-                    document.getElementById('pc-sheep').src = src;
+                if (data.status === 'success' && Array.isArray(data.data)) {
+                    const equipped = data.data.find(function(o) { return o.is_equipped; });
+
+                    if (equipped && equipped.item) {
+                        const itemName = idToName[equipped.item.id];
+
+                        if (itemName && map[itemName]) {
+                            const src = '/images/with_sheep/' + map[itemName];
+
+                            if (document.getElementById('pc-sheep')) {
+                                document.getElementById('pc-sheep').src = src;
+                            }
+
+                            if (document.getElementById('sp-sheep')) {
+                                document.getElementById('sp-sheep').src = src;
+                            }
+                        }
+                    }
                 }
-
-                if(document.getElementById('sp-sheep')) {
-                    document.getElementById('sp-sheep').src = src;
-                }
+            } catch (e) {
+                console.error('装備アイテムの取得に失敗しました:', e);
             }
 
         })();
