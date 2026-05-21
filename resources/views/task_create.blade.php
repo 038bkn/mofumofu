@@ -51,7 +51,7 @@
             </div>
 
             {{-- メインコンテンツ --}}
-            <div class="flex-1 overflow-y-auto px-5 py-6">
+            <div class="flex-1 overflow-y-auto px-5 py-6 pb-24">
                 <input type="hidden" id="taskDate" value="{{ $taskDate }}">
                 
                 {{-- タイトル --}}
@@ -94,12 +94,20 @@
         </form>
 
         {{-- ボトムナビ --}}
-        <nav class="w-full flex justify-center items-center text-slate-600 flex-shrink-0 border-t border-[#9ecfde]" style="background-color: #b8e0e9; height: 80px;">
-            <div class="w-full max-w-2xl px-6 flex justify-between items-center">
-                <a href="/chat" class="flex flex-col items-center gap-1"><span>💬</span><span class="text-[10px] font-bold">ひとりごと</span></a>
-                <a href="/home" class="flex flex-col items-center gap-1"><span>🏠</span><span class="text-[10px] font-bold">ホーム</span></a>
-                <a href="/calendar" class="flex flex-col items-center gap-1 text-slate-900"><span>🗓️</span><span class="text-[10px] font-bold border-b-2 border-slate-900">ToDo</span></a>
-                <a href="/setting" class="flex flex-col items-center gap-1"><span>⚙️</span><span class="text-[10px] font-bold">設定</span></a>
+        <nav class="fixed bottom-0 left-0 w-full h-[68px] bg-[#cdeef9] border-t border-[#b5d9e4] z-20">
+            <div class="w-full max-w-[390px] mx-auto h-full flex justify-around items-center">
+                <a href="/chat" class="flex flex-col items-center justify-center">
+                    <img src="{{ asset('images/icon/chat.png') }}" class="w-16 h-16 object-contain">
+                </a>
+                <a href="/home" class="flex flex-col items-center justify-center">
+                    <img src="{{ asset('images/icon/home.png') }}" class="w-16 h-16 object-contain">
+                </a>
+                <a href="/calendar" class="flex flex-col items-center justify-center">
+                    <img src="{{ asset('images/icon/todo.png') }}" class="w-16 h-16 object-contain">
+                </a>
+                <a href="/setting" class="flex flex-col items-center justify-center">
+                    <img src="{{ asset('images/icon/setting.png') }}" class="w-16 h-16 object-contain">
+                </a>
             </div>
         </nav>
     </div>
