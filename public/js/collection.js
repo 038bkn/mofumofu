@@ -56,7 +56,9 @@ async function loadOwnedItems() {
 
         if (data.status === 'success' && data.data) {
             data.data.forEach(function (ownedItem) {
-                ownedItemIds.add(ownedItem.item.id);
+                if (ownedItem.item) {
+                    ownedItemIds.add(ownedItem.item.id);
+                }
             });
         }
 

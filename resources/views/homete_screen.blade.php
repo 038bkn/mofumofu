@@ -129,7 +129,7 @@
 
     <div class="input-area">
         <div class="input-container">
-            <input type="text" id="messageInput" class="text-input" placeholder="今日頑張ったこと、教えてメ〜！">
+            <input type="text" id="messageInput" class="text-input" placeholder="今日ちゃんと学校行ったんだ～！！">
             <button class="send-btn" onclick="sendMessage()">
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#f4a0b0" stroke-width="2">
                     <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
