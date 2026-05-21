@@ -198,6 +198,7 @@
 
 </div>
 
+<script src="{{ asset('js/toast.js') }}"></script>
 <script src="{{ asset('js/calendar.js') }}"></script>
 
 </body>

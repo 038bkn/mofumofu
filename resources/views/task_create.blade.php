@@ -104,6 +104,7 @@
         </nav>
     </div>
 
+    <script src="{{ asset('js/toast.js') }}"></script>
     <script src="{{ asset('js/task_create.js') }}"></script>
 </body>
 </html>
