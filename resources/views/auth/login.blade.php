@@ -55,8 +55,7 @@
             <input
                 type="text"
                 id="email"
-                autocomplete="email"
-                inputmode="email"
+                autocomplete="username"
                 class="mt-1.5 w-full h-11 bg-white border-none rounded-lg px-3.5 text-[15px] text-[#333] outline-none shadow-sm focus:ring-2 focus:ring-[#f4a0a0]"
             >
 

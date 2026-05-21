@@ -25,7 +25,7 @@ async function handleLogin() {
 
     // フロント側バリデーション
     if (!email) {
-        showError('メールアドレスを入力してください。');
+        showError('メールアドレスまたはユーザー名を入力してください。');
         return;
     }
     if (!password) {
