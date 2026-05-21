@@ -12,20 +12,21 @@
             --bubble-cream: #fef9e7;
             --input-bg: #fce8e6;
             --text-dark: #5a4a4a;
+            --scrollbar-color: transparent;
         }
         body {
             font-family: 'Noto Sans JP', sans-serif;
-            background: var(--homete-bg); /* 全体をピンクに */
+            background: var(--homete-bg);
             display: flex; justify-content: center; min-height: 100vh;
             overflow: hidden;
         }
         .phone-frame {
-            width: 100%; /* 全幅に広げる */
+            width: 100%;
             height: 100vh;
             display: flex; flex-direction: column;
         }
 
-        .back-nav { padding: 15px; }
+        .back-nav { padding: 15px; flex-shrink: 0; }
         .back-link {
             display: inline-block; background: var(--bubble-cream);
             padding: 8px 20px; border-radius: 20px;
@@ -34,13 +35,39 @@
         }
 
         .chat-area {
-            flex: 1; overflow-y: auto; padding: 20px;
+            flex: 1;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            padding: 20px;
             display: flex; flex-direction: column; gap: 14px;
+            min-height: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .chat-area::-webkit-scrollbar {
+            width: 5px;
+        }
+        .chat-area::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .chat-area::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-color);
+            border-radius: 10px;
+        }
+        .chat-area {
+            scrollbar-width: thin;
+            scrollbar-color: var(--scrollbar-color) transparent;
         }
 
         .mascot-container {
+            position: fixed;
+            bottom: 110px;
+            left: 50%;
+            transform: translateX(-50%);
             text-align: center;
-            padding: 10px 0;
+            z-index: 0;
+            pointer-events: none;
         }
         .mascot-container img {
             width: 250px;
@@ -59,9 +86,12 @@
           background: var(--input-bg);
           padding: 20px;
           width: 100%;
+          flex-shrink: 0;
+          position: relative;
+          z-index: 2;
         }
         .input-container {
-            max-width: 1000px; /* PCでの入力欄の最大幅 */
+            max-width: 1000px;
             margin: 0 auto;
             display: flex;
             align-items: center;
@@ -76,7 +106,6 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        /* メッセージスタイル（共通） */
         .message-row { display: flex; align-items: flex-end; gap: 8px; margin-bottom: 10px; }
         .message-row.user { flex-direction: row-reverse; }
         .bubble {
@@ -99,7 +128,7 @@
 
     <div class="input-area">
         <div class="input-container">
-            <input type="text" id="messageInput" class="text-input" placeholder="ほめてほしいことを入力...">
+            <input type="text" id="messageInput" class="text-input" placeholder="今日頑張ったこと、教えてメ〜！">
             <button class="send-btn" onclick="sendMessage()">
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#f4a0b0" stroke-width="2">
                     <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
@@ -109,5 +138,19 @@
     </div>
 </div>
 <script src="{{ asset('js/homete_screen.js') }}"></script>
+<script>
+    let _scrollTimer;
+    const _chatArea = document.getElementById('chatArea');
+
+    function showScrollbar() {
+        document.documentElement.style.setProperty('--scrollbar-color', 'rgba(90, 74, 74, 0.4)');
+        clearTimeout(_scrollTimer);
+        _scrollTimer = setTimeout(() => {
+            document.documentElement.style.setProperty('--scrollbar-color', 'transparent');
+        }, 1000);
+    }
+
+    _chatArea.addEventListener('scroll', showScrollbar);
+</script>
 </body>
 </html>
