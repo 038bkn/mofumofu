@@ -68,9 +68,9 @@
                 class="mt-1.5 w-full h-11 bg-white border-none rounded-lg px-3.5 text-[15px] text-[#333] outline-none shadow-sm focus:ring-2 focus:ring-[#f4a0a0]"
             >
 
-            <div class="text-right mt-2.5">
+            {{-- <div class="text-right mt-2.5">
                 <a href="/forgot-password" class="text-[12px] text-[#6a9fd8] no-underline">パスワードを忘れた方はこちらから</a>
-            </div>
+            </div> --}}
 
             <!-- エラーメッセージ -->
             <div id="errorMsg" class="hidden mt-4 bg-[#fff0f0] border border-[#f4a0a0] rounded-lg px-3.5 py-2.5 text-[13px] text-[#c0392b] leading-relaxed"></div>
