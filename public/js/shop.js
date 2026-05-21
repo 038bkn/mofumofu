@@ -189,6 +189,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     await loadUserPoints();
                 }
                 closeConfirm();
+                showError('購入しました');
             } else {
                 closeConfirm();
                 showError(data.message ?? '購入に失敗しました。もう一度お試しください。');

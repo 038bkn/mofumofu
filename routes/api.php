@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ItemController;
-use App\Http\Controllers\PointController;
 use App\Http\Controllers\SoliloquyController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserItemController;
@@ -35,7 +34,13 @@ Route::middleware(['web', 'auth'])->group(function () {
 
     // ユーザー設定：モード更新
     Route::put('user/mode', [AuthController::class, 'updateMode']);
-
-    // ポイント加算（チャット送信時）
-    Route::post('points/add', [PointController::class, 'add']);
+    
+    // 【統合・修正】認証チェックAPI
+    // 認証必須グループ(auth)の中に配置することで、未ログイン時は自動的に401エラーになります。
+    Route::get('/auth/check', function () {
+        return response()->json([
+            'status' => 'success',
+            'authenticated' => true
+        ], 200);
+    });
 });
