@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Http\Middleware\NoCache;
 
 // ==========================================
 // ログイン・認証系画面（キャッシュを許可する）
@@ -28,8 +29,13 @@ Route::get('/forgot-password', function () {
 // 認証が必須のルート（キャッシュを「絶対に」禁止する）
 // ==========================================
 // middleware('auth')に加えて、戻るボタン対策のヘッダーを強制付与します
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', NoCache::class])->group(function () {
 
+    Route::get('/home', function () {
+        $points = auth()->user()?->points ?? 0;
+        return view('home', compact('points'));
+    })->name('home');
+    
     Route::get('/home', function () {
         $points = auth()->user()?->points ?? 0;
         return view('home', compact('points'));

@@ -24,7 +24,7 @@ async function checkAuthOnPageShow() {
 
 // pageshow はキャッシュから復元された場合（bfcache）にも発火する
 window.addEventListener('pageshow', function (event) {
-    // 修正：event.persisted の条件を外し、画面が「戻る」で表示されたら【必ず毎回】即座に認証チェックを行います
+    // 画面が「戻る」で表示されたら【必ず毎回】即座に認証チェックを行います
     checkAuthOnPageShow();
 });
 
@@ -91,6 +91,7 @@ function hideLogoutModal() {
     document.getElementById("logoutModal").style.display = "none";
 }
 
+// ★ 処理がスッキリと一本化され、確実に挙動するよう修正しました
 async function executeLogout() {
     try {
         const response = await fetch('/logout', {
@@ -101,7 +102,7 @@ async function executeLogout() {
             }
         });
 
-        // 成功またはすでに未ログイン状態
+        // 成功、またはセッション切れ（401）の場合
         if (response.ok || response.status === 401) {
             alert('ログアウトしました');
             // フロントのキャッシュ情報も完全に破棄する
@@ -112,18 +113,8 @@ async function executeLogout() {
             alert('ログアウト処理に失敗しました');
         }
 
-        // 未ログイン
-        if (response.status === 401) {
-            showToast('ログインしていません', 'error');
-            return;
-        }
-
-        // 成功
-        showToast('ログアウトしました', 'success');
-        setTimeout(() => { location.href = '/login'; }, 1000);
-
     } catch (error) {
-        console.error(error);
+        console.error('ログアウトエラー:', error);
     }
 }
 
