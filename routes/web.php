@@ -99,7 +99,8 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('/shop', function () {
-        return view('shop');
+        $ownedItemIds = Auth::user()->ownedItems()->pluck('item_id')->toArray();
+        return view('shop', ['ownedItemIds' => $ownedItemIds]);
     });
 
     Route::post('/logout', function () {
