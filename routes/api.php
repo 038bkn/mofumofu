@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\PointController;
 use App\Http\Controllers\SoliloquyController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserItemController;
@@ -34,4 +35,7 @@ Route::middleware(['web', 'auth'])->group(function () {
 
     // ユーザー設定：モード更新
     Route::put('user/mode', [AuthController::class, 'updateMode']);
+
+    // ポイント加算（チャット送信時）
+    Route::post('points/add', [PointController::class, 'add']);
 });
