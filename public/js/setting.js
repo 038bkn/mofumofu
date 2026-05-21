@@ -58,10 +58,11 @@ function saveMode() {
 
 // フォントサイズをCSS変数に反映
 function applyFontSize(size) {
-    document.documentElement.style.setProperty("--font-size-base", size + "px");
-    document.documentElement.style.fontSize = size + "px";
+    document.documentElement.style.setProperty(
+        "--font-size-base",
+        size + "px"
+    );
 }
-
 // フォント保存
 function saveFont() {
     try {

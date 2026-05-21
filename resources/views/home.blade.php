@@ -39,7 +39,7 @@
 
             .cloud-inner {
                 padding: 10px 80px 50px 100px;
-                font-size: 15px;
+                font-size: calc(var(--font-size-base) * 0.95);
             }
 
             .collection-btn {
