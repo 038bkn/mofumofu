@@ -13,14 +13,9 @@ class PointController extends Controller
      */
     public function add(Request $request)
     {
-        $request->validate([
-            'amount' => 'required|integer|min:1|max:100',
-        ]);
-
+        $amount = 5;
         $user = Auth::user();
-
-        $user->increment('points', $request->amount);
-
+        $user->increment('points', $amount);
         return response()->json([
             'status' => 'success',
             'points' => $user->fresh()->points,

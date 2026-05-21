@@ -39,9 +39,13 @@ async function addPoints(amount) {
         if (res.ok) {
             const json = await res.json();
             if (json.status === 'success' && json.points !== undefined) {
-                localStorage.setItem('total_points', json.points);
-                showPointToast(amount, json.points);
+                 const current = Number(localStorage.getItem('total_points') ?? 0);
+                 const next = Number(json.points);
+                if (Number.isFinite(next) && next >= current) {
+                    localStorage.setItem('total_points', String(next));
+                    showPointToast(amount, next);
             }
+        }
         }
     } catch (e) {
         console.error('ポイント保存エラー:', e);
