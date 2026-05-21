@@ -58,3 +58,17 @@ function addMessage(text, sender) {
     chatArea.appendChild(row);
     chatArea.scrollTop = chatArea.scrollHeight;
 }
+
+window.addEventListener("DOMContentLoaded", () => {
+
+    const savedFont =
+        localStorage.getItem("fontSize");
+
+    if (savedFont) {
+
+        document.documentElement.style.setProperty(
+            "--font-size-base",
+            savedFont + "px"
+        );
+    }
+});

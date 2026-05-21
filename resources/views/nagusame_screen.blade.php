@@ -13,6 +13,10 @@
             --input-bg: #c8e6f5;
             --text-dark: #5a4a4a;
             --scrollbar-color: transparent;
+            font-size: var(--font-size-base);
+        }
+        html {
+            font-size: var(--font-size-base);
         }
         body {
            font-family: 'Noto Sans JP', sans-serif;
@@ -33,7 +37,7 @@
         .back-link {
             display: inline-block; background: var(--bubble-cream);
             padding: 8px 20px; border-radius: 20px;
-            text-decoration: none; color: var(--text-dark); font-size: 14px; font-weight: 500;
+            text-decoration: none; color: var(--text-dark); font-size: 0.9rem; font-weight: 500;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
@@ -79,7 +83,7 @@
         }
         .mascot-label {
             margin-top: -30px;
-            font-size: 20px;
+            font-size: 1.2rem;
             color: #ffffff;
             position: relative;
             z-index: 5;
@@ -103,7 +107,7 @@
             gap: 10px;
         }
         .text-input {
-            flex: 1; padding: 15px 25px; border-radius: 30px; border: none; outline: none; font-size: 16px;
+            flex: 1; padding: 15px 25px; border-radius: 30px; border: none; outline: none; font-size: 1rem;
         }
         .send-btn {
             background: white; border: none; width: 50px; height: 50px;
@@ -115,7 +119,7 @@
         .message-row.user { flex-direction: row-reverse; }
         .bubble {
             max-width: 70%; padding: 12px 18px; border-radius: 20px;
-            font-size: 15px; background: var(--bubble-cream); color: var(--text-dark);
+            font-size: 0.95rem; background: var(--bubble-cream); color: var(--text-dark);
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
     </style>
