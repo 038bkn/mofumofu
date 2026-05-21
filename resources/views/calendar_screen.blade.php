@@ -70,7 +70,7 @@
         </div>
 
         {{-- コンテンツ --}}
-        <div class="px-2 sm:px-4 py-4 flex-1 overflow-y-auto hide-scrollbar min-h-0">
+        <div class="px-2 sm:px-4 py-4 pb-[120px] flex-1 overflow-y-auto hide-scrollbar min-h-0">
 
             {{-- 月表示 --}}
             <div class="rounded-[2.5rem] border border-slate-200 overflow-hidden mb-10 bg-white shadow-sm">
