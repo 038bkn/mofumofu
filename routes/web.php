@@ -30,91 +30,79 @@ Route::get('/forgot-password', function () {
 // middleware('auth')に加えて、戻るボタン対策のヘッダーを強制付与します
 Route::middleware('auth')->group(function () {
 
-    Route::group([
-        'middleware' => function ($request, $next) {
-            $response = $next($request);
-            // ブラウザのbfcacheや通常キャッシュを完全に破壊するヘッダー
-            $response->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
-            $response->headers->set('Pragma', 'no-cache');
-            $response->headers->set('Expires', 'Wed, 11 Jan 1984 05:00:00 GMT');
-            return $response;
-        }
-    ], function () {
+    Route::get('/home', function () {
+        $points = auth()->user()?->points ?? 0;
+        return view('home', compact('points'));
+    })->name('home');
 
-        Route::get('/home', function () {
-            $points = auth()->user()?->points ?? 0;
-            return view('home', compact('points'));
-        })->name('home');
+    Route::get('/setting', function () {
+        return view('setting');
+    })->name('setting');
 
-        Route::get('/setting', function () {
-            return view('setting');
-        })->name('setting');
+    Route::get('/user', function () {
+        return view('user');
+    })->name('user');
 
-        Route::get('/user', function () {
-            return view('user');
-        })->name('user');
+    Route::get('/pass', function () {
+        return view('pass');
+    });
 
-        Route::get('/pass', function () {
-            return view('pass');
-        });
+    Route::post('/pass/update', function () {
+        return redirect('/user');
+    });
 
-        Route::post('/pass/update', function () {
-            return redirect('/user');
-        });
+    // ==========================================
+    // メイン機能画面
+    // ==========================================
+    Route::get('/calendar', function () {
+        return view('calendar_screen');
+    });
 
-        // ==========================================
-        // メイン機能画面
-        // ==========================================
-        Route::get('/calendar', function () {
-            return view('calendar_screen');
-        });
+    Route::get('/day-schedule', function (Request $request) {
+        $date = $request->query('date', date('Y-m-d'));
+        return view('day_schedule', compact('date'));
+    });
 
-        Route::get('/day-schedule', function (Request $request) {
-            $date = $request->query('date', date('Y-m-d'));
-            return view('day_schedule', compact('date'));
-        });
+    Route::get('/task/create', function (Request $request) {
+        $date = $request->query('date', date('Y-m-d'));
+        return view('task_create', compact('date'));
+    })->name('task.create');
 
-        Route::get('/task/create', function (Request $request) {
-            $date = $request->query('date', date('Y-m-d'));
-            return view('task_create', compact('date'));
-        })->name('task.create');
+    Route::get('/task/detail', function (Request $request) {
+        $date = $request->query('date', date('Y-m-d'));
+        return view('task_detail', compact('date'));
+    });
 
-        Route::get('/task/detail', function (Request $request) {
-            $date = $request->query('date', date('Y-m-d'));
-            return view('task_detail', compact('date'));
-        });
+    Route::get('/chat', function () {
+        return view('chatscreen');
+    })->name('chat');
 
-        Route::get('/chat', function () {
-            return view('chatscreen');
-        })->name('chat');
+    Route::get('/homete', function () {
+        return view('homete_screen');
+    });
 
-        Route::get('/homete', function () {
-            return view('homete_screen');
-        });
+    Route::get('/nagusame', function () {
+        return view('nagusame_screen');
+    });
 
-        Route::get('/nagusame', function () {
-            return view('nagusame_screen');
-        });
+    Route::get('/hitorigoto', function () {
+        return view('homete_screen');
+    });
 
-        Route::get('/hitorigoto', function () {
-            return view('homete_screen');
-        });
+    Route::get('/todo', function () {
+        return view('home');
+    });
 
-        Route::get('/todo', function () {
-            return view('home');
-        });
+    // ==========================================
+    // コレクション・ショップ系画面
+    // ==========================================
+    Route::get('/collection', function () {
+        return view('collection');
+    });
 
-        // ==========================================
-        // コレクション・ショップ系画面
-        // ==========================================
-        Route::get('/collection', function () {
-            return view('collection');
-        });
-
-        Route::get('/shop', function () {
-            return view('shop');
-        });
-        
+    Route::get('/shop', function () {
+        $ownedItemIds = Auth::user()->ownedItems()->pluck('item_id')->toArray();
+        return view('shop', ['ownedItemIds' => $ownedItemIds]);
     });
 
     // ログアウト処理

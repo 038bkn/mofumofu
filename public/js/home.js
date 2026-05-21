@@ -129,3 +129,17 @@ function renderTodayTasks(tasks) {
 
 // 読み込み時
 document.addEventListener('DOMContentLoaded', loadTodayTasks);
+
+window.addEventListener("DOMContentLoaded", () => {
+
+    const savedFont =
+        localStorage.getItem("fontSize");
+
+    if (savedFont) {
+
+        document.documentElement.style.setProperty(
+            "--font-size-base",
+            savedFont + "px"
+        );
+    }
+});
