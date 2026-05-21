@@ -27,6 +27,7 @@ function handleSend() {
 async function addPoints(amount) {
     const token = document.querySelector('meta[name="csrf-token"]')?.content || '';
     try {
+        // 1. ポイント加算APIを叩く（DBの数値を増やす）
         const res = await fetch('/api/points/add', {
             method: 'POST',
             headers: {
@@ -36,16 +37,15 @@ async function addPoints(amount) {
             },
             body: JSON.stringify({ amount }),
         });
+
         if (res.ok) {
             const json = await res.json();
             if (json.status === 'success' && json.points !== undefined) {
-                 const current = Number(localStorage.getItem('total_points') ?? 0);
-                 const next = Number(json.points);
-                if (Number.isFinite(next) && next >= current) {
-                    localStorage.setItem('total_points', String(next));
-                    showPointToast(amount, next);
+                // 2. DBで確定した最新のポイントを同期してトースト表示
+                const nextPoints = Number(json.points);
+                localStorage.setItem('total_points', String(nextPoints));
+                showPointToast(amount, nextPoints);
             }
-        }
         }
     } catch (e) {
         console.error('ポイント保存エラー:', e);

@@ -122,6 +122,23 @@ function sendMessage() {
     addPoints(5);
 }
 
+function sendMessage() {
+    const text = messageInput.value.trim();
+    if (!text) return;
+
+    addMessage(text, 'user');
+    messageInput.value = '';
+
+    // 💡 ポイント加算を実行
+    addPoints(5);
+
+    setTimeout(() => {
+        const reply = comfortMessages[Math.floor(Math.random() * comfortMessages.length)];
+        addMessage(reply, 'bot');
+    }, 800);
+}
+
+// 💡 addPoints関数をDB同期型に修正
 async function addPoints(amount) {
     const token = document.querySelector('meta[name="csrf-token"]')?.content || '';
     try {
@@ -134,18 +151,18 @@ async function addPoints(amount) {
             },
             body: JSON.stringify({ amount }),
         });
+
         if (res.ok) {
             const json = await res.json();
             if (json.status === 'success' && json.points !== undefined) {
-                localStorage.setItem('total_points', json.points);
-                showPointToast(amount, json.points);
+                const nextPoints = Number(json.points);
+                localStorage.setItem('total_points', String(nextPoints));
+                showPointToast(amount, nextPoints);
             }
         }
-    } catch (e) {
-        console.error('ポイント保存エラー:', e);
+    } catch (e) {       console.error('ポイント保存エラー:', e);
     }
 }
-
 function showPointToast(amount, total) {
     const toast = document.createElement('div');
     toast.textContent = `+${amount}pt ⭐ 合計 ${total}pt`;
