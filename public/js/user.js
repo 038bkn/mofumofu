@@ -1,3 +1,33 @@
+// ===== ブラウザバック対策：ページ表示時に認証チェック =====
+
+async function checkAuthOnPageShow() {
+    try {
+        const response = await fetch('/api/auth/check', {
+            method: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json',
+            },
+            // キャッシュを使わず必ずサーバーに問い合わせる
+            cache: 'no-store',
+        });
+
+        if (response.status === 401 || response.status === 403) {
+            // 未認証ならlocalStorageをクリアしてログイン画面へ（履歴を置き換えてバックできなくする）
+            localStorage.clear();
+            location.replace('/login');
+        }
+    } catch (error) {
+        console.error('認証チェックエラー:', error);
+    }
+}
+
+// pageshow はキャッシュから復元された場合（bfcache）にも発火する
+window.addEventListener('pageshow', function (event) {
+    // 画面が「戻る」で表示されたら【必ず毎回】即座に認証チェックを行います
+    checkAuthOnPageShow();
+});
+
 // ===== アイコン =====
 
 function handleIconUpload(event) {
@@ -10,9 +40,11 @@ function handleIconUpload(event) {
 
         const img = document.getElementById("iconImage");
         const placeholder = document.getElementById("iconPlaceholder");
-        img.src = dataUrl;
-        img.style.display = "block";
-        placeholder.style.display = "none";
+        if (img && placeholder) {
+            img.src = dataUrl;
+            img.style.display = "block";
+            placeholder.style.display = "none";
+        }
 
         localStorage.setItem("userIcon", dataUrl);
     };
@@ -26,7 +58,6 @@ function toggleNameEdit() {
     const input = document.getElementById("nameInput");
     const current = document.getElementById("usernameDisplay").textContent;
 
-    // ②styleで表示/非表示を切り替え（Tailwindのhidden問題を回避）
     if (area.style.display === "flex") {
         area.style.display = "none";
     } else {
@@ -53,7 +84,6 @@ function saveName() {
 // ===== ログアウトモーダル =====
 
 function showLogoutModal() {
-    // ③styleで表示（Tailwindのhidden問題を回避）
     document.getElementById("logoutModal").style.display = "flex";
 }
 
@@ -61,47 +91,49 @@ function hideLogoutModal() {
     document.getElementById("logoutModal").style.display = "none";
 }
 
+// ★ 処理がスッキリと一本化され、確実に挙動するよう修正しました
 async function executeLogout() {
-
     try {
-
         const response = await fetch('/logout', {
             method: 'POST',
             headers: {
-                'X-CSRF-TOKEN': document
-                    .querySelector('meta[name="csrf-token"]')
-                    .content
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
             }
         });
 
-        // 未ログイン
-        if (response.status === 401) {
-            showToast('ログインしていません', 'error');
-            return;
+        // 成功、またはセッション切れ（401）の場合
+        if (response.ok || response.status === 401) {
+            alert('ログアウトしました');
+            // フロントのキャッシュ情報も完全に破棄する
+            localStorage.clear();
+            // replace() で履歴を上書きし、戻るボタンでログイン前のページに戻れなくする
+            location.replace('/login');
+        } else {
+            alert('ログアウト処理に失敗しました');
         }
 
-        // 成功
-        showToast('ログアウトしました', 'success');
-        setTimeout(() => { location.href = '/login'; }, 1000);
-
     } catch (error) {
-
-        console.error(error);
+        console.error('ログアウトエラー:', error);
     }
 }
 
 // ===== 初期ロード =====
 
 window.addEventListener("DOMContentLoaded", function () {
+    // ページ初回ロード時にも認証チェック
+    checkAuthOnPageShow();
 
     // アイコン復元
     const savedIcon = localStorage.getItem("userIcon");
     if (savedIcon) {
         const img = document.getElementById("iconImage");
         const placeholder = document.getElementById("iconPlaceholder");
-        img.src = savedIcon;
-        img.style.display = "block";
-        placeholder.style.display = "none";
+        if (img && placeholder) {
+            img.src = savedIcon;
+            img.style.display = "block";
+            placeholder.style.display = "none";
+        }
     }
 
     // ユーザー名復元

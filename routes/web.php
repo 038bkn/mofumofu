@@ -3,9 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Http\Middleware\NoCache;
 
 // ==========================================
-// ログイン・認証系画面
+// ログイン・認証系画面（キャッシュを許可する）
 // ==========================================
 Route::get('/', function () {
     return view('auth.login');
@@ -23,11 +24,18 @@ Route::get('/forgot-password', function () {
     return view('auth.forgot_password');
 })->name('password.request');
 
-// ==========================================
-// 認証が必須のルート
-// ==========================================
-Route::middleware('auth')->group(function () {
 
+// ==========================================
+// 認証が必須のルート（キャッシュを「絶対に」禁止する）
+// ==========================================
+// middleware('auth')に加えて、戻るボタン対策のヘッダーを強制付与します
+Route::middleware(['auth', NoCache::class])->group(function () {
+
+    Route::get('/home', function () {
+        $points = auth()->user()?->points ?? 0;
+        return view('home', compact('points'));
+    })->name('home');
+    
     Route::get('/home', function () {
         $points = auth()->user()?->points ?? 0;
         return view('home', compact('points'));
@@ -103,9 +111,11 @@ Route::middleware('auth')->group(function () {
         return view('shop', ['ownedItemIds' => $ownedItemIds]);
     });
 
-    Route::post('/logout', function () {
+    // ログアウト処理
+    Route::post('/logout', function (Request $request) {
         Auth::logout();
-        session()->flush();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return redirect('/login');
     })->name('logout');
 

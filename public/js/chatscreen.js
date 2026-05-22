@@ -24,11 +24,32 @@ function handleSend() {
     addPoints(5);
 }
 
-function addPoints(amount) {
-    const current = parseInt(localStorage.getItem('total_points') || '0', 10);
-    const newTotal = current + amount;
-    localStorage.setItem('total_points', newTotal);
-    showPointToast(amount, newTotal);
+async function addPoints(amount) {
+    const token = document.querySelector('meta[name="csrf-token"]')?.content || '';
+    try {
+        // 1. ポイント加算APIを叩く（DBの数値を増やす）
+        const res = await fetch('/api/points/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': token,
+            },
+            body: JSON.stringify({ amount }),
+        });
+
+        if (res.ok) {
+            const json = await res.json();
+            if (json.status === 'success' && json.points !== undefined) {
+                // 2. DBで確定した最新のポイントを同期してトースト表示
+                const nextPoints = Number(json.points);
+                localStorage.setItem('total_points', String(nextPoints));
+                showPointToast(amount, nextPoints);
+            }
+        }
+    } catch (e) {
+        console.error('ポイント保存エラー:', e);
+    }
 }
 
 function showPointToast(amount, total) {

@@ -5,6 +5,8 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\SoliloquyController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserItemController;
+use App\Http\Controllers\PointController; // 💡 追加
+
 use Illuminate\Support\Facades\Route;
 
 // 認証不要（ログイン・新規登録）
@@ -17,6 +19,9 @@ Route::middleware('web')->group(function () {
 // 認証必須
 Route::middleware(['web', 'auth'])->group(function () {
     Route::apiResource('tasks', TaskController::class);
+
+    // 💡 ここにポイント加算APIのルートを追加
+    Route::post('points/add', [PointController::class, 'add']);
 
     // ひとりごと（つぶやき）投稿
     Route::post('soliloquies', [SoliloquyController::class, 'store']);
@@ -37,4 +42,12 @@ Route::middleware(['web', 'auth'])->group(function () {
 
     // ユーザー設定：モード更新
     Route::put('user/mode', [AuthController::class, 'updateMode']);
+    
+    // 認証チェックAPI
+    Route::get('/auth/check', function () {
+        return response()->json([
+            'status' => 'success',
+            'authenticated' => true
+        ], 200);
+    });
 });

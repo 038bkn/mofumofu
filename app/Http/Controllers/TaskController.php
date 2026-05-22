@@ -118,7 +118,7 @@ class TaskController extends Controller
             $task->update($validated);
 
             if ($isCompleting) {
-                // ポイント計算（難易度 × 10）
+               
                 $earnedPoints = $task->difficulty * 5;
 
                 $user = $task->user;

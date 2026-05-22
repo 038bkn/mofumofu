@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>もふすけ - ユーザー画面</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    {{-- ブラウザバック対策：キャッシュを無効化 --}}
+   <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root { --font-size-base: 16px; }

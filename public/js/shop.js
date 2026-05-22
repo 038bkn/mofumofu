@@ -200,6 +200,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 ownedItemIds.add(itemId);
                 updateShopDisplay();
                 closeConfirm();
+                showError('購入しました');
             } else {
                 closeConfirm();
                 showError(data.message ?? '購入に失敗しました。もう一度お試しください。');
