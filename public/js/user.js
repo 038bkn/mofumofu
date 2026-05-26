@@ -67,7 +67,7 @@ function toggleNameEdit() {
     }
 }
 
-function saveName() {
+async function saveName() {
     const input = document.getElementById("nameInput");
     const name = input.value.trim();
 
@@ -76,9 +76,31 @@ function saveName() {
         return;
     }
 
-    localStorage.setItem("username", name);
-    document.getElementById("usernameDisplay").textContent = name;
-    document.getElementById("nameEditArea").style.display = "none";
+    try {
+        const response = await fetch('/api/user/name', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ name }),
+        });
+
+        if (!response.ok) {
+            const data = await response.json();
+            const msg = data.errors?.name?.[0] ?? 'ユーザー名の更新に失敗しました';
+            showToast(msg, 'error');
+            return;
+        }
+
+        localStorage.setItem("username", name);
+        document.getElementById("usernameDisplay").textContent = name;
+        document.getElementById("nameEditArea").style.display = "none";
+        showToast('ユーザー名を更新しました', 'success');
+    } catch (e) {
+        showToast('通信エラーが発生しました', 'error');
+    }
 }
 
 // ===== ログアウトモーダル =====
