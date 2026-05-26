@@ -119,6 +119,24 @@ class AuthController extends Controller
     }
 
     /**
+     * ユーザー名更新処理
+     * PUT /api/user/name
+     */
+    public function updateName(Request $request): JsonResponse
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:20'],
+        ], [
+            'name.required' => 'ユーザー名を入力してください。',
+            'name.max'      => 'ユーザー名は20文字以内で入力してください。',
+        ]);
+
+        auth()->user()->update(['name' => $request->name]);
+
+        return response()->json(['status' => 'success', 'name' => $request->name]);
+    }
+
+    /**
      * モード更新処理
      * PUT /api/user/mode
      */

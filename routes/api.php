@@ -40,6 +40,9 @@ Route::middleware(['web', 'auth'])->group(function () {
     // ユーザー設定：メールアドレス・パスワード更新
     Route::put('user/credentials', [AuthController::class, 'updateCredentials']);
 
+    // ユーザー設定：ユーザー名更新
+    Route::put('user/name', [AuthController::class, 'updateName']);
+
     // ユーザー設定：モード更新
     Route::put('user/mode', [AuthController::class, 'updateMode']);
     

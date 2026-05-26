@@ -94,6 +94,9 @@
                 <div class="flex justify-between items-center">
                     <span class="text-base font-medium text-slate-800 underline" id="emailDisplay">読み込み中…</span>
                 </div>
+                <div class="flex justify-between items-center mt-2">
+                    <span class="text-base font-medium text-slate-400 tracking-widest">••••••••</span>
+                </div>
                 <div class="flex justify-end mt-3">
                     <button
                         type="button"
