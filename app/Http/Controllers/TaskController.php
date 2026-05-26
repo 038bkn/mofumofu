@@ -106,30 +106,41 @@ class TaskController extends Controller
         $isCompleting = isset($validated['status'])
             && (int) $validated['status'] === 1
             && (int) $task->status === 0;
+        
+        $isUncompleting = isset($validated['status'])
+            && (int) $validated['status'] === 0
+            && (int) $task->status === 1;
+            
 
         $earnedPoints = 0;
-        $totalPoints  = null;
+        $totalPoints = null;
 
-        DB::transaction(function () use ($task, &$validated, $isCompleting, &$earnedPoints, &$totalPoints) {
-            if ($isCompleting) {
+        DB::transaction(function () use ($task, &$validated, $isCompleting, &$earnedPoints, &$totalPoints,$isUncompleting) {
+            if ($isCompleting || $isUncompleting) {
                 $validated['completed_at'] = now();
             }
 
             $task->update($validated);
 
+            $user = $task->user;
+
             if ($isCompleting) {
                
                 $earnedPoints = $task->difficulty * 5;
-
-                $user = $task->user;
                 $user->increment('points', $earnedPoints);
-                $totalPoints = $user->points;
+                $totalPoints = $user->fresh()->points;
+            }
+            if ($isUncompleting) {
+                $earnedPoints = $task->difficulty * 5;
+                $user->decrement('points', $earnedPoints);
+                $totalPoints = $user->fresh()->points;
             }
         });
 
         $task->refresh();
 
-        if ($isCompleting) {
+        if ($isCompleting || $isUncompleting) {
+            $validated['completed_at'] = null;
             return response()->json([
                 'status'        => 'success',
                 'data'          => $task,
